@@ -26,18 +26,22 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Condition")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("DeviceId")
+                    b.Property<int?>("DeviceCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MakerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(365)")
+                        .HasMaxLength(365);
+
+                    b.Property<string>("ProductId")
                         .IsRequired()
                         .HasColumnType("nvarchar(365)")
                         .HasMaxLength(365);
@@ -50,7 +54,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceId");
+                    b.HasIndex("DeviceCategoryId");
+
+                    b.HasIndex("MakerId");
 
                     b.ToTable("Devices");
                 });
@@ -72,11 +78,32 @@ namespace Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Core.Entities.Maker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(365)")
+                        .HasMaxLength(365);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Makers");
+                });
+
             modelBuilder.Entity("Core.Entities.Device", b =>
                 {
-                    b.HasOne("Core.Entities.DeviceCategory", "DeviceCategory")
+                    b.HasOne("Core.Entities.DeviceCategory", null)
                         .WithMany("Devices")
-                        .HasForeignKey("DeviceId");
+                        .HasForeignKey("DeviceCategoryId");
+
+                    b.HasOne("Core.Entities.Maker", null)
+                        .WithMany("Devices")
+                        .HasForeignKey("MakerId");
                 });
 #pragma warning restore 612, 618
         }

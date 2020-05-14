@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Data;
+using Infrastructure.Data.Repositories;
 using Inventory.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,6 @@ namespace inventory
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IConfiguration>(Configuration);
             services.AddControllers();
             services.AddMvc(option => option.EnableEndpointRouting = false);
             services.AddSpaStaticFiles(configuration =>
@@ -38,7 +38,20 @@ namespace inventory
                 configuration.RootPath = "../Client/dist";
             });
 
-            services.ConfigureSqlContext(Configuration);
+
+            services.AddDbContext<InventoryDBContext>();
+
+            services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                        .WithOrigins("http://localhost:4200/")
+                        .SetIsOriginAllowed((host) => true)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +69,8 @@ namespace inventory
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

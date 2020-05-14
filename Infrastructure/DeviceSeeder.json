@@ -1,0 +1,47 @@
+﻿[
+  {
+    "name": "Clemons Mcneil",
+    "description": "Eiusmod enim irure consequat cillum mollit quis id et.",
+    "purchased": "2016-11-24",
+    "value": 1512.24,
+    "productId": "03066a26",
+    "deviceCategoryId": 1,
+    "makerId": 3
+  },
+  {
+    "name": "Elaine Weber",
+    "description": "Qui cupidatat in deserunt occaecat duis anim amet ipsum consectetur enim.",
+    "purchased": "2015-05-09",
+    "value": 1477.63,
+    "productId": "527424jjj",
+    "deviceCategoryId": 4,
+    "makerId": 2
+  },
+  {
+    "name": "Deirdre Waters",
+    "description": "Consectetur qui esse magna nulla labore commodo non est voluptate duis dolore magna ad.",
+    "purchased": "2018-03-23",
+    "value": 3138.54,
+    "productId": "03066a26",
+    "deviceCategoryId": 2,
+    "makerId": 1
+  },
+  {
+    "name": "Stanton Lewis",
+    "description": "Commodo et eu cillum culpa minim magna tempor.",
+    "purchased": "2015-06-01",
+    "value": 1877.27,
+    "productId": "10b9d4dc",
+    "deviceCategoryId": 3,
+    "makerId": 4
+  },
+  {
+    "name": "Guthrie Dyer",
+    "description": "Sunt adipisicing in ut sunt velit non est reprehenderit occaecat proident veniam exercitation exercitation elit.",
+    "purchased": "2014-09-07",
+    "value": 2965.4,
+    "productId": "527424jjj",
+    "deviceCategoryId": 4,
+    "makerId": 4
+  }
+]

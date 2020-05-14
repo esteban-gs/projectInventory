@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-  
-    <ItemGroup>
-    <Folder Include="Data\" />
+
+  <ItemGroup>
+    <None Remove="DeviceSeeder.json" />
   </ItemGroup>
   
     <ItemGroup>
@@ -27,6 +27,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
     </ItemGroup>
+  
+    <ProjectExtensions><VisualStudio><UserProperties deviceseeder_1json__JsonSchema="core" /></VisualStudio></ProjectExtensions>
 
 
 </Project>
