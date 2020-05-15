@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Text;
 
+// DB schema : https://drawsql.app/quipu/diagrams/inventory-db#
+
 namespace Core.Entities
 {
-    public class Device
+    public class Device : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         [MaxLength(365)]
         public string Name { get; set; }
@@ -22,5 +22,11 @@ namespace Core.Entities
         [Required]
         [MaxLength(365)]
         public string ProductId { get; set; }
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+        [ForeignKey("Maker")]
+        public int MakerId { get; set; }
+        public Maker Maker { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace Infrastructure.Data
         }
 
         public DbSet<Device> Devices { get; set; }
-        public DbSet<DeviceCategory> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Maker> Makers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

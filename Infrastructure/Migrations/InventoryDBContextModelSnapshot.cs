@@ -19,6 +19,23 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Core.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Core.Entities.Device", b =>
                 {
                     b.Property<int>("Id")
@@ -26,14 +43,14 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("DeviceCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MakerId")
+                    b.Property<int>("MakerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -54,28 +71,11 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceCategoryId");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("MakerId");
 
                     b.ToTable("Devices");
-                });
-
-            modelBuilder.Entity("Core.Entities.DeviceCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Core.Entities.Maker", b =>
@@ -97,13 +97,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Device", b =>
                 {
-                    b.HasOne("Core.Entities.DeviceCategory", null)
+                    b.HasOne("Core.Entities.Category", "Category")
                         .WithMany("Devices")
-                        .HasForeignKey("DeviceCategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Core.Entities.Maker", null)
+                    b.HasOne("Core.Entities.Maker", "Maker")
                         .WithMany("Devices")
-                        .HasForeignKey("MakerId");
+                        .HasForeignKey("MakerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

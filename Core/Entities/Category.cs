@@ -6,15 +6,12 @@ using System.Text;
 
 namespace Core.Entities
 {
-    public class DeviceCategory
+    public class Category : BaseEntity
     {
-
-        [Key]
-        public int Id { get; set; }
         [Display(Name="Category Name")]
         [Required]
         [MaxLength(250)]
         public string Name { get; set; }
-        public List<Device> Devices { get; set; } = new List<Device>();
+        public IEnumerable<Device> Devices { get; set; }
     }
 }

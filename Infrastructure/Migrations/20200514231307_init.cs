@@ -44,30 +44,30 @@ namespace Infrastructure.Migrations
                     Purchased = table.Column<DateTime>(nullable: false),
                     Value = table.Column<decimal>(nullable: false),
                     ProductId = table.Column<string>(maxLength: 365, nullable: false),
-                    DeviceCategoryId = table.Column<int>(nullable: true),
-                    MakerId = table.Column<int>(nullable: true)
+                    CategoryId = table.Column<int>(nullable: false),
+                    MakerId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Devices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Devices_Categories_DeviceCategoryId",
-                        column: x => x.DeviceCategoryId,
+                        name: "FK_Devices_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Devices_Makers_MakerId",
                         column: x => x.MakerId,
                         principalTable: "Makers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Devices_DeviceCategoryId",
+                name: "IX_Devices_CategoryId",
                 table: "Devices",
-                column: "DeviceCategoryId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Devices_MakerId",

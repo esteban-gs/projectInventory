@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 using Inventory.Web;
+using Inventory.Web.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,17 +33,19 @@ namespace inventory
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddMvc(option => option.EnableEndpointRouting = false);
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddMvcCore(option => option.EnableEndpointRouting = false);
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "../Client/dist";
             });
 
-
             services.AddDbContext<InventoryDBContext>();
 
-            services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddCors(options =>
             {
@@ -52,6 +56,8 @@ namespace inventory
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
+
+            services.AddAutoMapper(typeof(MappingProfiles));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Core.Entities;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
+using Core.Specs;
+using Inventory.Web.Dtos;
+using AutoMapper;
+using System.Net.Http.Headers;
 
 namespace Inventory.Web.Controllers
 {
@@ -15,59 +19,62 @@ namespace Inventory.Web.Controllers
     [ApiController]
     public class DevicesController : ControllerBase
     {
-        private readonly InventoryDBContext _context;
-        private readonly IDataRepository<Device> _repo;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public DevicesController(
-            IDataRepository<Device> repo,
-            InventoryDBContext context)
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
-            _repo = repo;
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         // GET: api/Devices
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Device>>> GetDevices()
+        public ActionResult<IEnumerable<Device>> GetDevices()
         {
-            return await _context.Devices.ToListAsync();
+            return _unitOfWork.Repository<Device>().Find(
+                new DevicesListSpec()
+                ).ToList();
         }
 
         // GET: api/Devices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Device>> GetDevice(int id)
+        public ActionResult<DeviceToReturnDto> GetDevice(int id)
         {
-            var device = await _context.Devices.FindAsync(id);
+            var device = _unitOfWork.Repository<Device>().Find(
+                new DevicesListSpec(id)
+                ).SingleOrDefault();
 
             if (device == null)
             {
                 return NotFound();
             }
 
-            return device;
+            return _mapper.Map<Device, DeviceToReturnDto>(device);
         }
 
         // PUT: api/Devices/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDevice(int id, Device device)
+        public IActionResult PutDevice(int id, Device device)
         {
             if (id != device.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(device).State = EntityState.Modified;
+            _unitOfWork.Repository<Device>().Update(device);
 
             try
             {
-                _repo.Update(device);
-                var save = await _repo.SaveAsync(device);
+                _unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DeviceExists(id))
+                if (!_unitOfWork.Repository<Device>().Contains(d => device.Id == id))
                 {
                     return NotFound();
                 }
@@ -84,33 +91,33 @@ namespace Inventory.Web.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Device>> PostDevice([FromBody] Device device)
+        public ActionResult<Device> PostDevice([FromBody] Device device)
         {
-            _repo.Add(device);
-            var save = await _repo.SaveAsync(device);
+            _unitOfWork.Repository<Device>().Add(device);
+            _unitOfWork.Complete();
 
             return CreatedAtAction("GetDevice", new { id = device.Id }, device);
         }
 
         // DELETE: api/Devices/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Device>> DeleteDevice(int id)
+        public ActionResult<Device> DeleteDevice(int id)
         {
-            var device = await _context.Devices.FindAsync(id);
+            var device = _unitOfWork.Repository<Device>().FindById(id);
             if (device == null)
             {
                 return NotFound();
             }
 
-            _repo.Delete(device);
-            var save = await _repo.SaveAsync(device);
+            _unitOfWork.Repository<Device>().Remove(device);
+            _unitOfWork.Complete();
 
             return device;
         }
 
         private bool DeviceExists(int id)
         {
-            return _context.Devices.Any(e => e.Id == id);
+            return _unitOfWork.Repository<Device>().Contains(d => d.Id == id);
         }
     }
 }

@@ -5,7 +5,7 @@
     "purchased": "2016-11-24",
     "value": 1512.24,
     "productId": "03066a26",
-    "deviceCategoryId": 1,
+    "categoryId": 1,
     "makerId": 3
   },
   {
@@ -14,7 +14,7 @@
     "purchased": "2015-05-09",
     "value": 1477.63,
     "productId": "527424jjj",
-    "deviceCategoryId": 4,
+    "categoryId": 4,
     "makerId": 2
   },
   {
@@ -23,7 +23,7 @@
     "purchased": "2018-03-23",
     "value": 3138.54,
     "productId": "03066a26",
-    "deviceCategoryId": 2,
+    "categoryId": 2,
     "makerId": 1
   },
   {
@@ -32,7 +32,7 @@
     "purchased": "2015-06-01",
     "value": 1877.27,
     "productId": "10b9d4dc",
-    "deviceCategoryId": 3,
+    "categoryId": 3,
     "makerId": 4
   },
   {
@@ -41,7 +41,7 @@
     "purchased": "2014-09-07",
     "value": 2965.4,
     "productId": "527424jjj",
-    "deviceCategoryId": 4,
+    "categoryId": 4,
     "makerId": 4
   }
 ]

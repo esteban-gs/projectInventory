@@ -20,15 +20,15 @@ namespace Infrastructure.Data
             {
                 if (!context.Devices.Any())
                 {
-                    await MigrationRepository<Device>.JsonToList("DeviceSeeder", context);
-                    await MigrationRepository<DeviceCategory>.JsonToList("deviceCategory", context);
+                    await MigrationRepository<Category>.JsonToList("deviceCategory", context);
                     await MigrationRepository<Maker>.JsonToList("deviceMakers", context);
+                    await MigrationRepository<Device>.JsonToList("DeviceSeeder", context);
                 }
             }
             catch (Exception ex)
             {
                 var logger = loggerFactory.CreateLogger<InventoryDBContext>();
-                //Console.WriteLine(ex.InnerException.Message);
+                Console.WriteLine(ex.InnerException.Message);
                 logger.LogError(ex.Message);
             }
         }
@@ -45,9 +45,12 @@ namespace Infrastructure.Data
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
+
             var rootPath = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+
             var deviceDataSource = File
                        .ReadAllText($"{rootPath}/Infrastructure/{fileName}.json");
+
             var objectList = JsonSerializer.Deserialize<List<T>>(deviceDataSource, options);
 
             foreach (var devic in objectList)
