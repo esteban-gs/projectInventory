@@ -30,7 +30,7 @@
       <ProjectReference Include="..\Core\Core.csproj" />
     </ItemGroup>
   
-    <ProjectExtensions><VisualStudio><UserProperties deviceseeder_1json__JsonSchema="core" /></VisualStudio></ProjectExtensions>
+    <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 
 </Project>

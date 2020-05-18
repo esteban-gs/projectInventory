@@ -24,7 +24,8 @@ namespace Inventory.Web.Controllers
 
         public DevicesController(
             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper
+            )
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -32,49 +33,49 @@ namespace Inventory.Web.Controllers
 
         // GET: api/Devices
         [HttpGet]
-        public ActionResult<IEnumerable<Device>> GetDevices()
+        public ActionResult<IEnumerable<DeviceToReturnDto>> GetDevices()
         {
-            return _unitOfWork.Repository<Device>().Find(
-                new DevicesListSpec()
-                ).ToList();
+            var devices = _unitOfWork.Repository<Device>()
+                .Find(new DevicesWithCategoryAndMaker())
+                .ToList();
+
+            return Ok(_mapper
+                .Map<IEnumerable<DeviceToReturnDto>>(devices));
         }
 
         // GET: api/Devices/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(GetDevice))]
         public ActionResult<DeviceToReturnDto> GetDevice(int id)
         {
-            var device = _unitOfWork.Repository<Device>().Find(
-                new DevicesListSpec(id)
-                ).SingleOrDefault();
+            var device = _unitOfWork.Repository<Device>()
+                .Find(new DevicesWithCategoryAndMaker(id))
+                .SingleOrDefault();
 
             if (device == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<Device, DeviceToReturnDto>(device);
+            return Ok(_mapper.Map<DeviceToReturnDto>(device));
         }
 
         // PUT: api/Devices/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public IActionResult PutDevice(int id, Device device)
+        public async Task<IActionResult> PutDevice(int id, [FromBody] DeviceForCreationDTO deviceForCreationDTO)
         {
-            if (id != device.Id)
-            {
-                return BadRequest();
-            }
-
+            var device = _mapper.Map<Device>(deviceForCreationDTO);
+            device.Id = id;
             _unitOfWork.Repository<Device>().Update(device);
 
             try
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_unitOfWork.Repository<Device>().Contains(d => device.Id == id))
+                if (!await _unitOfWork.Repository<Device>().Contains(d => device.Id == id))
                 {
                     return NotFound();
                 }
@@ -91,33 +92,37 @@ namespace Inventory.Web.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public ActionResult<Device> PostDevice([FromBody] Device device)
+        public async Task<ActionResult<Device>> PostDevice([FromBody] DeviceForCreationDTO deviceForCreationDTO)
         {
-            _unitOfWork.Repository<Device>().Add(device);
-            _unitOfWork.Complete();
+            var device = _mapper.Map<Device>(deviceForCreationDTO);
+            await _unitOfWork.Repository<Device>().Add(device);
+            await _unitOfWork.Complete();
 
-            return CreatedAtAction("GetDevice", new { id = device.Id }, device);
+            // fetch created entity with child values
+            var deviceFromDb = _unitOfWork.Repository<Device>().Find(
+                new DevicesWithCategoryAndMaker(device.Id)
+                ).SingleOrDefault();
+
+            // mapp to a returnable obj
+            var deviceToReturn = _mapper.Map<DeviceToReturnDto>(deviceFromDb);
+
+            return new CreatedAtRouteResult(nameof(GetDevice), new { deviceToReturn.Id }, deviceToReturn);
         }
 
         // DELETE: api/Devices/5
         [HttpDelete("{id}")]
-        public ActionResult<Device> DeleteDevice(int id)
+        public async Task<ActionResult> DeleteDevice(int id)
         {
-            var device = _unitOfWork.Repository<Device>().FindById(id);
+            var device = await _unitOfWork.Repository<Device>().FindById(id);
             if (device == null)
             {
                 return NotFound();
             }
 
             _unitOfWork.Repository<Device>().Remove(device);
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
 
-            return device;
-        }
-
-        private bool DeviceExists(int id)
-        {
-            return _unitOfWork.Repository<Device>().Contains(d => d.Id == id);
+            return NoContent();
         }
     }
 }

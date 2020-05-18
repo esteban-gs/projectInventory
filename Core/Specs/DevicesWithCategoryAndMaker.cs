@@ -5,14 +5,14 @@ using System.Text;
 
 namespace Core.Specs
 {
-    public class DevicesListSpec : BaseSpecification<Device>
+    public class DevicesWithCategoryAndMaker : BaseSpecification<Device>
     {
-        public DevicesListSpec() : base()
+        public DevicesWithCategoryAndMaker() : base()
         {
             AddInclude(d => d.Category);
             AddInclude(d => d.Maker);
         }
-        public DevicesListSpec(int id) : base(x => x.Id == id)
+        public DevicesWithCategoryAndMaker(int id) : base(x => x.Id == id)
         {
             AddInclude(d => d.Category);
             AddInclude(d => d.Maker);

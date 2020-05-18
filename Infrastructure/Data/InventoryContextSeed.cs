@@ -22,7 +22,9 @@ namespace Infrastructure.Data
                 {
                     await MigrationRepository<Category>.JsonToList("deviceCategory", context);
                     await MigrationRepository<Maker>.JsonToList("deviceMakers", context);
-                    await MigrationRepository<Device>.JsonToList("DeviceSeeder", context);
+                    await MigrationRepository<Device>.JsonToList("devices", context);
+                    await MigrationRepository<Employee>.JsonToList("employees", context);
+                    await MigrationRepository<EmployeeDevice>.JsonToList("employeesDevices", context);
                 }
             }
             catch (Exception ex)

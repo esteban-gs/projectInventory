@@ -1,0 +1,65 @@
+﻿[
+  {
+    "name": "determined_mahavira",
+    "description": "Anim enim aliqua qui anim sunt minim aliqua ullamco est voluptate occaecat.",
+    "purchased": "2014-03-26",
+    "value": 3300.49,
+    "productId": "edcaec07",
+    "categoryId": 3,
+    "makerId": 4
+  },
+  {
+    "name": "high_kirch",
+    "description": "Sint non ea velit deserunt Lorem voluptate laboris enim laborum reprehenderit nostrud deserunt laboris culpa.",
+    "purchased": "2017-10-27",
+    "value": 3646.69,
+    "productId": "527424jjj",
+    "categoryId": 4,
+    "makerId": 1
+  },
+  {
+    "name": "compassionate_hamilton",
+    "description": "In elit qui sint in incididunt officia eu elit.",
+    "purchased": "2015-01-17",
+    "value": 3508.83,
+    "productId": "10b9d4dc",
+    "categoryId": 1,
+    "makerId": 4
+  },
+  {
+    "name": "boring_einstein",
+    "description": "Excepteur minim fugiat exercitation cupidatat sint nulla reprehenderit anim deserunt laborum qui.",
+    "purchased": "2018-08-31",
+    "value": 1385.27,
+    "productId": "527424jjj",
+    "categoryId": 3,
+    "makerId": 2
+  },
+  {
+    "name": "admiring_bartik",
+    "description": "Deserunt consectetur aute proident exercitation dolore ullamco.",
+    "purchased": "2019-02-27",
+    "value": 3463.07,
+    "productId": "527424jjj",
+    "categoryId": 2,
+    "makerId": 2
+  },
+  {
+    "name": "modest_lichterman",
+    "description": "Aliqua nisi reprehenderit dolor laborum nulla.",
+    "purchased": "2019-05-23",
+    "value": 1717.55,
+    "productId": "10b9d4dc",
+    "categoryId": 1,
+    "makerId": 4
+  },
+  {
+    "name": "adoring_lovelace",
+    "description": "In culpa excepteur deserunt in veniam culpa adipisicing eu.",
+    "purchased": "2015-11-26",
+    "value": 3445.14,
+    "productId": "edcaec07",
+    "categoryId": 4,
+    "makerId": 2
+  }
+]

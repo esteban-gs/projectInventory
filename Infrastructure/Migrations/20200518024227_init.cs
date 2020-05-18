@@ -21,6 +21,23 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(maxLength: 365, nullable: false),
+                    LastName = table.Column<string>(maxLength: 365, nullable: false),
+                    SocialSecurityNumber = table.Column<string>(maxLength: 11, nullable: false),
+                    BadgeNumber = table.Column<string>(maxLength: 15, nullable: true),
+                    HireDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Makers",
                 columns: table => new
                 {
@@ -43,7 +60,7 @@ namespace Infrastructure.Migrations
                     Description = table.Column<string>(maxLength: 500, nullable: true),
                     Purchased = table.Column<DateTime>(nullable: false),
                     Value = table.Column<decimal>(nullable: false),
-                    ProductId = table.Column<string>(maxLength: 365, nullable: false),
+                    ProductId = table.Column<string>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
                     MakerId = table.Column<int>(nullable: false)
                 },
@@ -64,6 +81,32 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EmployeesDevices",
+                columns: table => new
+                {
+                    EmployeeId = table.Column<int>(nullable: false),
+                    DeviceId = table.Column<int>(nullable: false),
+                    CheckOutDate = table.Column<DateTime>(nullable: false),
+                    CheckInDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeesDevices", x => new { x.EmployeeId, x.DeviceId });
+                    table.ForeignKey(
+                        name: "FK_EmployeesDevices_Devices_DeviceId",
+                        column: x => x.DeviceId,
+                        principalTable: "Devices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployeesDevices_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Devices_CategoryId",
                 table: "Devices",
@@ -73,12 +116,23 @@ namespace Infrastructure.Migrations
                 name: "IX_Devices_MakerId",
                 table: "Devices",
                 column: "MakerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeesDevices_DeviceId",
+                table: "EmployeesDevices",
+                column: "DeviceId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "EmployeesDevices");
+
+            migrationBuilder.DropTable(
                 name: "Devices");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Categories");

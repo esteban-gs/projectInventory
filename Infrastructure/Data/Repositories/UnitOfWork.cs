@@ -3,13 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {
         IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
-        int Complete();
+        Task<int> Complete();
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -22,9 +23,9 @@ namespace Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public int Complete()
+        public async Task<int> Complete()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
 
         public IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity

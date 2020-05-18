@@ -1,0 +1,38 @@
+[
+    {
+      "employeeId": 3,
+      "deviceId": 3,
+      "checkOutDate": "2007-06-23",
+      "checkInDate": "2019-12-22"
+    },
+    {
+      "employeeId": 3,
+      "deviceId": 2,
+      "checkOutDate": "2007-03-20",
+      "checkInDate": "2014-06-15"
+    },
+    {
+      "employeeId": 4,
+      "deviceId": 4,
+      "checkOutDate": "2014-12-05",
+      "checkInDate": "2011-07-06"
+    },
+    {
+      "employeeId": 4,
+      "deviceId": 2,
+      "checkOutDate": "2006-05-29",
+      "checkInDate": "2012-08-18"
+    },
+    {
+      "employeeId": 3,
+      "deviceId": 1,
+      "checkOutDate": "2005-03-19",
+      "checkInDate": "2018-10-27"
+    },
+    {
+      "employeeId": 2,
+      "deviceId": 3,
+      "checkOutDate": "2010-11-12",
+      "checkInDate": "2014-01-01"
+    }
+  ]

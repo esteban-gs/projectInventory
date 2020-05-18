@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories
 {
@@ -19,14 +21,14 @@ namespace Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
-            _ = _context.Set<TEntity>().Add(entity);
+            await _context.Set<TEntity>().AddAsync(entity);
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
+        public async Task AddRange(IEnumerable<TEntity> entities)
         {
-            _context.Set<TEntity>().AddRange(entities);
+            await _context.Set<TEntity>().AddRangeAsync(entities);
         }
 
         public bool Contains(ISpecification<TEntity> specification = null)
@@ -34,9 +36,9 @@ namespace Infrastructure.Data.Repositories
             return Count(specification) > 0 ? true : false;
         }
 
-        public bool Contains(Expression<Func<TEntity, bool>> predicate)
+        public async Task<bool> Contains(Expression<Func<TEntity, bool>> predicate)
         {
-            return Count(predicate) > 0 ? true : false;
+            return await CountAsync(predicate) > 0 ? true : false;
         }
 
         public int Count(ISpecification<TEntity> specification = null)
@@ -44,9 +46,9 @@ namespace Infrastructure.Data.Repositories
             return ApplySpecification(specification).Count();
         }
 
-        public int Count(Expression<Func<TEntity, bool>> predicate)
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return _context.Set<TEntity>().Where(predicate).Count();
+            return await _context.Set<TEntity>().Where(predicate).CountAsync();
         }
 
         public IEnumerable<TEntity> Find(ISpecification<TEntity> specification = null)
@@ -54,9 +56,9 @@ namespace Infrastructure.Data.Repositories
             return ApplySpecification(specification);
         }
 
-        public TEntity FindById(int id)
+        public async Task<TEntity> FindById(int id)
         {
-            return _context.Set<TEntity>().Find(id);
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
         public void Remove(TEntity entity)

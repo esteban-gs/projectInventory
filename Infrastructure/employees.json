@@ -1,0 +1,30 @@
+[
+    {
+      "firstName": "Jenny",
+      "lastName": "Whitehead",
+      "socialSecurityNumber": "881-60-5396",
+      "badgeNumber": "605UF309",
+      "hireDate": "2010-03-14"
+    },
+    {
+      "firstName": "Lilly",
+      "lastName": "Pope",
+      "socialSecurityNumber": "702-99-4094",
+      "badgeNumber": "908DH709",
+      "hireDate": "2004-11-29"
+    },
+    {
+      "firstName": "Milagros",
+      "lastName": "Petty",
+      "socialSecurityNumber": "829-10-6189",
+      "badgeNumber": "383TTY163",
+      "hireDate": "2007-03-26"
+    },
+    {
+      "firstName": "Mcconnell",
+      "lastName": "Moss",
+      "socialSecurityNumber": "621-30-1173",
+      "badgeNumber": "580A664",
+      "hireDate": "2013-10-27"
+    }
+  ]

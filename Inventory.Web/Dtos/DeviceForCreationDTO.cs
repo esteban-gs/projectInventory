@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-
-namespace Core.Entities
+namespace Inventory.Web.Dtos
 {
-    public class Device : BaseEntity
+    public class DeviceForCreationDTO
     {
-        [Required]
+        [Required(ErrorMessage ="The field with name {0} is required")]
         [MaxLength(365)]
         public string Name { get; set; }
         [MaxLength(500)]
@@ -18,14 +18,10 @@ namespace Core.Entities
         public DateTime Purchased { get; set; }
         [Required]
         public decimal Value { get; set; }
-        [Required]
+        [Required(ErrorMessage = "The field with name {0} is required")]
+        [StringLength(20)]
         public string ProductId { get; set; }
-        [ForeignKey("Category")]
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
-        [ForeignKey("Maker")]
         public int MakerId { get; set; }
-        public Maker Maker { get; set; }
-        public List<EmployeeDevice> EmployeeDevice { get; set; }
     }
 }

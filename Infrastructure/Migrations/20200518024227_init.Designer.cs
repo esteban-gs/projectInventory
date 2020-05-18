@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(InventoryDBContext))]
-    [Migration("20200514231307_init")]
+    [Migration("20200518024227_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,8 +62,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("ProductId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(365)")
-                        .HasMaxLength(365);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Purchased")
                         .HasColumnType("datetime2");
@@ -78,6 +77,61 @@ namespace Infrastructure.Migrations
                     b.HasIndex("MakerId");
 
                     b.ToTable("Devices");
+                });
+
+            modelBuilder.Entity("Core.Entities.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BadgeNumber")
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(365)")
+                        .HasMaxLength(365);
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(365)")
+                        .HasMaxLength(365);
+
+                    b.Property<string>("SocialSecurityNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(11)")
+                        .HasMaxLength(11);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("Core.Entities.EmployeeDevice", b =>
+                {
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeviceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CheckInDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CheckOutDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("EmployeeId", "DeviceId");
+
+                    b.HasIndex("DeviceId");
+
+                    b.ToTable("EmployeesDevices");
                 });
 
             modelBuilder.Entity("Core.Entities.Maker", b =>
@@ -108,6 +162,21 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Maker", "Maker")
                         .WithMany("Devices")
                         .HasForeignKey("MakerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Entities.EmployeeDevice", b =>
+                {
+                    b.HasOne("Core.Entities.Device", "Device")
+                        .WithMany("EmployeeDevice")
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Employee", "Employee")
+                        .WithMany("EmployeeDevice")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
