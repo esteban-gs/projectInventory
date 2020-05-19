@@ -12,6 +12,7 @@ using Core.Specs;
 using Inventory.Web.Dtos;
 using AutoMapper;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 
 namespace Inventory.Web.Controllers
 {
@@ -36,7 +37,7 @@ namespace Inventory.Web.Controllers
         public ActionResult<IEnumerable<DeviceToReturnDto>> GetDevices()
         {
             var devices = _unitOfWork.Repository<Device>()
-                .Find(new DevicesWithCategoryAndMaker())
+                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices())
                 .ToList();
 
             return Ok(_mapper
@@ -45,10 +46,10 @@ namespace Inventory.Web.Controllers
 
         // GET: api/Devices/5
         [HttpGet("{id}", Name = nameof(GetDevice))]
-        public ActionResult<DeviceToReturnDto> GetDevice(int id)
+        public async Task<ActionResult<DeviceToReturnDto>> GetDevice(int id)
         {
             var device = _unitOfWork.Repository<Device>()
-                .Find(new DevicesWithCategoryAndMaker(id))
+                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices(id))
                 .SingleOrDefault();
 
             if (device == null)
@@ -56,7 +57,18 @@ namespace Inventory.Web.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<DeviceToReturnDto>(device));
+            var deviceToReturn = _mapper.Map<DeviceToReturnDto>(device);
+
+            // All this here thanks to the Specification pattern. Not able to pass a .ThenInclude to EF
+            foreach (var employeeDeviceToReturnDTO in deviceToReturn.EmployeeDevicesList)
+            {
+                var employee = await _unitOfWork.Repository<Employee>()
+                    .FindById(employeeDeviceToReturnDTO.EmployeeId);
+
+                employeeDeviceToReturnDTO.Employee = $"{employee.FirstName} {employee.LastName}";
+            }
+
+            return Ok(deviceToReturn);
         }
 
         // PUT: api/Devices/5
@@ -67,6 +79,16 @@ namespace Inventory.Web.Controllers
         {
             var device = _mapper.Map<Device>(deviceForCreationDTO);
             device.Id = id;
+
+            // Get the updated device's EmployeeDevice List
+            var updatedDeviceEmployeeDevices = _unitOfWork.Repository<EmployeeDevice>()
+                .Find(new EmployeeDevicesOfADeviceSpec(id))
+                .ToList();
+
+            // Remove the list
+            _unitOfWork.Repository<EmployeeDevice>()
+                .RemoveRange(updatedDeviceEmployeeDevices);
+
             _unitOfWork.Repository<Device>().Update(device);
 
             try
@@ -100,7 +122,7 @@ namespace Inventory.Web.Controllers
 
             // fetch created entity with child values
             var deviceFromDb = _unitOfWork.Repository<Device>().Find(
-                new DevicesWithCategoryAndMaker(device.Id)
+                new DevicesWithCategoryAndMakerAndEmployeeDevices(device.Id)
                 ).SingleOrDefault();
 
             // mapp to a returnable obj
