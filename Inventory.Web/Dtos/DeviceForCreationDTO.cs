@@ -23,5 +23,6 @@ namespace Inventory.Web.Dtos
         public string ProductId { get; set; }
         public int CategoryId { get; set; }
         public int MakerId { get; set; }
+        public List<int> EmployeesIds { get; set; }
     }
 }

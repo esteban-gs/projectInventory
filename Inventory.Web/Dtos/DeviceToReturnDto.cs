@@ -16,5 +16,7 @@ namespace Inventory.Web.Dtos
         public string ProductId { get; set; }
         public string Category { get; set; }
         public string Maker { get; set; }
+
+        public List<EmployeeDeviceToReturnDTO> EmployeeDevicesList { get; set; }
     }
 }

@@ -16,8 +16,10 @@ namespace Inventory.Web.Helpers
             CreateMap<Device, DeviceToReturnDto>()
                 .ForMember(d => d.Category, o => o.MapFrom(s => s.Category.Name))
                 .ForMember(d => d.Maker, o => o.MapFrom(s => s.Maker.Name))
+                .ForMember(d => d.EmployeeDevicesList, o => o.MapFrom(MapEmployeesDevicesList))
                 .ReverseMap();
-            CreateMap<DeviceForCreationDTO, Device>();
+            CreateMap<DeviceForCreationDTO, Device>()
+                .ForMember(d => d.EmployeeDevice, o => o.MapFrom(MapEmployeesDevices));
 
             // Category
             CreateMap<Category, CategoryToReturnDTO>();
@@ -38,6 +40,44 @@ namespace Inventory.Web.Helpers
             //CreateMap<EmployeeDevice, EmployeesListDevicesForReturnDTO>()
             //    .ForMember(elfr => elfr.DeviceCount, o => o.MapFrom(ed =>ed.Device.Id));
 
+        }
+
+        private List<EmployeeDevice> MapEmployeesDevices(
+            DeviceForCreationDTO deviceForCreationDTO,
+            Device device
+            )
+        {
+            var result = new List<EmployeeDevice>();
+            foreach (var id in deviceForCreationDTO.EmployeesIds)
+            {
+                result.Add(
+                    new EmployeeDevice()
+                    {
+                        DeviceId = device.Id,
+                        EmployeeId = id,
+                        CheckOutDate = DateTime.Now
+                    });
+            }
+            return result;
+        }
+
+        private List<EmployeeDeviceToReturnDTO> MapEmployeesDevicesList(
+            Device device, 
+            DeviceToReturnDto deviceToReturnDto
+            )
+        {
+            var result = new List<EmployeeDeviceToReturnDTO>();
+            foreach (var ed in device.EmployeeDevice)
+            {
+                result.Add(
+                    new EmployeeDeviceToReturnDTO()
+                    {
+                        EmployeeId = ed.EmployeeId,
+                        CheckInDate = ed.CheckInDate,
+                        CheckOutDate = ed.CheckOutDate
+                    });
+            }
+            return result;
         }
     }
 }
