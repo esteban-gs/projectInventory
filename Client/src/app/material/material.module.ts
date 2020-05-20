@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 // simplify imports and exports
@@ -28,7 +29,9 @@ const materialImportsExportsArray = [
   MatSortModule,
   MatFormFieldModule,
   MatInputModule,
-  MatInputModule
+  MatInputModule,
+  MatTooltipModule,
+  MatTableModule
 
 
 ];

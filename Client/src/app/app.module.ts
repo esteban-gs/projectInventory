@@ -9,6 +9,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutComponent } from './layout/layout.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './navigation/header/header.component';
+import { HttpClientModule } from '@angular/common/http';
+import { DeviceModule } from './device/device.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { HeaderComponent } from './navigation/header/header.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    HttpClientModule,
+    DeviceModule
   ],
   providers: [],
   bootstrap: [AppComponent]
