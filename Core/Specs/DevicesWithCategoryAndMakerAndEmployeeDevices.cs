@@ -8,11 +8,12 @@ namespace Core.Specs
 {
     public class DevicesWithCategoryAndMakerAndEmployeeDevices : BaseSpecification<Device>
     {
-        public DevicesWithCategoryAndMakerAndEmployeeDevices() : base()
+        public DevicesWithCategoryAndMakerAndEmployeeDevices(int skip, int take) : base()
         {
             AddInclude(d => d.Category);
             AddInclude(d => d.Maker);
             AddInclude(d => d.EmployeeDevice);
+            ApplyPaging(skip, take);
         }
         public DevicesWithCategoryAndMakerAndEmployeeDevices(int id) : base(x => x.Id == id)
         {

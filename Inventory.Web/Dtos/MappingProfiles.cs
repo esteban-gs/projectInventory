@@ -12,12 +12,19 @@ namespace Inventory.Web.Helpers
     {
         public MappingProfiles()
         {
-            // Device
+            // Device details
             CreateMap<Device, DeviceToReturnDto>()
                 .ForMember(d => d.Category, o => o.MapFrom(s => s.Category.Name))
                 .ForMember(d => d.Maker, o => o.MapFrom(s => s.Maker.Name))
-                .ForMember(d => d.EmployeeDevicesList, o => o.MapFrom(MapEmployeesDevicesList))
-                .ReverseMap();
+                .ForMember(d => d.EmployeeDevicesList, o => o.MapFrom(MapEmployeesDevicesList));
+
+            // Device List
+            CreateMap<Device, DeviceListToReturnDTO>()
+                .ForMember(d => d.Category, o => o.MapFrom(s => s.Category.Name))
+                .ForMember(d => d.Maker, o => o.MapFrom(s => s.Maker.Name))
+                .ForMember(d => d.EmployeesAssigned, o => o.MapFrom(s => s.EmployeeDevice.Count()));
+
+            // Device Creation
             CreateMap<DeviceForCreationDTO, Device>()
                 .ForMember(d => d.EmployeeDevice, o => o.MapFrom(MapEmployeesDevices));
 
@@ -32,14 +39,6 @@ namespace Inventory.Web.Helpers
             // employees
             CreateMap<Employee, EmployeeForReturnDTO>();
             CreateMap<EmployeeForCreationDTO, Employee>();
-
-            ////EmployeeDevices
-            //CreateMap<EmployeeDevice, EmployeesDevicesForReturnDTO>()
-            //    .ForMember(e => e.Employee, o => o.MapFrom(s => (s.Employee.FirstName + " " + s.Employee.LastName)))
-            //    .ForMember(e => e.Device, o => o.MapFrom(s => s.Device.Name));
-            //CreateMap<EmployeeDevice, EmployeesListDevicesForReturnDTO>()
-            //    .ForMember(elfr => elfr.DeviceCount, o => o.MapFrom(ed =>ed.Device.Id));
-
         }
 
         private List<EmployeeDevice> MapEmployeesDevices(

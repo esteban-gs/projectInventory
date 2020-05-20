@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Data;
@@ -17,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using Microsoft.OpenApi.Models;
 
 namespace inventory
 {
@@ -58,11 +59,43 @@ namespace inventory
             });
 
             services.AddAutoMapper(typeof(MappingProfiles));
+
+            services.AddSwaggerGen(config =>
+            {
+                config.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Inventory",
+                    Description = "This is a web API for inventory operations",
+                    TermsOfService = new Uri("https://quipu.tech/"),
+                    License = new OpenApiLicense()
+                    {
+                        Name = "Apache"
+                    },
+                    Contact = new OpenApiContact()
+                    {
+                        Name = "Esteban GS",
+                        Email = "esteban@quipu.tech",
+                        Url = new Uri("https://quipu.tech/")
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                config.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+
+            app.UseSwaggerUI(config =>
+            {
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "Inventory");
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
