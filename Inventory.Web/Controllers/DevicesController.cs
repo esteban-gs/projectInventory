@@ -13,6 +13,9 @@ using Inventory.Web.Dtos;
 using AutoMapper;
 using System.Net.Http.Headers;
 using System.Security.Policy;
+using Inventory.Web.Dtos.Pagination;
+using Inventory.Web.Helpers;
+using System.Runtime.CompilerServices;
 
 namespace Inventory.Web.Controllers
 {
@@ -32,16 +35,25 @@ namespace Inventory.Web.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get paginated list of Devices with a count of assigned employess for every device
+        /// </summary>
+        /// <param name="pagination">A pagination object from query</param>
+        /// <returns></returns>
         // GET: api/Devices
         [HttpGet]
-        public ActionResult<IEnumerable<DeviceToReturnDto>> GetDevices()
+        public async Task<ActionResult<IEnumerable<DeviceListToReturnDTO>>> GetDevices([FromQuery] PaginationDTO pagination)
         {
+            var deviceCount = await _unitOfWork.Repository<Device>().CountAsync(d => d.Id != 0);
+
+            await HttpContext.InsertPaginationParametersInResponse(deviceCount, pagination.RecordsPerPage);
+
             var devices = _unitOfWork.Repository<Device>()
-                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices())
+                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices(pagination.Page -1, pagination.RecordsPerPage))
                 .ToList();
 
             return Ok(_mapper
-                .Map<IEnumerable<DeviceToReturnDto>>(devices));
+                .Map<IEnumerable<DeviceListToReturnDTO>>(devices));
         }
 
         // GET: api/Devices/5

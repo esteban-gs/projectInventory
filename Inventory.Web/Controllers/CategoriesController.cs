@@ -29,6 +29,10 @@ namespace Inventory.Web.Controllers
             this._mapper = mapper;
         }
 
+        /// <summary>
+        /// Get List of Categories
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Categories
         [HttpGet]
         public ActionResult<IEnumerable<CategoryToReturnDTO>> GetCategories()
@@ -41,6 +45,11 @@ namespace Inventory.Web.Controllers
                 .Map<IEnumerable<CategoryToReturnDTO>>(categories));
         }
 
+        /// <summary>
+        /// Get a category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/Categories/5
         [HttpGet("{id}", Name = nameof(GetCategory))]
         public ActionResult<CategoryToReturnDTO> GetCategory(int id)
@@ -60,6 +69,12 @@ namespace Inventory.Web.Controllers
         // PUT: api/Categories/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        /// Update a Category
+        /// </summary>
+        /// <param name="id">Id of the entity to update</param>
+        /// <param name="categoryForCreation"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategory(int id, [FromBody] CategoryForCreationDTO  categoryForCreation)
         {
