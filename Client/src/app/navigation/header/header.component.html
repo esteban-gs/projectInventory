@@ -1,27 +1,17 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span>
-      <a mat-button routerLink="/">
-        HOME
-      </a>
-    </span>
-    <span class="spacer"></span>
-    <div class="flex-container">
-      <button
-        mat-icon-button
-        routerLink="/"
-        matTooltip="Home"
-      >
-        <mat-icon>home</mat-icon>
-      </button>
-      <button 
-        mat-icon-button 
-        routerLink="/device/devices" 
-        matTooltip="Device"
-      >
-        <mat-icon>devices</mat-icon>
-      </button>
-    </div>
-  </mat-toolbar-row>
-</mat-toolbar>
-<main></main>
+    <mat-toolbar-row>
+      <span class="spacer"></span>
+
+        <a mat-button routerLink="/">
+          Project Inventory
+        </a>
+        <button
+          mat-icon-button
+          routerLink="/"
+          matTooltip="Home"
+          matTooltipPosition="right"
+          color="accent"
+        ><mat-icon>github</mat-icon></button>
+
+    </mat-toolbar-row>
+  </mat-toolbar>

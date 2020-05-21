@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatPaginatorModule } from '@angular/material/paginator';
 
 
 // simplify imports and exports
@@ -31,9 +32,9 @@ const materialImportsExportsArray = [
   MatInputModule,
   MatInputModule,
   MatTooltipModule,
-  MatTableModule
-
-
+  MatTableModule,
+  MatSortModule,
+  MatPaginatorModule
 ];
 
 @NgModule({
