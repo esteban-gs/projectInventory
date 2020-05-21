@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DeviceListComponent } from './device-list/device-list.component';
 import { DeviceRoutingModule } from './device-routing/device-routing.module';
 import { MaterialModule } from '../material/material.module';
-
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -11,7 +11,8 @@ import { MaterialModule } from '../material/material.module';
   imports: [
     CommonModule,
     DeviceRoutingModule,
-    MaterialModule
+    MaterialModule,
+    FlexLayoutModule
   ]
 })
 export class DeviceModule { }

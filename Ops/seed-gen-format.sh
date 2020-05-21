@@ -1,8 +1,8 @@
 #Devices
 [
-  '{{repeat(7)}}',
+  '{{repeat(1000)}}',
   {
-    name: '{{random("boring_einstein", "prickly_borg", "admiring_bartik", "modest_lichterman", "drunk_jennings", "lonely_khorana", "high_kirch")}}',
+    name: '{{lorem(1, "words")}}',
     description: '{{lorem(1, "sentences")}}',
     purchased: '{{date(new Date(2014, 0, 1), new Date(), "YYYY-MM-dd")}}',
     value: '{{floating(1000, 4000, 2, "0.00")}}',
@@ -29,7 +29,7 @@
 
 #Employees
 [
-  '{{repeat(4)}}',
+  '{{repeat(800)}}',
   {
     firstName: '{{firstName()}}',
     lastName: '{{surname()}}',
@@ -41,10 +41,10 @@
 
 #EmployeeDevice
 [
-  '{{repeat(6)}}',
+  '{{repeat(1200)}}',
   {
-    employeeId: '{{integer(1, 4)}}',
-    deviceId: '{{integer(1, 4)}}',
+    employeeId: '{{integer(1, 800)}}',
+    deviceId: '{{integer(1, 1000)}}',
     checkOutDate: '{{date(new Date(2000, 0, 1), new Date(), "YYYY-MM-dd")}}',
 	checkInDate: '{{date(new Date(2010, 0, 1), new Date(), "YYYY-MM-dd")}}'
   }

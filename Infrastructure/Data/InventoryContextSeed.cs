@@ -30,8 +30,8 @@ namespace Infrastructure.Data
             catch (Exception ex)
             {
                 var logger = loggerFactory.CreateLogger<InventoryDBContext>();
-                Console.WriteLine(ex.InnerException.Message);
                 logger.LogError(ex.Message);
+                logger.LogError(ex.InnerException.Message);
             }
         }
     }
@@ -70,8 +70,8 @@ namespace Infrastructure.Data
             {
 
                 await objSet.AddAsync(item);
+                await context.SaveChangesAsync();
             }
-            await context.SaveChangesAsync();
         }
     }
 }
