@@ -1,0 +1,109 @@
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+  <mat-tab-group>
+    <mat-tab label="Details">
+      <mat-card fxFlex="100%" fxFlex.xs="100%">
+        <mat-card-title>Device Details</mat-card-title>
+        <mat-card-content>
+          <div fxLayout="column wrap" fxLayoutGap="40px">
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Id:</strong></div>
+              <div fxFlex>{{ device?.id }}</div>
+            </div>
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Tag:</strong></div>
+              <div fxFlex>{{ device?.name }}</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Description:</strong></div>
+              <div fxFlex>{{ device?.description }}</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Purchased On:</strong></div>
+              <div fxFlex>{{ device?.purchased | date: "shortDate" }}</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Value:</strong></div>
+              <div fxFlex>{{ device?.value }}</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Product Number:</strong></div>
+              <div fxFlex>{{ device?.productId }}</div>
+            </div>
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Category:</strong></div>
+              <div fxFlex>{{ device?.category }}</div>
+            </div>
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Maker:</strong></div>
+              <div fxFlex>{{ device?.maker }}</div>
+            </div>
+
+            <div
+              fxLayout="row wrap"
+              fxFlex
+              *ngIf="device.employeeDevicesList.length > 0; else advancedUser"
+            >
+              <div fxFlex><strong>No Employees Assigned</strong></div>
+              <div fxFlex class="beginner-color">Beginner user.</div>
+            </div>
+            <ng-template #advancedUser>
+              <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Type of user:</strong></div>
+                <div fxFlex class="advanced-color">Advanced user</div>
+              </div>
+            </ng-template>
+          </div>
+        </mat-card-content>
+        <!-- <mat-card-actions>
+          <mat-form-field>
+            <mat-select placeholder="Show accounts" (selectionChange)="onChange($event)">
+              <mat-option *ngFor="let opt of selectOptions" [value]="opt.value">
+                {{opt.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-actions> -->
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Related">
+      <mat-card fxFlex="100%" fxFlex.xs="100%">
+        <mat-card-title>
+          Employees Assigned
+          <button mat-mini-fab matTooltip="Expand / Contract All" (click)="toggleExpansion()">
+            <mat-icon>open_with</mat-icon>
+          </button>
+        </mat-card-title>
+        <mat-card-content>
+          <mat-accordion
+            *ngFor="let employeeDevice of device.employeeDevicesList"
+          >
+            <mat-expansion-panel
+              class="accordion-spacer"
+              [expanded]="panelOpenState" 
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title> </mat-panel-title>
+                <mat-panel-description>
+                  <h2 class="mat-h2">{{ employeeDevice.employee }}</h2>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>Employee Number: {{ employeeDevice.employeeId }}</p>
+              <p>
+                Device Check-out:
+                {{ employeeDevice.checkOutDate | date: "shortDate" }}
+              </p>
+              <p>
+                Device Check-in:
+                {{ employeeDevice.checkInDate | date: "shortDate" }}
+              </p>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</section>

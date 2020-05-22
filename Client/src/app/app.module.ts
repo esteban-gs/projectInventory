@@ -12,6 +12,8 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DeviceModule } from './device/device.module';
 import { SidenavComponent } from './navigation/sidenav/sidenav.component';
+import { NotFoundComponent } from './error-pages/not-found/not-found.component';
+import { ServerErrorComponent } from './error-pages/server-error/server-error.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { SidenavComponent } from './navigation/sidenav/sidenav.component';
     LayoutComponent,
     HomeComponent,
     HeaderComponent,
-    SidenavComponent
+    SidenavComponent,
+    NotFoundComponent,
+    ServerErrorComponent
   ],
   imports: [
     BrowserModule,
