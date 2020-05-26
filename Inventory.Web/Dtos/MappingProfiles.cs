@@ -61,20 +61,29 @@ namespace Inventory.Web.Helpers
         }
 
         private List<EmployeeDeviceToReturnDTO> MapEmployeesDevicesList(
-            Device device, 
+            Device device,
             DeviceToReturnDto deviceToReturnDto
             )
         {
+            var dbNullDate = "1/1/0001";
+            var dbNullDateInCs = DateTime.Parse(dbNullDate);
+
             var result = new List<EmployeeDeviceToReturnDTO>();
             foreach (var ed in device.EmployeeDevice)
             {
-                result.Add(
-                    new EmployeeDeviceToReturnDTO()
-                    {
-                        EmployeeId = ed.EmployeeId,
-                        CheckInDate = ed.CheckInDate,
-                        CheckOutDate = ed.CheckOutDate
-                    });
+                var edToReturn = new EmployeeDeviceToReturnDTO()
+                {
+                    EmployeeId = ed.EmployeeId,
+                    CheckOutDate = ed.CheckOutDate,
+                    CheckInDate = ed.CheckInDate
+                };
+
+                if (ed.CheckInDate == dbNullDateInCs)
+                {
+                    edToReturn.CheckInDate = null;
+                }
+
+                result.Add(edToReturn);
             }
             return result;
         }

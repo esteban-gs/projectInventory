@@ -1,20 +1,29 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { DeviceService } from './../../shared/device.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { DeviceModel } from './../../_interface/device-model';
+import { DeviceForList } from '../../_interface/device-for-list';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ErrorHandlerService } from '../../shared/error-handler.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-device-list',
   templateUrl: './device-list.component.html',
-  styleUrls: ['./device-list.component.scss']
+  styleUrls: ['./device-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class DeviceListComponent implements OnInit, AfterViewInit {
   public displayedColumns = [
     'id',
     'name',
-    // 'description',
     'purchased',
     'value',
     'productId',
@@ -25,12 +34,18 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     'update',
     'delete'
   ];
-  public dataSource = new MatTableDataSource<DeviceModel>();
+  public dataSource = new MatTableDataSource<DeviceForList>();
+
+  expandedElement: DeviceForList | null;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private repoService: DeviceService) { }
+  constructor(
+    private repoService: DeviceService,
+    private errorService: ErrorHandlerService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.getAllOwners();
@@ -42,11 +57,13 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public getAllOwners = () => {
-    this.repoService.getData('api/devices')
+    this.repoService.getData('api/devices?recordsPerPage=50&page=1')
       .subscribe(res => {
-        this.dataSource.data = res as DeviceModel[];
-        console.log(this.dataSource.data);
-      });
+        this.dataSource.data = res as DeviceForList[];
+      },
+        (error) => {
+          this.errorService.handleError(error);
+        });
   }
 
   public doFilter = (value: string) => {
@@ -54,7 +71,8 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public redirectToDetails = (id: string) => {
-
+    const url = `/device/details/${id}`;
+    this.router.navigate([url]);
   }
 
   public redirectToUpdate = (id: string) => {

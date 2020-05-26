@@ -11,6 +11,6 @@ namespace Inventory.Web.Dtos
         public int EmployeeId { get; set; }
         public string Employee { get; set; }
         public DateTime CheckOutDate { get; set; }
-        public DateTime CheckInDate { get; set; }
+        public DateTime? CheckInDate { get; set; }
     }
 }

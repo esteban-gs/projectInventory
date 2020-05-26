@@ -49,7 +49,7 @@ namespace Inventory.Web.Controllers
             await HttpContext.InsertPaginationParametersInResponse(deviceCount, pagination.RecordsPerPage);
 
             var devices = _unitOfWork.Repository<Device>()
-                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices(pagination.Page -1, pagination.RecordsPerPage))
+                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices((pagination.Page -1) * pagination.RecordsPerPage , pagination.RecordsPerPage))
                 .ToList();
 
             return Ok(_mapper
