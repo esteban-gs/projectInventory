@@ -35,6 +35,7 @@ export class DeviceCreateComponent implements OnInit {
       productId: new FormControl('', [Validators.required, Validators.maxLength(20)]),
       categoryId: new FormControl(1),
       makerId: new FormControl(1),
+      // Not handling creating devices with employeeDevices assigned. Will handle on edit
       employeesIds: new FormControl([]),
     });
 
@@ -60,6 +61,7 @@ export class DeviceCreateComponent implements OnInit {
     }
   }
 
+  // employees should be assigned after creation
   private executeOwnerCreation = (deviceFormValue) => {
     const device: DeviceForCreate = {
       name: deviceFormValue.name,
@@ -69,7 +71,7 @@ export class DeviceCreateComponent implements OnInit {
       productId: deviceFormValue.productId,
       categoryId: deviceFormValue.categoryId,
       makerId: deviceFormValue.makerId,
-      employeesIds: deviceFormValue.employeesIds
+      employeesIds: []
     };
 
     const apiUrl = 'api/devices';
