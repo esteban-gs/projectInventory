@@ -9,6 +9,10 @@ import { DeviceForCreate } from '../../../_interface/device-for-create';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from 'src/app/shared/dialogs/success-dialog/success-dialog.component';
 import { ErrorHandlerService } from '../../../shared/error-handler.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EditingStatusComponent } from 'src/app/shared/snackbars/editing-status/editing-status.component';
+
 
 @Component({
   selector: 'app-device-data',
@@ -17,8 +21,13 @@ import { ErrorHandlerService } from '../../../shared/error-handler.service';
 })
 export class DeviceDataComponent implements OnInit {
   private dialogConfig;
+
+  // Form
   public deviceForm: FormGroup;
   maxDate: Date;
+
+  // Confirm Dialog
+  confirmDelete: boolean;
 
   @Input() public device: DeviceForDetails;
   @Output() selectEmitt = new EventEmitter();
@@ -30,7 +39,8 @@ export class DeviceDataComponent implements OnInit {
     private repoService: DeviceService,
     private location: Location,
     private dialog: MatDialog,
-    private errorService: ErrorHandlerService
+    private errorService: ErrorHandlerService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -61,8 +71,15 @@ export class DeviceDataComponent implements OnInit {
     this.selectEmitt.emit(event.value);
   }
 
+  openSnackBar() {
+    this.snackBar.openFromComponent(EditingStatusComponent, {
+      horizontalPosition: 'right'
+    });
+  }
+
   public toggleEdit = () => {
     this.deviceForm.enable();
+    this.openSnackBar();
   }
 
   public redirectToList = () => {
@@ -78,22 +95,42 @@ export class DeviceDataComponent implements OnInit {
     return this.deviceForm.controls[controlName].hasError(errorName);
   }
 
+  dismissSnackBar() {
+    this.snackBar.dismiss();
+  }
+
   public onCancel = () => {
     this.deviceForm.reset();
     this.createForm();
     this.deviceForm.disable();
-    const url = `/device/details/${this.device.id}`;
-    this.router.navigate([url]);
+    this.dismissSnackBar();
   }
 
-  public createDevice = (deviceFormValue) => {
+  public editDevice = (deviceFormValue) => {
+    // clear editing status
+    this.dismissSnackBar();
+
     if (this.deviceForm.valid) {
-      this.executeOwnerCreation(deviceFormValue);
+      this.executeDeviceUpdate(deviceFormValue);
     }
   }
 
+  confirmDialog(): void {
+    const message = `Are you sure you want to permanently delete record: ${this.device.id}`;
+    this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, this.dialogConfig);
+
+    dialogRef.afterClosed()
+      .subscribe(dialogResult => {
+        this.confirmDelete = dialogResult;
+        if (this.confirmDelete) {
+          this.delete(`${this.device.id}`);
+        }
+      });
+  }
+
   // employees should be assigned after creation
-  private executeOwnerCreation = (deviceFormValue) => {
+  private executeDeviceUpdate = (deviceFormValue) => {
     const device: DeviceForCreate = {
       name: deviceFormValue.name,
       description: deviceFormValue.description,
@@ -105,8 +142,8 @@ export class DeviceDataComponent implements OnInit {
       employeesIds: []
     };
 
-    const apiUrl = 'api/devices';
-    this.repoService.create(apiUrl, device)
+    const apiUrl = `api/devices/${this.device.id}`;
+    this.repoService.update(apiUrl, device)
       .subscribe(res => {
         const dialogRef = this.dialog.open(SuccessDialogComponent, this.dialogConfig);
 

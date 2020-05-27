@@ -9,7 +9,6 @@
       <div fxFlexAlign="center">
         <section>
           <h1>Device Details</h1>
-          <h3>Id: {{ device?.id }}</h3>
         </section>
       </div>
       <mat-card>
@@ -17,7 +16,7 @@
         <form
           [formGroup]="deviceForm"
           autocomplete="off"
-          (ngSubmit)="createDevice(deviceForm.value)"
+          (ngSubmit)="editDevice(deviceForm.value)"
         >
           <mat-card-content>
             <div fxLayout="column" fxLayoutAlign="space-evenly center">
@@ -34,7 +33,7 @@
                         formControlName="name"
                         id="name"
                       />
-                      <mat-icon matPrefix>loyalty</mat-icon>
+                      <mat-icon matSuffix>loyalty</mat-icon>
                       <mat-hint align="end"
                         >Not more than 60 characters long.</mat-hint
                       >
@@ -55,7 +54,7 @@
                         placeholder="The device is in good condition"
                         formControlName="description"
                       ></textarea>
-                      <mat-icon matPrefix>description</mat-icon>
+                      <mat-icon matSuffix>description</mat-icon>
                       <mat-hint align="end"
                         >Not more then 100 characters long.</mat-hint
                       >
@@ -101,7 +100,7 @@
                         matInput
                         type="number"
                       />
-                      <mat-icon matPrefix>attach_money</mat-icon>
+                      <mat-icon matSuffix>attach_money</mat-icon>
                       <mat-hint align="end"
                         >Not more then 100 characters long.</mat-hint
                       >
@@ -126,7 +125,7 @@
                         placeholder="123FF45T"
                         formControlName="productId"
                       />
-                      <mat-icon matPrefix>device_unknown</mat-icon>
+                      <mat-icon matSuffix>device_unknown</mat-icon>
                       <mat-hint align="end"
                         >Not more then 100 characters long.</mat-hint
                       >
@@ -148,7 +147,7 @@
                         placeholder="Category"
                         formControlName="categoryId"
                       />
-                      <mat-icon matPrefix>markunread_mailbox</mat-icon>
+                      <mat-icon matSuffix>markunread_mailbox</mat-icon>
                       <mat-hint align="end"
                         >Not more then 100 characters long.</mat-hint
                       >
@@ -165,7 +164,7 @@
                         placeholder="Maker"
                         formControlName="makerId"
                       />
-                      <mat-icon matPrefix>build</mat-icon>
+                      <mat-icon matSuffix>build</mat-icon>
                       <mat-hint align="end"
                         >Not more then 100 characters long.</mat-hint
                       >
@@ -213,11 +212,14 @@
             <button mat-raised-button color="primary" (click)="toggleEdit()">
               Edit
             </button>
-            <button mat-raised-button color="warn" (click)="delete(device?.id)">
+            <button mat-raised-button color="warn" (click)="confirmDialog()">
               Delete
             </button>
           </ng-container>
         </mat-card-actions>
+        <mat-card-footer align="center" class="mat-caption">
+          Record Id: {{ device?.id }}
+        </mat-card-footer>
       </mat-card>
     </div>
   </mat-tab>

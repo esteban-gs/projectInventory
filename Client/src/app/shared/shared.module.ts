@@ -4,9 +4,16 @@ import { MaterialModule } from '../material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SuccessDialogComponent } from './dialogs/success-dialog/success-dialog.component';
 import { ErrorDialogComponent } from './dialogs/error-dialog/error-dialog.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
+import { EditingStatusComponent } from './snackbars/editing-status/editing-status.component';
 
 @NgModule({
-  declarations: [SuccessDialogComponent, ErrorDialogComponent],
+  declarations: [
+    SuccessDialogComponent,
+    ErrorDialogComponent,
+    ConfirmDialogComponent,
+    EditingStatusComponent
+  ],
   imports: [
     CommonModule,
     MaterialModule,
@@ -16,11 +23,14 @@ import { ErrorDialogComponent } from './dialogs/error-dialog/error-dialog.compon
     MaterialModule,
     FlexLayoutModule,
     SuccessDialogComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    ConfirmDialogComponent
   ],
   entryComponents: [
     SuccessDialogComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    ConfirmDialogComponent,
+    EditingStatusComponent
   ]
 })
 export class SharedModule { }
