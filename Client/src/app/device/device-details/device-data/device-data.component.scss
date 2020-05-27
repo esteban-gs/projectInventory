@@ -6,3 +6,11 @@
   margin: 20px;
   margin-left: 40px;
 }
+input.right-align::-webkit-outer-spin-button,
+input.right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+.mat-input-element:disabled {
+  color: 	#003152;
+}

@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ErrorHandlerService } from '../../shared/error-handler.service';
 import { Router } from '@angular/router';
+import { ActionsService } from '../actions.service';
 
 @Component({
   selector: 'app-device-list',
@@ -21,6 +22,8 @@ import { Router } from '@angular/router';
   ],
 })
 export class DeviceListComponent implements OnInit, AfterViewInit {
+  private dialogConfig;
+
   public displayedColumns = [
     'id',
     'name',
@@ -44,7 +47,8 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   constructor(
     private repoService: DeviceService,
     private errorService: ErrorHandlerService,
-    private router: Router
+    private router: Router,
+    private actionsServ: ActionsService
   ) { }
 
   ngOnInit() {
@@ -79,8 +83,8 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
 
   }
 
-  public redirectToDelete = (id: string) => {
-
+  public delete = (id: string) => {
+    this.actionsServ.delete(id, this.dialogConfig);
   }
 
 

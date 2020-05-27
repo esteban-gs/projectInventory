@@ -15,7 +15,6 @@ export class DeviceDetailsComponent implements OnInit {
 
   constructor(
     private repository: DeviceService,
-    private router: Router,
     private activeRoute: ActivatedRoute,
     private errorHandler: ErrorHandlerService
   ) { }

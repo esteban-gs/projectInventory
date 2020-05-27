@@ -32,6 +32,7 @@
                   formControlName="name"
                   id="name"
                 />
+                <mat-icon matPrefix>loyalty</mat-icon>
                 <mat-hint align="end"
                   >Not more than 60 characters long.</mat-hint
                 >
@@ -43,16 +44,16 @@
                 >
               </mat-form-field>
             </p>
-            <!-- Description -->
-            <p>
+             <!-- Description -->
+             <p>
               <mat-form-field appearance="outline">
                 <mat-label>Description</mat-label>
-                <input
-                  matInput
-                  type="text"
+                <textarea 
+                  matInput 
                   placeholder="The device is in good condition"
                   formControlName="description"
-                />
+                  ></textarea>
+                <mat-icon matPrefix>description</mat-icon>
                 <mat-hint align="end"
                   >Not more then 100 characters long.</mat-hint
                 >
@@ -64,6 +65,7 @@
                 >
               </mat-form-field>
             </p>
+           
             <!-- Date Purchased -->
             <p>
               <mat-form-field appearance="outline">
@@ -96,7 +98,7 @@
                   formControlName="value"
                   matInput type="number" 
                 >
-                <span matPrefix>$&nbsp;</span>
+                <mat-icon matPrefix>attach_money</mat-icon>
                 <mat-hint align="end"
                   >Not more then 100 characters long.</mat-hint
                 >
@@ -121,6 +123,7 @@
                   placeholder="123FF45T"
                   formControlName="productId"
                 />
+                <mat-icon matPrefix>device_unknown</mat-icon>
                 <mat-hint align="end"
                   >Not more then 100 characters long.</mat-hint
                 >
@@ -142,6 +145,7 @@
                   placeholder="Category"
                   formControlName="categoryId"
                 />
+                <mat-icon matPrefix>markunread_mailbox</mat-icon>
                 <mat-hint align="end"
                   >Not more then 100 characters long.</mat-hint
                 >
@@ -158,15 +162,15 @@
                   placeholder="Maker"
                   formControlName="makerId"
                 />
+                <mat-icon matPrefix>build</mat-icon>
                 <mat-hint align="end"
                   >Not more then 100 characters long.</mat-hint
                 >
               </mat-form-field>
             </p>
-
-            <p>
+            <!-- <p> -->
               <!-- employeesIds-->
-              <mat-form-field appearance="outline">
+              <!-- <mat-form-field appearance="outline">
                 <mat-label>Assigned Employees</mat-label>
                 <input
                   matInput
@@ -177,8 +181,8 @@
                 <mat-hint align="end"
                   >Not more then 100 characters long.</mat-hint
                 >
-              </mat-form-field>
-            </p>
+              </mat-form-field> -->
+            <!-- </p> -->
           </div>
         </div>
       </div>
