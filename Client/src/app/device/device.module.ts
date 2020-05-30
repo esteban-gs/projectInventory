@@ -7,7 +7,6 @@ import { DeviceDataComponent } from './device-details/device-data/device-data.co
 import { DeviceCreateComponent } from './device-create/device-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { DeviceEditComponent } from './device-edit/device-edit.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +14,6 @@ import { DeviceEditComponent } from './device-edit/device-edit.component';
     DeviceDetailsComponent,
     DeviceDataComponent,
     DeviceCreateComponent,
-    DeviceEditComponent
   ],
   imports: [
     CommonModule,

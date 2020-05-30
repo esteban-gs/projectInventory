@@ -2,9 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DeviceForDetails } from '../../../_interface/device-for-details';
 import { Router } from '@angular/router';
 import { ActionsService } from '../../actions.service';
-import { DeviceService } from '../../../shared/device.service';
+import { DeviceService } from '../../device.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Location, CurrencyPipe } from '@angular/common';
+import { Location } from '@angular/common';
 import { DeviceForCreate } from '../../../_interface/device-for-create';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from 'src/app/shared/dialogs/success-dialog/success-dialog.component';
@@ -20,6 +20,7 @@ import { EditingStatusComponent } from 'src/app/shared/snackbars/editing-status/
   styleUrls: ['./device-data.component.scss']
 })
 export class DeviceDataComponent implements OnInit {
+  // Reusable mat-dialog configs
   private dialogConfig;
 
   // Form
@@ -30,29 +31,19 @@ export class DeviceDataComponent implements OnInit {
   confirmDelete: boolean;
 
   @Input() public device: DeviceForDetails;
-  @Output() selectEmitt = new EventEmitter();
+  @Output() editedDeviceEmitt = new EventEmitter<boolean>();
+
+  // Mat table columns
   displayedColumns: string[] = ['employeeId', 'employee', 'checkOutDate', 'checkInDate'];
 
   constructor(
     private router: Router,
     private actionsServ: ActionsService,
     private repoService: DeviceService,
-    private location: Location,
     private dialog: MatDialog,
     private errorService: ErrorHandlerService,
     private snackBar: MatSnackBar
   ) { }
-
-  ngOnInit() {
-    this.createForm();
-    this.deviceForm.disable();
-    this.dialogConfig = {
-      height: 'auto',
-      width: 'auto',
-      disableClose: true,
-      data: {}
-    };
-  }
 
   public createForm() {
     this.deviceForm = new FormGroup({
@@ -67,23 +58,31 @@ export class DeviceDataComponent implements OnInit {
       employeesIds: new FormControl([]),
     });
   }
-  public onChange = (event) => {
-    this.selectEmitt.emit(event.value);
+
+  // Calls method in parent item to get device data again and pass it to child
+  public onChange = (edited: boolean) => {
+    this.editedDeviceEmitt.emit(edited);
   }
 
   openSnackBar() {
     this.snackBar.openFromComponent(EditingStatusComponent, {
-      horizontalPosition: 'right'
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
     });
   }
 
-  public toggleEdit = () => {
+  public setToEditMode = () => {
     this.deviceForm.enable();
     this.openSnackBar();
   }
 
-  public redirectToList = () => {
-    const url = `/device/devices`;
+  public setToViewMode = () => {
+    this.deviceForm.disable();
+    this.dismissSnackBar();
+  }
+
+  public redirectToDetails = () => {
+    const url = `/device/details/${this.device.id}`;
     this.router.navigate([url]);
   }
 
@@ -150,7 +149,8 @@ export class DeviceDataComponent implements OnInit {
         // subscribing on the [mat-dialog-close] attribute as soon as dialog button is clicked
         dialogRef.afterClosed()
           .subscribe(result => {
-            this.location.back();
+            this.onChange(true);
+            this.setToViewMode();
           });
       },
         (error => {
@@ -158,6 +158,17 @@ export class DeviceDataComponent implements OnInit {
           this.errorService.handleError(error);
         })
       );
+  }
+
+  ngOnInit() {
+    this.createForm();
+    this.deviceForm.disable();
+    this.dialogConfig = {
+      height: 'auto',
+      width: 'auto',
+      disableClose: true,
+      data: {}
+    };
   }
 
 }

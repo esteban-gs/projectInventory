@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { DeviceService } from 'src/app/shared/device.service';
+import { DeviceService } from 'src/app/device/device.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from 'src/app/shared/dialogs/success-dialog/success-dialog.component';
 import { Location } from '@angular/common';
@@ -13,7 +13,7 @@ export class ActionsService {
   private dialogConfig;
   constructor(
     private router: Router,
-    private repoService: DeviceService,
+    private deviceHttpServ: DeviceService,
     private dialog: MatDialog,
     private location: Location,
     private errorService: ErrorHandlerService
@@ -26,7 +26,7 @@ export class ActionsService {
   public delete = (id: string, dialogConf: any) => {
 
     const apiUrl = `api/devices/${id}`;
-    this.repoService.delete(apiUrl)
+    this.deviceHttpServ.delete(apiUrl)
       .subscribe(res => {
         const dialogRef = this.dialog.open(SuccessDialogComponent, this.dialogConfig);
 
@@ -42,5 +42,4 @@ export class ActionsService {
         })
       );
   }
-
 }
