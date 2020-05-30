@@ -1,6 +1,6 @@
 <div *ngIf="deviceForDetails">
   <app-device-data
     [device]="deviceForDetails"
-    (selecEmitt)="showDevice = $event"
+    (editedDeviceEmitt)="onEditedDevice($event)"
   ></app-device-data>
 </div>

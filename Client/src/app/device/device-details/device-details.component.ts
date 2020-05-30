@@ -11,7 +11,7 @@ import { DeviceForDetails } from 'src/app/_interface/device-for-details';
 })
 export class DeviceDetailsComponent implements OnInit {
   public deviceForDetails: DeviceForDetails;
-  public showDevice;
+  edited = false;
 
   constructor(
     private repository: DeviceService,
@@ -35,5 +35,9 @@ export class DeviceDetailsComponent implements OnInit {
         (error) => {
           this.errorHandler.handleError(error);
         });
+  }
+
+  public onEditedDevice(edited: boolean) {
+    edited ? this.getDeviceDetails() : console.log('Not Eited') ;
   }
 }
