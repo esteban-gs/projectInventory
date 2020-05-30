@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DeviceForDetails } from '../../../_interface/device-for-details';
 import { Router } from '@angular/router';
 import { ActionsService } from '../../actions.service';
-import { DeviceService } from '../../../shared/device.service';
+import { DeviceService } from '../../device.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { DeviceForCreate } from '../../../_interface/device-for-create';

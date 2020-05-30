@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DeviceService } from './../../shared/device.service';
+import { DeviceService } from '../device.service';
 import { ErrorHandlerService } from './../../shared/error-handler.service';
 import { DeviceForDetails } from 'src/app/_interface/device-for-details';
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { DeviceService } from './../../shared/device.service';
+import { DeviceService } from '../device.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { DeviceForList } from '../../_interface/device-for-list';
 import { MatSort } from '@angular/material/sort';

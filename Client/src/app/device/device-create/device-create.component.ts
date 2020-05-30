@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DeviceService } from '../../shared/device.service';
+import { DeviceService } from '../device.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location, CurrencyPipe } from '@angular/common';
 import { DeviceForCreate } from '../../_interface/device-for-create';
