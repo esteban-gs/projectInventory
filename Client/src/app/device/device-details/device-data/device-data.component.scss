@@ -14,3 +14,19 @@ input.right-align::-webkit-inner-spin-button {
 .mat-input-element:disabled {
   color: 	#003152;
 }
+
+.header {
+  display: flex;
+  align-items: center;
+  height: auto;
+  min-height: 100px;
+  box-sizing: border-box;
+  border-bottom: solid 1px rgba(0,0,0,0.12);
+  color: rgba(0,0,0,0.6);
+  margin-bottom: 40px;
+
+  .title {
+    margin-right: auto;
+    font-weight: 400;
+  }
+}

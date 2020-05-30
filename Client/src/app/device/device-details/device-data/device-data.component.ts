@@ -66,7 +66,8 @@ export class DeviceDataComponent implements OnInit {
 
   openSnackBar() {
     this.snackBar.openFromComponent(EditingStatusComponent, {
-      horizontalPosition: 'right'
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
     });
   }
 

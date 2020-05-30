@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { DeviceService } from './../../shared/device.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { DeviceForList } from '../../_interface/device-for-list';
@@ -8,6 +8,9 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ErrorHandlerService } from '../../shared/error-handler.service';
 import { Router } from '@angular/router';
 import { ActionsService } from '../actions.service';
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { DeviceForDetails } from 'src/app/_interface/device-for-details';
 
 @Component({
   selector: 'app-device-list',
@@ -24,6 +27,9 @@ import { ActionsService } from '../actions.service';
 export class DeviceListComponent implements OnInit, AfterViewInit {
   private dialogConfig;
 
+  // Confirm Dialog
+  confirmDelete: boolean;
+
   public displayedColumns = [
     'id',
     'name',
@@ -34,7 +40,6 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     'maker',
     'employeesAssigned',
     'details',
-    'update',
     'delete'
   ];
   public dataSource = new MatTableDataSource<DeviceForList>();
@@ -48,11 +53,21 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     private repoService: DeviceService,
     private errorService: ErrorHandlerService,
     private router: Router,
-    private actionsServ: ActionsService
+    private actionsServ: ActionsService,
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-    this.getAllOwners();
+    this.getDevices();
+
+    // set up the reusable dialog configs
+    this.dialogConfig = {
+      height: 'auto',
+      width: 'auto',
+      disableClose: true,
+      data: {}
+    };
   }
 
   ngAfterViewInit(): void {
@@ -60,7 +75,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  public getAllOwners = () => {
+  public getDevices = () => {
     this.repoService.getData('api/devices?recordsPerPage=50&page=1')
       .subscribe(res => {
         this.dataSource.data = res as DeviceForList[];
@@ -83,9 +98,27 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
 
   }
 
+  confirmDialog(id: string): any {
+    const message = `Are you sure you want to permanently delete record: ${id}`;
+    this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, this.dialogConfig);
+
+    dialogRef.afterClosed()
+      .subscribe(dialogResult => {
+        this.confirmDelete = dialogResult;
+        if (this.confirmDelete) {
+          this.delete(`${id}`);
+          // removes deletem item from table list
+          const deviceId = Number(id);
+          const deletableIndex = this.dataSource.data.findIndex(i => i.id === deviceId);
+          this.dataSource.data.splice(deletableIndex, 1);
+          // force new array values into itself ???
+          this.dataSource.data = this.dataSource.data.slice(0);
+        }
+      });
+  }
+
   public delete = (id: string) => {
     this.actionsServ.delete(id, this.dialogConfig);
   }
-
-
 }

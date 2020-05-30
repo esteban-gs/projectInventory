@@ -1,16 +1,39 @@
 <mat-tab-group>
   <mat-tab label="Details">
-    <div
-      class="mat-typography"
-      fxLayout="column"
-      fxLayoutGap="10px"
-    >
+    <div class="mat-typography" fxLayout="column" fxLayoutGap="10px">
       <div>
         <section align="center">
           <h1>Device Details</h1>
         </section>
         <mat-card>
-          <mat-card-title></mat-card-title>
+          <mat-card-header class="header">
+            <div class="header-actions">
+              <div class="columns">
+                <div class="column">
+                  <ng-container>
+                    <button
+                      mat-raised-button
+                      color="warn"
+                      (click)="confirmDialog()"
+                    >
+                      Delete
+                    </button>
+                  </ng-container>
+                </div>
+                <div class="column">
+                  <ng-container *ngIf="deviceForm.disabled">
+                    <button
+                      mat-raised-button
+                      color="primary"
+                      (click)="setToEditMode()"
+                    >
+                      Edit
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </mat-card-header>
           <form
             [formGroup]="deviceForm"
             autocomplete="off"
@@ -208,16 +231,6 @@
               </ng-container>
             </mat-card-actions>
           </form>
-          <mat-card-actions align="center">
-            <ng-container *ngIf="deviceForm.disabled">
-              <button mat-raised-button color="primary" (click)="setToEditMode()">
-                Edit
-              </button>
-              <button mat-raised-button color="warn" (click)="confirmDialog()">
-                Delete
-              </button>
-            </ng-container>
-          </mat-card-actions>
           <mat-card-footer align="center" class="mat-caption">
             Record Id: {{ device?.id }}
           </mat-card-footer>
