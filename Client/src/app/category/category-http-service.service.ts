@@ -32,6 +32,6 @@ export class CategoryHttpServiceService {
   private generateHeaders = () => {
     return {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    }
+    };
   }
 }

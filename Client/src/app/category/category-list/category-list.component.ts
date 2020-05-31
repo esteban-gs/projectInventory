@@ -10,8 +10,7 @@ import { CategoryHttpServiceService } from '../category-http-service.service';
 })
 export class CategoryListComponent implements OnInit {
 
-  public displayedColumns = ['id', 'name', 'details', 'delete'
-  ];
+  public displayedColumns = ['id', 'name', 'details', 'delete' ];
   public dataSource = new MatTableDataSource<CategoryForList>();
 
   constructor(

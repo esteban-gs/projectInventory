@@ -1,0 +1,45 @@
+.sidenav-container {
+    height: 100%;
+  }
+  
+  .sidenav {
+    width: auto;
+    box-shadow: 3px 0 6px rgba(0, 0, 0, 0.24);
+  }
+  
+  .toolbar-filler {
+    /* This fills the remaining space, by using flexbox. 
+         Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+  }
+
+  .header {
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  /* .hidden {
+    display: none;
+  } */
+  
+  /* .sidenav .mat-toolbar {
+    background: inherit;
+  } */
+  
+  .mat-toolbar.mat-primary {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  } 
+
+  .mat-drawer-side {
+      border: 0;
+  }
+  
+  /* @media (min-width:760px) {
+   .sidenav {
+     display: none;
+   } 
+  } */
+  

@@ -1,0 +1,113 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport="true"
+    [attr.role]="isHs ? 'dialog' : 'navigation'"
+    [mode]="isHs ? 'push' : 'side'"
+    [opened]="isHs ? false : true"
+  >
+    <mat-toolbar color="primary">
+      <!-- This fills the remaining space of the current row -->
+      <span class="toolbar-filler"></span>
+      <!--toolbar chevron toggl-->
+      <span>
+        <ng-container *ngIf="!isHs">
+          <button
+            type="button"
+            aria-label="Toggle sidenav"
+            mat-mini-fab
+            matTooltip="Collapse Menu"
+            color="primary"
+            (click)="drawer.toggle()"
+          >
+            <mat-icon aria-label="Side nav toggle icon" *ngIf="drawer.opened"
+              >chevron_left</mat-icon
+            >
+          </button>
+        </ng-container>
+      </span>
+    </mat-toolbar>
+    <mat-nav-list>
+      <mat-list-item>
+        <button
+          mat-mini-fab
+          color="primary"
+          routerLink="/"
+          matTooltip="Home"
+          matTooltipPosition="right"
+          color="accent"
+        >
+          <mat-icon>home</mat-icon>
+        </button>
+      </mat-list-item>
+
+      <mat-list-item>
+        <button
+          mat-mini-fab
+          color="primary"
+          routerLink="/device/devices"
+          matTooltip="Device"
+          matTooltipPosition="right"
+          color="accent"
+        >
+          <mat-icon>devices</mat-icon>
+        </button>
+      </mat-list-item>
+
+      <mat-list-item>
+        <button
+          mat-mini-fab
+          color="primary"
+          routerLink="/category/categories"
+          matTooltip="Categories"
+          matTooltipPosition="right"
+          color="accent"
+        >
+          <mat-icon>category</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="header">
+      <!--Sidenav hamburger toggle button-->
+      <ng-container *ngIf="isHs">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-mini-fab
+          color="primary"
+          mat-icon-button
+          (click)="drawer.toggle()"
+        >
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+      </ng-container>
+
+      <!--toolbar chevron toggl-->
+      <ng-container *ngIf="!drawer.opened && !isHs">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          matTooltip="Expand Menu"
+          mat-mini-fab
+          color="primary"
+          (click)="drawer.toggle()"
+        >
+          <mat-icon aria-label="Side nav toggle icon">chevron_right</mat-icon>
+        </button>
+      </ng-container>
+
+      <!-- Title -->
+      <span
+        ><a mat-button routerLink="/">
+          Project Inventory
+        </a>
+      </span>
+    </mat-toolbar>
+
+    <!--Add Content Here-->
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
