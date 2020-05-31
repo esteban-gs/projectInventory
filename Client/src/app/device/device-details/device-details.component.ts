@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DeviceService } from '../device.service';
 import { ErrorHandlerService } from './../../shared/error-handler.service';
 import { DeviceForDetails } from 'src/app/_interface/device-for-details';
+import { HttpService } from 'src/app/shared/http.service';
 
 @Component({
   selector: 'app-owner-details',
@@ -14,7 +14,7 @@ export class DeviceDetailsComponent implements OnInit {
   edited = false;
 
   constructor(
-    private repository: DeviceService,
+    private repository: HttpService,
     private activeRoute: ActivatedRoute,
     private errorHandler: ErrorHandlerService
   ) { }

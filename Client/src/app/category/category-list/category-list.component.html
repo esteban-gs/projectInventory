@@ -10,8 +10,17 @@
     </section>
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="space-around none">
-    <div fxFlexAlign="start"></div>
+  <div fxLayout="row" fxLayoutAlign="space-around">
+    <div fxFlexAlign="start">
+      <mat-form-field>
+        <input
+          matInput
+          type="text"
+          (keyup)="doFilter($event.target.value)"
+          placeholder="Filter List"
+        />
+      </mat-form-field>
+    </div>
     <div fxFlexAlign="end">
       <button
         [routerLink]="['/device/create']"
@@ -25,14 +34,14 @@
   </div>
 
   <div fxLayoutAlign="center">
-    <table mat-table [dataSource]="dataSource">
+    <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="id" sticky>
-        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
         <td mat-cell *matCellDef="let element">{{ element.id }}</td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td mat-cell *matCellDef="let element">{{ element.name }}</td>
       </ng-container>
 

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceService {
-
+export class HttpService {
 
   constructor(private http: HttpClient) { }
 
@@ -26,16 +25,13 @@ export class DeviceService {
     return this.http.delete(this.createCompleteRoute(route, environment.appUrl));
   }
 
-
-  // internal methods
   private createCompleteRoute = (route: string, envAddress: string) => {
     return `${envAddress}/${route}`;
   }
 
   private generateHeaders = () => {
     return {
-      headers: new HttpHeaders(
-        { 'Content-Type': 'application/json' })
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
   }
 }

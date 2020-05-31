@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { DeviceService } from '../device.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { DeviceForList } from '../../_interface/device-for-list';
 import { MatSort } from '@angular/material/sort';
@@ -50,7 +49,6 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
-    private repoService: DeviceService,
     private errorService: ErrorHandlerService,
     private router: Router,
     private actionsServ: ActionsService,
@@ -76,13 +74,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public getDevices = () => {
-    this.repoService.getData('api/devices?recordsPerPage=50&page=1')
-      .subscribe(res => {
-        this.dataSource.data = res as DeviceForList[];
-      },
-        (error) => {
-          this.errorService.handleError(error);
-        });
+    this.actionsServ.getDevices(this.dataSource);
   }
 
   public doFilter = (value: string) => {

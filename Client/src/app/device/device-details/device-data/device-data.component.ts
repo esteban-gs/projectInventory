@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DeviceForDetails } from '../../../_interface/device-for-details';
 import { Router } from '@angular/router';
 import { ActionsService } from '../../actions.service';
-import { DeviceService } from '../../device.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { DeviceForCreate } from '../../../_interface/device-for-create';
@@ -12,6 +11,7 @@ import { ErrorHandlerService } from '../../../shared/error-handler.service';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EditingStatusComponent } from 'src/app/shared/snackbars/editing-status/editing-status.component';
+import { HttpService } from 'src/app/shared/http.service';
 
 
 @Component({
@@ -39,7 +39,7 @@ export class DeviceDataComponent implements OnInit {
   constructor(
     private router: Router,
     private actionsServ: ActionsService,
-    private repoService: DeviceService,
+    private repoService: HttpService,
     private dialog: MatDialog,
     private errorService: ErrorHandlerService,
     private snackBar: MatSnackBar

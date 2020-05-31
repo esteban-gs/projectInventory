@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { DeviceService } from 'src/app/device/device.service';
+import { HttpService } from 'src/app/shared/http.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from 'src/app/shared/dialogs/success-dialog/success-dialog.component';
 import { Location } from '@angular/common';
 import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
+import { DeviceForList } from '../_interface/device-for-list';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ActionsService {
   private dialogConfig;
   constructor(
     private router: Router,
-    private deviceHttpServ: DeviceService,
+    private httpServ: HttpService,
     private dialog: MatDialog,
     private location: Location,
     private errorService: ErrorHandlerService
@@ -26,7 +27,7 @@ export class ActionsService {
   public delete = (id: string, dialogConf: any) => {
 
     const apiUrl = `api/devices/${id}`;
-    this.deviceHttpServ.delete(apiUrl)
+    this.httpServ.delete(apiUrl)
       .subscribe(res => {
         const dialogRef = this.dialog.open(SuccessDialogComponent, this.dialogConfig);
 
@@ -42,4 +43,16 @@ export class ActionsService {
         })
       );
   }
+
+
+  public getDevices = (dataSource: any): any => {
+    this.httpServ.getData('api/devices?recordsPerPage=50&page=1')
+      .subscribe(res => {
+        dataSource.data = res as DeviceForList[];
+      },
+        (error) => {
+          this.errorService.handleError(error);
+        });
+  }
+
 }
