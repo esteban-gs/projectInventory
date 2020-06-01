@@ -5,6 +5,7 @@ import { CategoryRoutingModule } from './category-routing/category-routing.modul
 import { SharedModule } from '../shared/shared.module';
 import { CategoryDetailsComponent } from './category-details/category-details.component';
 import { CategoryDataComponent } from './category-details/category-data/category-data.component';
+import { CategoryCreateComponent } from './category-create/category-create.component';
 
 
 
@@ -12,7 +13,8 @@ import { CategoryDataComponent } from './category-details/category-data/category
   declarations: [
     CategoryListComponent,
     CategoryDetailsComponent,
-    CategoryDataComponent
+    CategoryDataComponent,
+    CategoryCreateComponent
   ],
   imports: [
     CommonModule,
