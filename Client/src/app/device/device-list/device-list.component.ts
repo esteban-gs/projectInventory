@@ -6,10 +6,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ErrorHandlerService } from '../../shared/error-handler.service';
 import { Router } from '@angular/router';
-import { ActionsService } from '../actions.service';
+import { DeleteService } from '../../shared/delete.service';
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { DeviceForDetails } from 'src/app/_interface/device-for-details';
+import { HttpService } from 'src/app/shared/http.service';
 
 @Component({
   selector: 'app-device-list',
@@ -51,9 +52,10 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   constructor(
     private errorService: ErrorHandlerService,
     private router: Router,
-    private actionsServ: ActionsService,
+    private actionsServ: DeleteService,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private repoServ: HttpService
   ) { }
 
   ngOnInit() {
@@ -74,7 +76,13 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public getDevices = () => {
-    this.actionsServ.getDevices(this.dataSource);
+    this.repoServ.getData('api/devices?recordsPerPage=50&page=1')
+      .subscribe(res => {
+        this.dataSource.data = res as DeviceForList[];
+      },
+        (error) => {
+          this.errorService.handleError(error);
+        });
   }
 
   public doFilter = (value: string) => {
@@ -111,6 +119,6 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public delete = (id: string) => {
-    this.actionsServ.delete(id, this.dialogConfig);
+    this.actionsServ.delete(id, this.dialogConfig, `api/devices/${id}`);
   }
 }

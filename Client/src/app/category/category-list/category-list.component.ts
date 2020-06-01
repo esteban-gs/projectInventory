@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { CategoryForList } from 'src/app/_interface/category-for-list';
 import { CategoryHttpServiceService } from '../category-http-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-list',
@@ -17,7 +18,8 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, null) sort: MatSort;
 
   constructor(
-    private categoryHttpServ: CategoryHttpServiceService
+    private categoryHttpServ: CategoryHttpServiceService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -40,7 +42,8 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
   }
 
   public redirectToDetails = (id: string) => {
-
+    const url = `/category/details/${id}`;
+    this.router.navigate([url]);
   }
 
   public redirectToUpdate = (id: string) => {

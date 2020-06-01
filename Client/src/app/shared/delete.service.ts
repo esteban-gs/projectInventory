@@ -5,18 +5,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from 'src/app/shared/dialogs/success-dialog/success-dialog.component';
 import { Location } from '@angular/common';
 import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
-import { DeviceForList } from '../_interface/device-for-list';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ActionsService {
+export class DeleteService {
   private dialogConfig;
   constructor(
     private router: Router,
     private httpServ: HttpService,
     private dialog: MatDialog,
-    private location: Location,
     private errorService: ErrorHandlerService
   ) { }
   public redirectToList = () => {
@@ -24,10 +22,11 @@ export class ActionsService {
     this.router.navigate([url]);
   }
 
-  public delete = (id: string, dialogConf: any) => {
-
-    const apiUrl = `api/devices/${id}`;
-    this.httpServ.delete(apiUrl)
+  /***
+   * Reusable delete action handles confirm dialog and delete success dialog
+   */
+  public delete = (id: string, dialogConf: any, endpoint: string) => {
+    this.httpServ.delete(endpoint)
       .subscribe(res => {
         const dialogRef = this.dialog.open(SuccessDialogComponent, this.dialogConfig);
 
@@ -43,16 +42,4 @@ export class ActionsService {
         })
       );
   }
-
-
-  public getDevices = (dataSource: any): any => {
-    this.httpServ.getData('api/devices?recordsPerPage=50&page=1')
-      .subscribe(res => {
-        dataSource.data = res as DeviceForList[];
-      },
-        (error) => {
-          this.errorService.handleError(error);
-        });
-  }
-
 }

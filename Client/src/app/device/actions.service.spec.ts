@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ActionsService } from './actions.service';
+import { DeleteService } from '../shared/delete.service';
 
 describe('ActionsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ActionsService = TestBed.get(ActionsService);
+    const service: DeleteService = TestBed.get(DeleteService);
     expect(service).toBeTruthy();
   });
 });

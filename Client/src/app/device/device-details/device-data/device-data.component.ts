@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DeviceForDetails } from '../../../_interface/device-for-details';
 import { Router } from '@angular/router';
-import { ActionsService } from '../../actions.service';
+import { DeleteService } from '../../../shared/delete.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { DeviceForCreate } from '../../../_interface/device-for-create';
@@ -38,7 +38,7 @@ export class DeviceDataComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private actionsServ: ActionsService,
+    private deleteServ: DeleteService,
     private repoService: HttpService,
     private dialog: MatDialog,
     private errorService: ErrorHandlerService,
@@ -87,7 +87,7 @@ export class DeviceDataComponent implements OnInit {
   }
 
   public delete = (id: string) => {
-    this.actionsServ.delete(id, this.dialogConfig);
+    this.deleteServ.delete(id, this.dialogConfig, `api/devices/${id}`);
   }
 
   public hasError = (controlName: string, errorName: string) => {
