@@ -17,15 +17,19 @@ export class DeleteService {
     private dialog: MatDialog,
     private errorService: ErrorHandlerService
   ) { }
-  public redirectToList = () => {
-    const url = `/device/devices`;
-    this.router.navigate([url]);
+  public redirectToList = (listEndpoint: string) => {
+    this.router.navigate([listEndpoint]);
   }
 
   /***
    * Reusable delete action handles confirm dialog and delete success dialog
    */
-  public delete = (id: string, dialogConf: any, endpoint: string) => {
+  public delete = (
+    id: string,
+    dialogConf: any,
+    endpoint: string,
+    redirectEndpoint: string
+  ) => {
     this.httpServ.delete(endpoint)
       .subscribe(res => {
         const dialogRef = this.dialog.open(SuccessDialogComponent, this.dialogConfig);
@@ -33,7 +37,7 @@ export class DeleteService {
         // subscribing on the [mat-dialog-close] attribute as soon as dialog button is clicked
         dialogRef.afterClosed()
           .subscribe(result => {
-            this.redirectToList();
+            this.redirectToList(redirectEndpoint);
           });
       },
         (error => {

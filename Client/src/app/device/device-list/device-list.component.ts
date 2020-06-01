@@ -25,9 +25,14 @@ import { HttpService } from 'src/app/shared/http.service';
   ],
 })
 export class DeviceListComponent implements OnInit, AfterViewInit {
-  private dialogConfig;
+  // endpoints 
+  apiEndpoint = `api/devices/`;
+  listEndpoint = `device/devices/`;
+  rootEndpoint = `device/`;
+  detailsEndpoint = `device/details/`;
 
-  // Confirm Dialog
+  // dialog cofigs
+  private dialogConfig;
   confirmDelete: boolean;
 
   public displayedColumns = [
@@ -76,7 +81,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public getDevices = () => {
-    this.repoServ.getData('api/devices?recordsPerPage=50&page=1')
+    this.repoServ.getData(`${this.apiEndpoint}?recordsPerPage=50&page=1`)
       .subscribe(res => {
         this.dataSource.data = res as DeviceForList[];
       },
@@ -90,14 +95,11 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public redirectToDetails = (id: string) => {
-    const url = `/device/details/${id}`;
+    const url = `${this.detailsEndpoint}${id}`;
     this.router.navigate([url]);
   }
 
-  public redirectToUpdate = (id: string) => {
-
-  }
-
+  // confirm deletion, delete
   confirmDialog(id: string): any {
     const message = `Are you sure you want to permanently delete record: ${id}`;
     this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
@@ -119,6 +121,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public delete = (id: string) => {
-    this.actionsServ.delete(id, this.dialogConfig, `api/devices/${id}`);
+    this.actionsServ
+      .delete(id, this.dialogConfig, `${this.apiEndpoint}${id}`, `${this.listEndpoint}`);
   }
 }

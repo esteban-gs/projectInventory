@@ -3,6 +3,7 @@ import { DeleteService } from 'src/app/shared/delete.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CategoryForList } from 'src/app/_interface/category-for-list';
 import { HttpService } from 'src/app/shared/http.service';
+import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 
 @Component({
   selector: 'app-category-details',
@@ -11,16 +12,16 @@ import { HttpService } from 'src/app/shared/http.service';
 })
 export class CategoryDetailsComponent implements OnInit {
   public categoryForDetails: CategoryForList;
+  edited = false;
+
   constructor(
-    private actionsServ: DeleteService,
-    private router: Router,
     private activeRoute: ActivatedRoute,
-    private repo: HttpService
+    private repo: HttpService,
+    private errorHandler: ErrorHandlerService
   ) { }
 
   ngOnInit() {
     this.getCategoryDetails();
-
   }
 
   private getCategoryDetails = () => {
@@ -31,7 +32,15 @@ export class CategoryDetailsComponent implements OnInit {
       .subscribe(res => {
         this.categoryForDetails = res as CategoryForList;
         console.log(`cat from component: ${JSON.stringify(this.categoryForDetails)}`);
-      });
+      },
+        (error) => {
+          console.log(JSON.stringify(error));
+          this.errorHandler.handleError(error);
+        });
+  }
+
+  public onEditedCategory(edited: boolean) {
+    edited ? this.getCategoryDetails() : console.log('Not Eited');
   }
 
 }

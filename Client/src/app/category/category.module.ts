@@ -4,11 +4,16 @@ import { CategoryListComponent } from './category-list/category-list.component';
 import { CategoryRoutingModule } from './category-routing/category-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { CategoryDetailsComponent } from './category-details/category-details.component';
+import { CategoryDataComponent } from './category-details/category-data/category-data.component';
 
 
 
 @NgModule({
-  declarations: [CategoryListComponent, CategoryDetailsComponent],
+  declarations: [
+    CategoryListComponent,
+    CategoryDetailsComponent,
+    CategoryDataComponent
+  ],
   imports: [
     CommonModule,
     CategoryRoutingModule,
