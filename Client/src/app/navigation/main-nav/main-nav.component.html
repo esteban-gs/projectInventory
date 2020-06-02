@@ -7,10 +7,11 @@
     [mode]="isHs ? 'push' : 'side'"
     [opened]="isHs ? false : true"
   >
+    <!-- Header -->
     <mat-toolbar color="primary">
       <!-- This fills the remaining space of the current row -->
       <span class="toolbar-filler"></span>
-      <!--toolbar chevron toggl-->
+      <!--sidenav toolbar chevron toggle-->
       <span>
         <ng-container *ngIf="!isHs">
           <button
@@ -28,47 +29,38 @@
         </ng-container>
       </span>
     </mat-toolbar>
-    <mat-nav-list>
-      <mat-list-item>
-        <button
-          mat-mini-fab
-          color="primary"
-          routerLink="/"
-          matTooltip="Home"
-          matTooltipPosition="right"
-          color="accent"
-        >
-          <mat-icon>home</mat-icon>
-        </button>
-      </mat-list-item>
 
-      <mat-list-item>
-        <button
-          mat-mini-fab
-          color="primary"
-          routerLink="/device/devices"
-          matTooltip="Device"
-          matTooltipPosition="right"
-          color="accent"
-        >
-          <mat-icon>devices</mat-icon>
-        </button>
-      </mat-list-item>
-
-      <mat-list-item>
-        <button
-          mat-mini-fab
-          color="primary"
-          routerLink="/category/categories"
-          matTooltip="Categories"
-          matTooltipPosition="right"
-          color="accent"
-        >
-          <mat-icon>category</mat-icon>
-        </button>
-      </mat-list-item>
-    </mat-nav-list>
+    <!-- sidenav navigation list -->
+    <div class="white-spacing">
+      <mat-toolbar *ngFor="let nav of navItems" color="white">
+        <!-- home -->
+        <mat-toolbar-row>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <div>
+              <button
+                mat-icon-button
+                color="primary"
+                [routerLink]="nav.link"
+                [matTooltip]="nav.page"
+                [matTooltipPosition]="nav.tooltipPos"
+                color="accent"
+              >
+                <mat-icon>{{ nav.icon }}</mat-icon>
+              </button>
+            </div>
+            <div>
+              <ng-container *ngIf="isHs">
+                <a [routerLink]="nav.link" class="mat-small">
+                  {{ nav.page }}
+                </a>
+              </ng-container>
+            </div>
+          </div>
+        </mat-toolbar-row>
+      </mat-toolbar>
+    </div>
   </mat-sidenav>
+
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="header">
       <!--Sidenav hamburger toggle button-->
@@ -107,7 +99,7 @@
       </span>
     </mat-toolbar>
 
-    <!--Add Content Here-->
+    <!--App content-->
     <ng-content></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>
