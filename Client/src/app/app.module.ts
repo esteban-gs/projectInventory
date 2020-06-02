@@ -15,6 +15,7 @@ import { CategoryModule } from './category/category.module';
 import { MainNavComponent } from './navigation/main-nav/main-nav.component';
 import { DeviceBreakpointObserverService } from './shared/device-breakpoint-observer.service';
 import { MakerModule } from './maker/maker.module';
+import { EmployeeModule } from './employee/employee.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { MakerModule } from './maker/maker.module';
     HttpClientModule,
     DeviceModule,
     CategoryModule,
-    MakerModule
+    MakerModule,
+    EmployeeModule
   ],
   providers: [DeviceBreakpointObserverService],
   bootstrap: [AppComponent]

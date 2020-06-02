@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'device', loadChildren: () => import('./device/device.module').then(m => m.DeviceModule) },
   { path: 'category', loadChildren: () => import('./category/category.module').then(m => m.CategoryModule) },
   { path: 'maker', loadChildren: () => import('./maker/maker.module').then(m => m.MakerModule) },
+  { path: 'employee', loadChildren: () => import('./employee/employee.module').then(m => m.EmployeeModule) },
   { path: '404', component: NotFoundComponent },
   { path: '500', component: ServerErrorComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
