@@ -11,6 +11,8 @@ using Infrastructure.Data.Repositories;
 using AutoMapper;
 using Inventory.Web.Dtos;
 using Core.Specs;
+using Inventory.Web.Dtos.Pagination;
+using Inventory.Web.Helpers;
 
 namespace Inventory.Web.Controllers
 {
@@ -32,10 +34,14 @@ namespace Inventory.Web.Controllers
 
         // GET: api/Employees
         [HttpGet]
-        public ActionResult<IEnumerable<EmployeeForReturnDTO>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<EmployeeForReturnDTO>>> GetEmployees([FromQuery] PaginationDTO pagination)
         {
+            var entityCount = await _unitOfWork.Repository<Employee>().CountAsync(d => d.Id != 0);
+
+            await HttpContext.InsertPaginationParametersInResponse(entityCount, pagination.RecordsPerPage);
+
             var employees = _unitOfWork.Repository<Employee>()
-                .Find(new EmployeesSpec())
+                .Find(new EmployeesSpec((pagination.Page - 1) * pagination.RecordsPerPage, pagination.RecordsPerPage))
                 .ToList();
 
             return Ok(_mapper

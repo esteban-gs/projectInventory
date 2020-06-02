@@ -7,9 +7,9 @@ namespace Core.Specs
 {
     public class EmployeesSpec : BaseSpecification<Employee>
     {
-        public EmployeesSpec() : base()
+        public EmployeesSpec(int skip, int take) : base()
         {
-
+            ApplyPaging(skip, take);
         }
         public EmployeesSpec(int id) : base(x => x.Id == id) 
         {
