@@ -61,6 +61,8 @@ export class MakerListComponent implements OnInit, AfterViewInit {
 
   public redirectToDetails = (id: string) => {
     const url = `${this.detailsEndpoint}${id}`;
+    console.log(url);
+    console.log(this.router.url);
     this.router.navigate([url]);
   }
 

@@ -1,0 +1,7 @@
+<div *ngIf="makerForDetails">
+    <app-maker-data
+      [maker]="makerForDetails"
+      (editedMakerEmit)="onEditedMaker($event)"
+    ></app-maker-data>
+  </div>
+  
