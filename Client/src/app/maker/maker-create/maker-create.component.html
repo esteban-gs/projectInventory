@@ -1,0 +1,59 @@
+<div class="mat-typography" fxLayout="column" fxLayoutGap="10px">
+    <div fxFlexAlign="center">
+      <section>
+        <h1>Create a new maker</h1>
+      </section>
+    </div>
+    <mat-card>
+      <mat-card-title></mat-card-title>
+  
+      <form
+        [formGroup]="makerForm"
+        autocomplete="off"
+        (ngSubmit)="createRecord(makerForm.value)"
+      >
+        <mat-card-content>
+          <div fxLayout="column" fxLayoutAlign="space-evenly center">
+            <div class="columns">
+              <div class="column">
+                <!-- Column1 -->
+                <p>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Maker Name</mat-label>
+                    <input
+                      matInput
+                      type="text"
+                      placeholder="ACME, Inc."
+                      formControlName="name"
+                      id="name"
+                    />
+                    <mat-icon matSuffix>loyalty</mat-icon>
+                    <mat-hint align="end"
+                      >Not more than 60 characters long.</mat-hint
+                    >
+                    <mat-error *ngIf="hasError('name', 'required')"
+                      >Device Tag is required</mat-error
+                    >
+                    <mat-error *ngIf="hasError('name', 'maxlength')"
+                      >You have more than 60 characters</mat-error
+                    >
+                  </mat-form-field>
+                </p>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+  
+        <!-- Action Buttons -->
+        <mat-card-actions align="center">
+          <button type="submit" mat-raised-button color="primary" [disabled]="!makerForm.valid">
+            Create
+          </button>
+          <button type="button" mat-raised-button color="warn" (click)="onCancel()">
+            Cancel
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card>
+  </div>
+  
