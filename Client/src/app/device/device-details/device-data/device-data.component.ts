@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DeviceForDetails } from '../../../_interface/device-for-details';
 import { Router } from '@angular/router';
-import { ActionsService } from '../../actions.service';
-import { DeviceService } from '../../device.service';
+import { DeleteService } from '../../../shared/delete.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { DeviceForCreate } from '../../../_interface/device-for-create';
@@ -12,6 +11,7 @@ import { ErrorHandlerService } from '../../../shared/error-handler.service';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EditingStatusComponent } from 'src/app/shared/snackbars/editing-status/editing-status.component';
+import { HttpService } from 'src/app/shared/http.service';
 
 
 @Component({
@@ -26,6 +26,8 @@ export class DeviceDataComponent implements OnInit {
   // Form
   public deviceForm: FormGroup;
   maxDate: Date;
+  apiEndpoint = `api/devices/`;
+  listEndpoint = `device/devices`;
 
   // Confirm Dialog
   confirmDelete: boolean;
@@ -38,8 +40,8 @@ export class DeviceDataComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private actionsServ: ActionsService,
-    private repoService: DeviceService,
+    private deleteServ: DeleteService,
+    private repoService: HttpService,
     private dialog: MatDialog,
     private errorService: ErrorHandlerService,
     private snackBar: MatSnackBar
@@ -71,6 +73,10 @@ export class DeviceDataComponent implements OnInit {
     });
   }
 
+  dismissSnackBar() {
+    this.snackBar.dismiss();
+  }
+
   public setToEditMode = () => {
     this.deviceForm.enable();
     this.openSnackBar();
@@ -81,28 +87,20 @@ export class DeviceDataComponent implements OnInit {
     this.dismissSnackBar();
   }
 
-  public redirectToDetails = () => {
-    const url = `/device/details/${this.device.id}`;
-    this.router.navigate([url]);
-  }
-
-  public delete = (id: string) => {
-    this.actionsServ.delete(id, this.dialogConfig);
-  }
-
-  public hasError = (controlName: string, errorName: string) => {
-    return this.deviceForm.controls[controlName].hasError(errorName);
-  }
-
-  dismissSnackBar() {
-    this.snackBar.dismiss();
-  }
-
   public onCancel = () => {
     this.deviceForm.reset();
     this.createForm();
     this.deviceForm.disable();
     this.dismissSnackBar();
+  }
+
+  public delete = (id: string) => {
+    this.deleteServ
+      .delete(id, this.dialogConfig, `${this.apiEndpoint}${id}`, `${this.listEndpoint}`);
+  }
+
+  public hasError = (controlName: string, errorName: string) => {
+    return this.deviceForm.controls[controlName].hasError(errorName);
   }
 
   public editDevice = (deviceFormValue) => {
@@ -114,6 +112,7 @@ export class DeviceDataComponent implements OnInit {
     }
   }
 
+  // confirm delete, delete
   confirmDialog(): void {
     const message = `Are you sure you want to permanently delete record: ${this.device.id}`;
     this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
@@ -141,7 +140,7 @@ export class DeviceDataComponent implements OnInit {
       employeesIds: []
     };
 
-    const apiUrl = `api/devices/${this.device.id}`;
+    const apiUrl = `${this.apiEndpoint}${this.device.id}`;
     this.repoService.update(apiUrl, device)
       .subscribe(res => {
         const dialogRef = this.dialog.open(SuccessDialogComponent, this.dialogConfig);

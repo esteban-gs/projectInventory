@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DeviceService } from '../device.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location, CurrencyPipe } from '@angular/common';
 import { DeviceForCreate } from '../../_interface/device-for-create';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from 'src/app/shared/dialogs/success-dialog/success-dialog.component';
 import { ErrorHandlerService } from '../../shared/error-handler.service';
+import { HttpService } from 'src/app/shared/http.service';
 
 @Component({
   selector: 'app-device-create',
@@ -18,7 +18,7 @@ export class DeviceCreateComponent implements OnInit {
   maxDate: Date;
 
   constructor(
-    private repoService: DeviceService,
+    private repoService: HttpService,
     private location: Location,
     private dialog: MatDialog,
     private errorService: ErrorHandlerService

@@ -1,32 +1,30 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatDialog } from '@angular/material';
-import { MatSort } from '@angular/material/sort';
-import { CategoryForList } from 'src/app/_interface/category-for-list';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MakerForList } from 'src/app/_interface/maker-for-list';
+import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { HttpService } from 'src/app/shared/http.service';
-import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { Router } from '@angular/router';
 import { DeleteService } from 'src/app/shared/delete.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-category-list',
-  templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.scss']
+  selector: 'app-maker-list',
+  templateUrl: './maker-list.component.html',
+  styleUrls: ['./maker-list.component.scss']
 })
-export class CategoryListComponent implements OnInit, AfterViewInit {
+export class MakerListComponent implements OnInit, AfterViewInit {
   // endpoints
-  apiEndpoint = `api/categories/`;
-  listEndpoint = `category/categories/`;
-  detailsEndpoint = `category/details/`;
+  apiEndpoint = `api/makers/`;
+  listEndpoint = `maker/makers/`;
+  detailsEndpoint = `maker/details/`;
 
   // dialog cofigs
   private dialogConfig;
   confirmDelete: boolean;
 
   public displayedColumns = ['id', 'name', 'details', 'delete'];
-  public dataSource = new MatTableDataSource<CategoryForList>();
+  public dataSource = new MatTableDataSource<MakerForList>();
 
   @ViewChild(MatSort, null) sort: MatSort;
-
   constructor(
     private repoServ: HttpService,
     private router: Router,
@@ -35,7 +33,7 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.getCategories();
+    this.getMakers();
 
     // set up the reusable dialog configs
     this.dialogConfig = {
@@ -54,15 +52,17 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  public getCategories = () => {
+  public getMakers = () => {
     this.repoServ.getData(`${this.apiEndpoint}`)
       .subscribe(res => {
-        this.dataSource.data = res as CategoryForList[];
+        this.dataSource.data = res as MakerForList[];
       });
   }
 
   public redirectToDetails = (id: string) => {
     const url = `${this.detailsEndpoint}${id}`;
+    console.log(url);
+    console.log(this.router.url);
     this.router.navigate([url]);
   }
 
@@ -79,8 +79,8 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
           this.delete(`${id}`);
 
           // removes deletem item from table list
-          const categoryId = Number(id);
-          const deletableIndex = this.dataSource.data.findIndex(i => i.id === categoryId);
+          const makerId = Number(id);
+          const deletableIndex = this.dataSource.data.findIndex(i => i.id === makerId);
           this.dataSource.data.splice(deletableIndex, 1);
 
           // force new array values into itself ???
@@ -93,4 +93,5 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
     this.actionsServ
       .delete(id, this.dialogConfig, `${this.apiEndpoint}${id}`, `${this.listEndpoint}`);
   }
+
 }

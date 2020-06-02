@@ -1,0 +1,31 @@
+table {
+  width: 100%;
+  overflow-x: auto;
+  min-width: 320px;
+}
+
+
+// Table Column widths
+
+// small
+.mat-column-id,
+.mat-column-details,
+.mat-column-delete {
+  max-width: 100px;
+  min-width: 50px;
+}
+
+// medium
+.mat-column-badgeNumber,
+.mat-column-hireDate,
+.mat-column-socialSecurityNumber {
+  max-width: 170px;
+  min-width: 110px;
+}
+
+// large
+.mat-column-firstName,
+.mat-column-lastName {
+  max-width: 180px;
+  min-width: 140px;
+}

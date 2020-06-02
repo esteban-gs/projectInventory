@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { DeviceService } from '../device.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { DeviceForList } from '../../_interface/device-for-list';
 import { MatSort } from '@angular/material/sort';
@@ -7,10 +6,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ErrorHandlerService } from '../../shared/error-handler.service';
 import { Router } from '@angular/router';
-import { ActionsService } from '../actions.service';
+import { DeleteService } from '../../shared/delete.service';
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { DeviceForDetails } from 'src/app/_interface/device-for-details';
+import { HttpService } from 'src/app/shared/http.service';
 
 @Component({
   selector: 'app-device-list',
@@ -25,9 +25,14 @@ import { DeviceForDetails } from 'src/app/_interface/device-for-details';
   ],
 })
 export class DeviceListComponent implements OnInit, AfterViewInit {
-  private dialogConfig;
+  // endpoints 
+  apiEndpoint = `api/devices/`;
+  listEndpoint = `device/devices/`;
+  rootEndpoint = `device/`;
+  detailsEndpoint = `device/details/`;
 
-  // Confirm Dialog
+  // dialog cofigs
+  private dialogConfig;
   confirmDelete: boolean;
 
   public displayedColumns = [
@@ -50,12 +55,12 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
-    private repoService: DeviceService,
     private errorService: ErrorHandlerService,
     private router: Router,
-    private actionsServ: ActionsService,
+    private actionsServ: DeleteService,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private repoServ: HttpService
   ) { }
 
   ngOnInit() {
@@ -76,7 +81,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public getDevices = () => {
-    this.repoService.getData('api/devices?recordsPerPage=50&page=1')
+    this.repoServ.getData(`${this.apiEndpoint}?recordsPerPage=50&page=1`)
       .subscribe(res => {
         this.dataSource.data = res as DeviceForList[];
       },
@@ -90,14 +95,11 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public redirectToDetails = (id: string) => {
-    const url = `/device/details/${id}`;
+    const url = `${this.detailsEndpoint}${id}`;
     this.router.navigate([url]);
   }
 
-  public redirectToUpdate = (id: string) => {
-
-  }
-
+  // confirm deletion, delete
   confirmDialog(id: string): any {
     const message = `Are you sure you want to permanently delete record: ${id}`;
     this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
@@ -119,6 +121,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   public delete = (id: string) => {
-    this.actionsServ.delete(id, this.dialogConfig);
+    this.actionsServ
+      .delete(id, this.dialogConfig, `${this.apiEndpoint}${id}`, `${this.listEndpoint}`);
   }
 }

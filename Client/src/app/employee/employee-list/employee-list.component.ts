@@ -1,31 +1,30 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatDialog } from '@angular/material';
-import { MatSort } from '@angular/material/sort';
-import { CategoryForList } from 'src/app/_interface/category-for-list';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { EmployeeForList } from 'src/app/_interface/employee-for-list';
+import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { HttpService } from 'src/app/shared/http.service';
-import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { Router } from '@angular/router';
 import { DeleteService } from 'src/app/shared/delete.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-category-list',
-  templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.scss']
+  selector: 'app-employee-list',
+  templateUrl: './employee-list.component.html',
+  styleUrls: ['./employee-list.component.scss']
 })
-export class CategoryListComponent implements OnInit, AfterViewInit {
-  // endpoints
-  apiEndpoint = `api/categories/`;
-  listEndpoint = `category/categories/`;
-  detailsEndpoint = `category/details/`;
+export class EmployeeListComponent implements OnInit, AfterViewInit {
+// endpoints
+apiEndpoint = `api/employees/?recordsPerPage=50&page=1`;
+listEndpoint = `employee/employees/`;
+detailsEndpoint = `employee/details/`;
 
-  // dialog cofigs
-  private dialogConfig;
-  confirmDelete: boolean;
+// dialog cofigs
+private dialogConfig;
+confirmDelete: boolean;
 
-  public displayedColumns = ['id', 'name', 'details', 'delete'];
-  public dataSource = new MatTableDataSource<CategoryForList>();
+public displayedColumns = ['id', 'firstName', 'lastName', 'socialSecurityNumber', 'badgeNumber', 'hireDate', 'details', 'delete'];
+public dataSource = new MatTableDataSource<EmployeeForList>();
 
-  @ViewChild(MatSort, null) sort: MatSort;
+@ViewChild(MatSort, null) sort: MatSort;
 
   constructor(
     private repoServ: HttpService,
@@ -35,7 +34,7 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.getCategories();
+    this.getEmployees();
 
     // set up the reusable dialog configs
     this.dialogConfig = {
@@ -54,15 +53,17 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  public getCategories = () => {
+  public getEmployees = () => {
     this.repoServ.getData(`${this.apiEndpoint}`)
       .subscribe(res => {
-        this.dataSource.data = res as CategoryForList[];
+        this.dataSource.data = res as EmployeeForList[];
       });
   }
 
   public redirectToDetails = (id: string) => {
     const url = `${this.detailsEndpoint}${id}`;
+    console.log(url);
+    console.log(this.router.url);
     this.router.navigate([url]);
   }
 
@@ -79,8 +80,8 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
           this.delete(`${id}`);
 
           // removes deletem item from table list
-          const categoryId = Number(id);
-          const deletableIndex = this.dataSource.data.findIndex(i => i.id === categoryId);
+          const makerId = Number(id);
+          const deletableIndex = this.dataSource.data.findIndex(i => i.id === makerId);
           this.dataSource.data.splice(deletableIndex, 1);
 
           // force new array values into itself ???
@@ -93,4 +94,6 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
     this.actionsServ
       .delete(id, this.dialogConfig, `${this.apiEndpoint}${id}`, `${this.listEndpoint}`);
   }
+
+
 }

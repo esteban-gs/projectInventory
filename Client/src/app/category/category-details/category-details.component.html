@@ -1,0 +1,6 @@
+<div *ngIf="categoryForDetails">
+  <app-category-data
+    [category]="categoryForDetails"
+    (editedCategoryEmit)="onEditedCategory($event)"
+  ></app-category-data>
+</div>
