@@ -1,0 +1,7 @@
+<div *ngIf="employeeForDetails">
+    <app-employee-data
+      [employee]="employeeForDetails"
+      (editedEmployeeEmitt)="onEditedEntity($event)"
+    ></app-employee-data>
+  </div>
+  

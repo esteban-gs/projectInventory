@@ -6,13 +6,15 @@ import { SuccessDialogComponent } from './dialogs/success-dialog/success-dialog.
 import { ErrorDialogComponent } from './dialogs/error-dialog/error-dialog.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { EditingStatusComponent } from './snackbars/editing-status/editing-status.component';
+import { ValidatorsComponent } from './validators/validators.component';
 
 @NgModule({
   declarations: [
     SuccessDialogComponent,
     ErrorDialogComponent,
     ConfirmDialogComponent,
-    EditingStatusComponent
+    EditingStatusComponent,
+    ValidatorsComponent
   ],
   imports: [
     CommonModule,

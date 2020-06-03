@@ -1,0 +1,167 @@
+<div class="mat-typography" fxLayout="column" fxLayoutGap="10px">
+  <div fxFlexAlign="center">
+    <section>
+      <h1>Create a new employee</h1>
+    </section>
+  </div>
+  <mat-card>
+    <mat-card-title></mat-card-title>
+
+    <form
+      [formGroup]="employeeForm"
+      autocomplete="off"
+      (ngSubmit)="createRecord(employeeForm.value)"
+    >
+      <mat-card-content>
+        <div fxLayout="column" fxLayoutAlign="space-evenly center">
+          <div class="columns">
+            <div class="column is-half">
+              <!-- Column1 -->
+              <!-- First Name -->
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Peter"
+                    formControlName="firstName"
+                    id="firstName"
+                  />
+                  <mat-icon matSuffix>loyalty</mat-icon>
+                  <mat-hint align="end"
+                    >Not more than 60 characters long.</mat-hint
+                  >
+                  <mat-error *ngIf="hasError('firstName', 'required')"
+                    >Device Tag is required</mat-error
+                  >
+                  <mat-error *ngIf="hasError('firstName', 'maxlength')"
+                    >You have more than 60 characters</mat-error
+                  >
+                </mat-form-field>
+              </p>
+              <!-- Last Name -->
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Doe"
+                    formControlName="lastName"
+                    id="lastName"
+                  />
+                  <mat-icon matSuffix>loyalty</mat-icon>
+                  <mat-hint align="end"
+                    >Not more than 60 characters long.</mat-hint
+                  >
+                  <mat-error *ngIf="hasError('lastName', 'required')"
+                    >Device Tag is required</mat-error
+                  >
+                  <mat-error *ngIf="hasError('lastName', 'maxlength')"
+                    >You have more than 60 characters</mat-error
+                  >
+                </mat-form-field>
+              </p>
+
+              <!-- Last Name -->
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>S.S. Number</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="123-12-1234"
+                    formControlName="socialSecurityNumber"
+                    id="socialSecurityNumber"
+                  />
+                  <mat-icon matSuffix>loyalty</mat-icon>
+                  <mat-hint align="end"
+                    >Not more than 60 characters long.</mat-hint
+                  >
+                  <mat-error
+                    *ngIf="hasError('socialSecurityNumber', 'required')"
+                    >Device Tag is required</mat-error
+                  >
+                  <mat-error
+                    *ngIf="hasError('socialSecurityNumber', 'maxlength')"
+                    >You have more than 60 characters</mat-error
+                  >
+                  <mat-error
+                    *ngIf="hasError('socialSecurityNumber', 'pattern')"
+                    >e.g 123-12-1234</mat-error
+                  >
+                </mat-form-field>
+              </p>
+            </div>
+            <div class="column">
+              <!-- Column2 -->
+              <p>
+                <!-- productId-->
+                <mat-form-field appearance="outline">
+                  <mat-label>Badge Number</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="1434DFFF"
+                    formControlName="badgeNumber"
+                  />
+                  <mat-icon matSuffix>device_unknown</mat-icon>
+                  <mat-hint align="end"
+                    >Not more then 100 characters long.</mat-hint
+                  >
+                  <mat-error *ngIf="hasError('badgeNumber', 'required')"
+                    >Description is required</mat-error
+                  >
+                  <mat-error *ngIf="hasError('badgeNumber', 'maxlength')"
+                    >You have more than 100 characters</mat-error
+                  >
+                </mat-form-field>
+              </p>
+              <!-- Date Purchased -->
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>Date Hired</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    [max]="maxDate"
+                    placeholder="Date Hired"
+                    formControlName="hireDate"
+                    id="hireDate"
+                    (click)="picker.open()"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker color="primary"></mat-datepicker>
+                </mat-form-field>
+              </p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <!-- Action Buttons -->
+      <mat-card-actions align="center">
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="!employeeForm.valid"
+        >
+          Create
+        </button>
+        <button
+          type="button"
+          mat-raised-button
+          color="warn"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>
