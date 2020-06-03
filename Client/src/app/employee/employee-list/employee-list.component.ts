@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { EmployeeForList } from 'src/app/_interface/employee-for-list';
 import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { HttpService } from 'src/app/shared/http.service';
+import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { DeleteService } from 'src/app/shared/delete.service';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
@@ -12,19 +13,21 @@ import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialo
   styleUrls: ['./employee-list.component.scss']
 })
 export class EmployeeListComponent implements OnInit, AfterViewInit {
-// endpoints
-apiEndpoint = `api/employees/?recordsPerPage=50&page=1`;
-listEndpoint = `employee/employees/`;
-detailsEndpoint = `employee/details/`;
+  // endpoints
+  apiEndpoint = `api/employees/`;
+  apiEntityListEndpoint = `api/employees/?recordsPerPage=50&page=1`;
+  listEndpoint = `employee/employees/`;
+  detailsEndpoint = `employee/details/`;
 
-// dialog cofigs
-private dialogConfig;
-confirmDelete: boolean;
+  // dialog cofigs
+  private dialogConfig;
+  confirmDelete: boolean;
 
-public displayedColumns = ['id', 'firstName', 'lastName', 'socialSecurityNumber', 'badgeNumber', 'hireDate', 'details', 'delete'];
-public dataSource = new MatTableDataSource<EmployeeForList>();
+  public displayedColumns = ['id', 'firstName', 'lastName', 'socialSecurityNumber', 'badgeNumber', 'hireDate', 'details', 'delete'];
+  public dataSource = new MatTableDataSource<EmployeeForList>();
 
-@ViewChild(MatSort, null) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private repoServ: HttpService,
@@ -47,6 +50,7 @@ public dataSource = new MatTableDataSource<EmployeeForList>();
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   public doFilter = (value: string) => {
@@ -54,7 +58,7 @@ public dataSource = new MatTableDataSource<EmployeeForList>();
   }
 
   public getEmployees = () => {
-    this.repoServ.getData(`${this.apiEndpoint}`)
+    this.repoServ.getData(`${this.apiEntityListEndpoint}`)
       .subscribe(res => {
         this.dataSource.data = res as EmployeeForList[];
       });
@@ -94,6 +98,4 @@ public dataSource = new MatTableDataSource<EmployeeForList>();
     this.actionsServ
       .delete(id, this.dialogConfig, `${this.apiEndpoint}${id}`, `${this.listEndpoint}`);
   }
-
-
 }

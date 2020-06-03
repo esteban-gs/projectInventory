@@ -25,7 +25,7 @@ import { HttpService } from 'src/app/shared/http.service';
   ],
 })
 export class DeviceListComponent implements OnInit, AfterViewInit {
-  // endpoints 
+  // endpoints
   apiEndpoint = `api/devices/`;
   listEndpoint = `device/devices/`;
   rootEndpoint = `device/`;
