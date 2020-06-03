@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { EmployeeListComponent } from '../employee-list/employee-list.component';
 import { RouterModule, Routes } from '@angular/router';
 import { EmployeeDetailsComponent } from '../employee-details/employee-details.component';
+import { EmployeeCreateComponent } from '../employee-create/employee-create.component';
 
 const routes: Routes = [
   { path: 'employees', component: EmployeeListComponent },
-  { path: 'details/:id', component: EmployeeDetailsComponent }
+  { path: 'details/:id', component: EmployeeDetailsComponent },
+  { path: 'create', component: EmployeeCreateComponent }
 ];
 
 @NgModule({

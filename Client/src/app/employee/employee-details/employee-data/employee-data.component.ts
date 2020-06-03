@@ -44,8 +44,8 @@ export class EmployeeDataComponent implements OnInit {
   public createForm() {
     this.employeeForm = new FormGroup({
       firstName: new FormControl(this.employee.firstName, [Validators.required, Validators.maxLength(365)]),
-      lastName: new FormControl(this.employee.lastName, [Validators.maxLength(365)]),
-      socialSecurityNumber: new FormControl(this.employee.socialSecurityNumber, [Validators.maxLength(11)]),
+      lastName: new FormControl(this.employee.lastName, [Validators.required, Validators.maxLength(365)]),
+      socialSecurityNumber: new FormControl(this.employee.socialSecurityNumber, [Validators.required, Validators.maxLength(11)]),
       badgeNumber: new FormControl(this.employee.badgeNumber, [Validators.maxLength(15)]),
       hireDate: new FormControl(this.employee.hireDate, [Validators.required]),
     });
