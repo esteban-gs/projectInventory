@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 
@@ -38,11 +39,10 @@ namespace Infrastructure.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var rootPath = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-
+            Console.WriteLine(Environment.CurrentDirectory);
             var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath($"{rootPath}/Inventory.Web")
-                .AddJsonFile("appsettings.json");
+                .SetBasePath(Environment.CurrentDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             var _config = configurationBuilder.Build();
 

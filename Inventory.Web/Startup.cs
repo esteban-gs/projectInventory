@@ -44,6 +44,7 @@ namespace inventory
                 configuration.RootPath = "../Client/dist";
             });
 
+            
             services.AddDbContext<InventoryDBContext>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

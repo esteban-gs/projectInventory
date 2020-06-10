@@ -18,8 +18,11 @@ namespace Infrastructure.Data
         {
             try
             {
+                context.Database.EnsureCreated();
+
                 if (!context.Devices.Any())
                 {
+
                     await MigrationRepository<Category>.JsonToList("deviceCategory", context);
                     await MigrationRepository<Maker>.JsonToList("deviceMakers", context);
                     await MigrationRepository<Device>.JsonToList("devices", context);
@@ -48,7 +51,10 @@ namespace Infrastructure.Data
                 WriteIndented = true
             };
 
-            var rootPath = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+            // var rootPath = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+            var rootPath = Environment.CurrentDirectory;
+            Console.WriteLine("______________+++++++_");
+            Console.WriteLine(rootPath);
 
             var deviceDataSource = File
                        .ReadAllText($"{rootPath}/Infrastructure/{fileName}.json");
