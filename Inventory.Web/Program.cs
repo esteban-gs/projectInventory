@@ -29,7 +29,7 @@ namespace inventory
                 {
                     var logger = loggerFactory.CreateLogger<Program>();
                     logger.LogError(ex, "An error ocurred during migration");
-                    Console.WriteLine(ex.InnerException.Message);
+                    logger.LogError(ex.InnerException.Message);
                 }
             }
 

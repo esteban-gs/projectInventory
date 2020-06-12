@@ -1,6 +1,6 @@
 #Devices
 [
-  '{{repeat(1000)}}',
+  '{{repeat(500)}}',
   {
     name: '{{lorem(1, "words")}}',
     description: '{{lorem(1, "sentences")}}',
@@ -29,7 +29,7 @@
 
 #Employees
 [
-  '{{repeat(800)}}',
+  '{{repeat(500)}}',
   {
     firstName: '{{firstName()}}',
     lastName: '{{surname()}}',
@@ -41,12 +41,12 @@
 
 #EmployeeDevice
 [
-  '{{repeat(1200)}}',
+  '{{repeat(800)}}',
   {
-    employeeId: '{{integer(1, 800)}}',
-    deviceId: '{{integer(1, 1000)}}',
+    employeeId: '{{integer(1, 500)}}',
+    deviceId: '{{integer(1, 500)}}',
     checkOutDate: '{{date(new Date(2000, 0, 1), new Date(), "YYYY-MM-dd")}}',
-	checkInDate: '{{date(new Date(2010, 0, 1), new Date(), "YYYY-MM-dd")}}'
+	  checkInDate: '{{date(new Date(2010, 0, 1), new Date(), "YYYY-MM-dd")}}'
   }
 ]
 
