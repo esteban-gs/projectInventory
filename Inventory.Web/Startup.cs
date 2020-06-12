@@ -41,7 +41,8 @@ namespace inventory
 
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "../Client/dist";
+                var slnRoot = Environment.CurrentDirectory;
+                configuration.RootPath = $"{slnRoot}/Client/dist";
             });
 
             

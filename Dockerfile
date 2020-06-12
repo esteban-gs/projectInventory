@@ -1,8 +1,18 @@
+FROM node:12.16.1-alpine As ui-builder
+
+WORKDIR /app
+
+COPY ./Client ./Client
+
+RUN cd Client \
+    && npm install \
+    && npm run build --prod
+
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-bionic AS build-env
 WORKDIR /app
 
-# Copy everything else and build
 COPY . ./
+# COPY --from=ui-builder /app/Client/dist ./Client/dist
 
 # Need to configure upgrade TLS, per MS SQL requirements 
 # See: https://github.com/dotnet/SqlClient/issues/222#issuecomment-535941637
@@ -16,7 +26,9 @@ RUN dotnet publish "Inventory.Web/Inventory.Web.csproj" -c Release -o out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-bionic
 WORKDIR /app
 COPY --from=build-env /app/out .
+COPY --from=ui-builder /app/Client/dist ./Client/dist
 COPY --from=build-env /app/Infrastructure ./Infrastructure
+COPY source dest
 ENTRYPOINT ["dotnet", "Inventory.Web.dll"]
 
 

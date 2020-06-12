@@ -5,7 +5,7 @@ services:
   db:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     volumes:
-      - C:\Users\comsa\code\volumeData\inventoryV:/var/lib/mysql/data
+      -  inventory-db-data:/var/lib/mysql/data
 
       # - "inventory-db-data:/var/lib/mysql/data"
     networks:
@@ -26,11 +26,17 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: inventory-api
+    environment: 
+      - ASPNETCORE_URLS="https://+;http://+"
+      - ASPNETCORE_HTTPS_PORT=8001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password="!Passw0rd"
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+
     restart: always 
     ports:
-      - "8080:80"
+      - "8001:80"
     expose: 
-      - 8080
+      - 8001
     depends_on:
       - db
     command: 
