@@ -14,10 +14,10 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=!Passw0rd
-    ports:
-      - "1433:1433"
-    expose:  
-      - 1433
+    # ports:
+    #   - "1433:1433"
+    # expose:  
+    #   - 1433
 
   inventory-api:
     networks:
@@ -27,20 +27,18 @@ services:
       dockerfile: Dockerfile
     container_name: inventory-api
     environment: 
-      - ASPNETCORE_URLS="https://+;http://+"
-      - ASPNETCORE_HTTPS_PORT=8001
-      - ASPNETCORE_Kestrel__Certificates__Default__Password="!Passw0rd"
+      - ASPNETCORE_URLS=https://+:5001
+      # - ASPNETCORE_HTTPS_PORT=8001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=!Passw0rd
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
 
     restart: always 
     ports:
-      - "8001:80"
+      - "80:5001"
     expose: 
-      - 8001
+      - 80
     depends_on:
       - db
-    command: 
-      - "sleep 2000;" 
 
 networks:
   sql:

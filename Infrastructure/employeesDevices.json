@@ -1782,12 +1782,6 @@
     "checkInDate": "2016-03-28"
   },
   {
-    "employeeId": 43,
-    "deviceId": 153,
-    "checkOutDate": "2006-04-29",
-    "checkInDate": "2010-05-27"
-  },
-  {
     "employeeId": 82,
     "deviceId": 329,
     "checkOutDate": "2004-07-14",

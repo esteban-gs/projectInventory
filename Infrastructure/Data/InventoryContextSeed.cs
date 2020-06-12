@@ -60,21 +60,21 @@ namespace Infrastructure.Data
                        .ReadAllText($"{rootPath}/Infrastructure/{fileName}.json");
 
             var objectList = JsonSerializer.Deserialize<List<T>>(deviceDataSource, options);
-
-            foreach (var devic in objectList)
-            {
-                PropertyInfo[] properties = devic.GetType().GetProperties();
-                foreach (var prop in properties)
-                {
-                    Console.WriteLine($"{prop.Name}: , {prop.GetValue(devic, null)}");
-                }
-                Console.Write($"{devic.GetType().GetProperties()}{Environment.NewLine}");
-            }
+            Console.Write($"Creating {objectList.Count()} records{Environment.NewLine}");
+            
+            // foreach (var devic in objectList)
+            // {
+            //     PropertyInfo[] properties = devic.GetType().GetProperties();
+            //     foreach (var prop in properties)
+            //     {
+            //         Console.WriteLine($"{prop.Name}: , {prop.GetValue(devic, null)}");
+            //     }
+            //     Console.Write($"{devic.GetType().GetProperties()}{Environment.NewLine}");
+            // }
 
             objSet = context.Set<T>();
             foreach (var item in objectList)
             {
-
                 await objSet.AddAsync(item);
                 await context.SaveChangesAsync();
             }
