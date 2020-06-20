@@ -3,9 +3,9 @@ version: "3.8"
 
 services:
   db:
-    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
     volumes:
-      -  inventory-db-data:/var/lib/mysql/data
+      -  C:/Users/comsa/code/volumeData/inventoryV:/var/opt/mssql/data
 
       # - "inventory-db-data:/var/lib/mysql/data"
     networks:
