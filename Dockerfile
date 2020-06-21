@@ -27,7 +27,7 @@ RUN dotnet publish "Inventory.Web/Inventory.Web.csproj" -c Release -o out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-bionic
 WORKDIR /app
 
-COPY ./.aspnet/https/ /https/
+# COPY ./conf.d/https /https/
 
 COPY --from=build-env /app/out .
 COPY --from=ui-builder /app/Client/dist ./Client/dist

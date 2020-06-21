@@ -12,6 +12,8 @@ node_modules/
 
 .aspnet/
 *.pfx
+*.env
+certs/
 
 # profiling files
 chrome-profiler-events.json
