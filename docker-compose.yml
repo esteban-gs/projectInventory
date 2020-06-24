@@ -27,15 +27,15 @@ services:
     volumes:
       - ./certs:/https
     restart: always
-    ports:
-      - "8001:5000"
     expose:
-      - 8001
+      - 5000
     depends_on:
       - db
 
   # ningx proxy service
   proxy:
+    networks:
+      - sql
     build:
       context: ./nginx
       dockerfile: nginx.Dockerfile
