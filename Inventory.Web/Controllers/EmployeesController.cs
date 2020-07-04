@@ -34,7 +34,7 @@ namespace Inventory.Web.Controllers
 
         // GET: api/Employees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmployeeForReturnDTO>>> GetEmployees([FromQuery] PaginationDTO pagination)
+        public async Task<ActionResult<IEnumerable<EmployeeForReturnDTO>>> GetEmployees([FromQuery] HeaderParamsDTO pagination)
         {
             var entityCount = await _unitOfWork.Repository<Employee>().CountAsync(d => d.Id != 0);
 

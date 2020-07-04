@@ -13,9 +13,9 @@ using Inventory.Web.Dtos;
 using AutoMapper;
 using System.Net.Http.Headers;
 using System.Security.Policy;
-using Inventory.Web.Dtos.Pagination;
 using Inventory.Web.Helpers;
 using System.Runtime.CompilerServices;
+using Core.Specs.Pagination;
 
 namespace Inventory.Web.Controllers
 {
@@ -38,18 +38,25 @@ namespace Inventory.Web.Controllers
         /// <summary>
         /// Get paginated list of Devices with a count of assigned employess for every device
         /// </summary>
-        /// <param name="pagination">A pagination object from query</param>
+        /// <param name="deviceParams">A headerParams object from query</param>
         /// <returns></returns>
         // GET: api/Devices
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DeviceListToReturnDTO>>> GetDevices([FromQuery] PaginationDTO pagination)
+        public async Task<ActionResult<IEnumerable<DeviceListToReturnDTO>>> GetDevices([FromQuery] DeviceParams deviceParams)
         {
             var deviceCount = await _unitOfWork.Repository<Device>().CountAsync(d => d.Id != 0);
+            await HttpContext.InsertPaginationParametersInResponse(deviceCount, deviceParams.RecordsPerPage);
 
-            await HttpContext.InsertPaginationParametersInResponse(deviceCount, pagination.RecordsPerPage);
+            var recordsToSkip = (deviceParams.Page - 1) * deviceParams.RecordsPerPage;
 
             var devices = _unitOfWork.Repository<Device>()
-                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices((pagination.Page -1) * pagination.RecordsPerPage , pagination.RecordsPerPage))
+                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices(
+                    recordsToSkip, 
+                    deviceParams.RecordsPerPage, 
+                    deviceParams.Sort,
+                    deviceParams.CategoryId,
+                    deviceParams.MakerId
+                    ))
                 .ToList();
 
             return Ok(_mapper
