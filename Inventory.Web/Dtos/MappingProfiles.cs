@@ -74,6 +74,7 @@ namespace Inventory.Web.Helpers
                 var edToReturn = new EmployeeDeviceToReturnDTO()
                 {
                     EmployeeId = ed.EmployeeId,
+                    Employee = $"{ed.Employee.FirstName} {ed.Employee.LastName}",
                     CheckOutDate = ed.CheckOutDate,
                     CheckInDate = ed.CheckInDate
                 };

@@ -1,27 +1,26 @@
 ﻿using Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
+using Core.Specs.SpecificationParams;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Specs
 {
     public class DevicesWithCategoryAndMakerAndEmployeeDevices : BaseSpecification<Device>
     {
-        public DevicesWithCategoryAndMakerAndEmployeeDevices(int skip, int take, string sort, int? categoryId, int? makerId)
+        public DevicesWithCategoryAndMakerAndEmployeeDevices(DeviceParams deviceParams)
             : base(x =>
-                (categoryId == 0 || x.CategoryId == categoryId) &&
-                (makerId == 0 || x.MakerId == makerId)
+                (string.IsNullOrEmpty(deviceParams.Search) || x.Name.ToLower()
+                                                                    .Contains(deviceParams.Search)) &&
+                (!deviceParams.CategoryId.HasValue || x.CategoryId == deviceParams.CategoryId) &&
+                (!deviceParams.MakerId.HasValue || x.MakerId == deviceParams.MakerId)
             )
         {
-            AddInclude(d => d.Category);
-            AddInclude(d => d.Maker);
-            AddInclude(d => d.EmployeeDevice);
+            AddInclude(q => q.Include(d => d.Category));
+            AddInclude(q => q.Include(d => d.Maker));
+            AddInclude(q => q.Include(d => d.EmployeeDevice).ThenInclude(d => d.Employee));
 
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(deviceParams.Sort))
             {
-                switch (sort)
+                switch (deviceParams.Sort)
                 {
                     // productId
                     case "productIdAsc":
@@ -83,15 +82,19 @@ namespace Core.Specs
                         ApplyOrderBy(d => d.Name);
                         break;
                 }
-
-                ApplyPaging(skip, take);
             }
+            else // default sort
+            {
+                ApplyOrderByDescending(d => d.Id);
+            }
+
+            ApplyPaging(deviceParams.Skip, deviceParams.RecordsPerPage);
         }
         public DevicesWithCategoryAndMakerAndEmployeeDevices(int id) : base(x => x.Id == id)
         {
-            AddInclude(d => d.Category);
-            AddInclude(d => d.Maker);
-            AddInclude(d => d.EmployeeDevice);
+            AddInclude(q => q.Include(d => d.Category));
+            AddInclude(q => q.Include(d => d.Maker));
+            AddInclude(q => q.Include(d => d.EmployeeDevice).ThenInclude(d => d.Employee));
         }
     }
 }

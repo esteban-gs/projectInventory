@@ -25,7 +25,7 @@ namespace Infrastructure.Data.Repositories
         //
         int Count(ISpecification<TEntity> specification = null);
         Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
-
+        Task<int> CountAsync(ISpecification<TEntity> specification = null);
 
     }
 }

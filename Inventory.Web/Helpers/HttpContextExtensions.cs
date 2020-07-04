@@ -10,6 +10,7 @@ namespace Inventory.Web.Helpers
 {
     public static class HttpContextExtensions
     {
+        // Usage:  await HttpContext.InsertPaginationParametersInResponse(deviceCount, deviceParams.RecordsPerPage);
         public static Task InsertPaginationParametersInResponse(
             this HttpContext httpContext,
             double entityCount,
