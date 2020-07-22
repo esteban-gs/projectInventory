@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { DeviceForList } from '../../_interface/device-for-list';
+import { DeviceForList, ApiResponseModel } from '../../_interface/device-for-list';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ErrorHandlerService } from '../../shared/error-handler.service';
 import { Router } from '@angular/router';
@@ -11,6 +11,9 @@ import { MatDialog } from '@angular/material';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { DeviceForDetails } from 'src/app/_interface/device-for-details';
 import { HttpService } from 'src/app/shared/http.service';
+import { merge, Observable, of as observableOf } from 'rxjs';
+import { startWith, switchMap, map, catchError, tap } from 'rxjs/operators';
+import { DeviceService } from './device.service';
 
 @Component({
   selector: 'app-device-list',
@@ -35,6 +38,12 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   private dialogConfig;
   confirmDelete: boolean;
 
+  // Pagination
+  resultsLength = 0;
+  pageIndex = 1;
+  recordsPerPage = 10;
+  isLoadingResults = true;
+
   public displayedColumns = [
     'id',
     'name',
@@ -47,7 +56,10 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     'details',
     'delete'
   ];
-  public dataSource = new MatTableDataSource<DeviceForList>();
+
+  // table obj
+  dataSource: ApiResponseModel;
+  pageEvent: PageEvent;
 
   expandedElement: DeviceForList | null;
 
@@ -60,12 +72,11 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     private actionsServ: DeleteService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
-    private repoServ: HttpService
+    private repoServ: HttpService,
+    private devHttpServ: DeviceService
   ) { }
 
   ngOnInit() {
-    this.getDevices();
-
     // set up the reusable dialog configs
     this.dialogConfig = {
       height: 'auto',
@@ -73,25 +84,66 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
       disableClose: true,
       data: {}
     };
+
+    // this.dataSource.paginator = this.paginator;
+
+
+    ////
+    // this.devHttpServ.getDevices(1, 10);
+
+    this.initDataSource();
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+
+    // this.pageIndex = this.paginator.pageIndex;
+    // this.recordsPerPage = this.paginator.pageSize;
+
+    // merge(this.sort.sortChange, this.paginator.page)
+    //   .pipe(
+    //     startWith({}),
+    //     switchMap(() => {
+    //       return this.devHttpServ!.getDevices(
+    //         this.paginator.pageIndex + 1,
+    //         this.paginator.pageSize,
+    //         '',
+    //         '',
+    //         '',
+    //         '');
+    //     }),
+    //     map(data => {
+    //       this.resultsLength = data.count;
+    //       return data.data;
+    //     }),
+    //     catchError((error) => {
+    //       this.errorService.handleError(error);
+    //       return observableOf([]);
+    //     })
+    //   ).subscribe(data => this.dataSource = data);
+
+
+    // this.getDevices();
   }
 
-  public getDevices = () => {
-    this.repoServ.getData(`${this.apiEndpoint}?recordsPerPage=50&page=1`)
-      .subscribe(res => {
-        this.dataSource.data = res as DeviceForList[];
-      },
-        (error) => {
-          this.errorService.handleError(error);
-        });
+  initDataSource() {
+    this.devHttpServ.getDevices(1, 10, '', '', '', '').pipe(
+      tap(data => console.log(data)),
+      map((data: ApiResponseModel) => {
+        this.dataSource = data as ApiResponseModel;
+        console.log(this.dataSource);
+      })
+    ).subscribe();
   }
 
-  public doFilter = (value: string) => {
-    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  onPaginateChange(event: PageEvent) {
+    const page = event.pageIndex + 1;
+    const size = event.pageSize;
+
+    this.devHttpServ.getDevices(page, size).pipe(
+      map((data: ApiResponseModel) => this.dataSource = data)
+    ).subscribe();
   }
 
   public redirectToDetails = (id: string) => {
@@ -100,25 +152,25 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   // confirm deletion, delete
-  confirmDialog(id: string): any {
-    const message = `Are you sure you want to permanently delete record: ${id}`;
-    this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, this.dialogConfig);
+  // confirmDialog(id: string): any {
+  //   const message = `Are you sure you want to permanently delete record: ${id}`;
+  //   this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
+  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, this.dialogConfig);
 
-    dialogRef.afterClosed()
-      .subscribe(dialogResult => {
-        this.confirmDelete = dialogResult;
-        if (this.confirmDelete) {
-          this.delete(`${id}`);
-          // removes deletem item from table list
-          const deviceId = Number(id);
-          const deletableIndex = this.dataSource.data.findIndex(i => i.id === deviceId);
-          this.dataSource.data.splice(deletableIndex, 1);
-          // force new array values into itself ???
-          this.dataSource.data = this.dataSource.data.slice(0);
-        }
-      });
-  }
+  //   dialogRef.afterClosed()
+  //     .subscribe(dialogResult => {
+  //       this.confirmDelete = dialogResult;
+  //       if (this.confirmDelete) {
+  //         this.delete(`${id}`);
+  //         // removes deletem item from table list
+  //         const deviceId = Number(id);
+  //         const deletableIndex = this.dataSource.data.findIndex(i => i.id === deviceId);
+  //         this.dataSource.data.splice(deletableIndex, 1);
+  //         // force new array values into itself ???
+  //         this.dataSource.data = this.dataSource.data.slice(0);
+  //       }
+  //     });
+  // }
 
   public delete = (id: string) => {
     this.actionsServ

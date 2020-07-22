@@ -88,7 +88,8 @@ namespace Core.Specs
                 ApplyOrderByDescending(d => d.Id);
             }
 
-            ApplyPaging(deviceParams.Skip, deviceParams.RecordsPerPage);
+            var skip = (deviceParams.Page - 1) * deviceParams.RecordsPerPage;
+            ApplyPaging(skip, deviceParams.RecordsPerPage);
         }
         public DevicesWithCategoryAndMakerAndEmployeeDevices(int id) : base(x => x.Id == id)
         {

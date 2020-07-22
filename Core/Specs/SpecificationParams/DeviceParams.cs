@@ -1,5 +1,9 @@
-﻿namespace Core.Specs.SpecificationParams
+﻿using Swashbuckle.AspNetCore.Annotations;
+using System.Runtime.InteropServices.WindowsRuntime;
+
+namespace Core.Specs.SpecificationParams
 {
+    [SwaggerTag("Create, read, update and delete Products")]
     public class DeviceParams
     {
         private const int MaxRecordsPerPage = 50;
@@ -13,7 +17,6 @@
             get => _recordsPerPage;
             set => _recordsPerPage = (value > MaxRecordsPerPage) ? MaxRecordsPerPage : value;
         }
-        public int Skip { get => (Page - 1) * _recordsPerPage; }
 
         public string Sort { get; set; }
         public int? CategoryId { get; set; }
