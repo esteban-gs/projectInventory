@@ -8,8 +8,11 @@ namespace Core.Specs
     {
         public DevicesWithCategoryAndMakerAndEmployeeDevices(DeviceParams deviceParams)
             : base(x =>
-                (string.IsNullOrEmpty(deviceParams.Search) || x.Name.ToLower()
-                                                                    .Contains(deviceParams.Search)) &&
+                (string.IsNullOrEmpty(deviceParams.Search) || 
+                    x.Name.ToLower().Contains(deviceParams.Search) ||
+                    x.ProductId.ToLower().Contains(deviceParams.Search) ||
+                    x.Id.ToString().Contains(deviceParams.Search)
+                ) &&
                 (!deviceParams.CategoryId.HasValue || x.CategoryId == deviceParams.CategoryId) &&
                 (!deviceParams.MakerId.HasValue || x.MakerId == deviceParams.MakerId)
             )
@@ -78,8 +81,16 @@ namespace Core.Specs
                         ApplyOrderByDescending(d => d.Name);
                         break;
 
+                    // Id (PK)
+                    case "idAsc":
+                        ApplyOrderBy(d => d.Id);
+                        break;
+                    case "idDesc":
+                        ApplyOrderByDescending(d => d.Id);
+                        break;
+
                     default:
-                        ApplyOrderBy(d => d.Name);
+                        ApplyOrderByDescending(d => d.Id);
                         break;
                 }
             }
