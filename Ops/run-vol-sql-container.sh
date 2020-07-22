@@ -1,6 +1,6 @@
 #!/bin/bash
 container_name=inventory-sqlser
-volume_name=inventory
+volume_name=inventory-db-data
 
 echo "."
 echo "."
@@ -40,7 +40,7 @@ then
         
     elif docker container inspect $container_name | grep -Eq "No such container";
     then
-        docker run -d --name $container_name -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=!Passw0rd" -p 1433:1433 -v $volume_name:/usr  mcr.microsoft.com/mssql/server
+        docker run -d --name $container_name -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=!Passw0rd" -p 1433:1433 -v $volume_name:/usr  mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
     else
         echo "."
         echo 'Container with name $container_name either DOES NOT exist Or has EXITED with an error';

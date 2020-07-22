@@ -10,7 +10,7 @@
     </section>
   </div>
   <div fxLayout="row" fxLayoutAlign="space-between stretch">
-    <div>
+    <!-- <div>
       <mat-form-field>
         <input
           matInput
@@ -19,7 +19,7 @@
           placeholder="Filter List"
         />
       </mat-form-field>
-    </div>
+    </div> -->
     <div>
       <button
         [routerLink]="['/device/create']"
@@ -32,47 +32,37 @@
     </div>
   </div>
 
-  <div>
+  <div *ngIf="dataSource">
     <table
       mat-table
-      [dataSource]="dataSource"
+      [dataSource]="dataSource.data"
       multiTemplateDataRows
       class="mat-elevation-z8"
       matSort
     >
+
       <ng-container matColumnDef="id" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-
-        <td mat-cell *matCellDef="let element">
-          {{ element.id }}
-        </td>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
       </ng-container>
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.name }}
-        </td>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
       </ng-container>
 
       <ng-container matColumnDef="purchased">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Purchased</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.purchased | date: "shortDate" }}
-        </td>
+        <td mat-cell *matCellDef="let element">{{ element.purchased | date: "shortDate" }}</td>
       </ng-container>
 
       <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.value | currency }}
-        </td>
+        <td mat-cell *matCellDef="let element">{{ element.value | currency }}</td>
       </ng-container>
 
       <ng-container matColumnDef="productId">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Product Number
-        </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Number</th>
         <td mat-cell *matCellDef="let element">{{ element.productId }}</td>
       </ng-container>
 
@@ -87,12 +77,8 @@
       </ng-container>
 
       <ng-container matColumnDef="employeesAssigned">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Employees Assigned
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.employeesAssigned }}
-        </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Employees Assigned</th>
+        <td mat-cell *matCellDef="let element">{{ element.employeesAssigned }}</td>
       </ng-container>
 
       <ng-container matColumnDef="details">
@@ -114,7 +100,7 @@
           <button
             mat-icon-button
             color="warn"
-            (click)="confirmDialog(element.id)"
+            
           >
             <mat-icon class="mat-18">delete</mat-icon>
           </button>
@@ -168,11 +154,14 @@
       ></tr>
     </table>
   </div>
-  <div fxFlexAlign="center">
+  <div fxFlexAlign="center" *ngIf="dataSource">
     <mat-paginator
-      [length]="50"
-      [pageSize]="10"
+      showFirstLastButtons
       [pageSizeOptions]="[10, 20, 50]"
+      [length]="dataSource.count"
+      [pageSize]="dataSource.recordsPerPage"
+      [pageIndex]="dataSource.page - 1"
+      (page)="pageEvent = $event; onPaginateChange($event)"
     >
     </mat-paginator>
   </div>

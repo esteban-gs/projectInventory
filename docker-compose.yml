@@ -19,13 +19,14 @@ services:
     networks:
       - sql
     build:
+    # image: comsat61/inventory:latest
       context: .
       dockerfile: Dockerfile
     container_name: inventory-api
     env_file:
       - ./test.env
-    volumes:
-      - ./certs:/https
+    # volumes:
+    #   - ./certs:/https
     restart: always
     expose:
       - 5000
@@ -39,11 +40,12 @@ services:
     build:
       context: ./nginx
       dockerfile: nginx.Dockerfile
+    container_name: proxy
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - /etc/letsencrypt/:/etc/letsencrypt/
+    # volumes:
+    #   - /etc/letsencrypt/:/etc/letsencrypt/
     links:
       - inventory-api
 

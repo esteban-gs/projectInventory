@@ -9,3 +9,10 @@ export interface DeviceForList {
     maker: string;
     employeesAssigned: number;
 }
+
+export interface ApiResponseModel {
+    page: number;
+    recordsPerPage: number;
+    count: number;
+    data: DeviceForList[];
+}

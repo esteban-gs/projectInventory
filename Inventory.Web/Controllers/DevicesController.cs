@@ -13,9 +13,9 @@ using Inventory.Web.Dtos;
 using AutoMapper;
 using System.Net.Http.Headers;
 using System.Security.Policy;
-using Inventory.Web.Dtos.Pagination;
 using Inventory.Web.Helpers;
 using System.Runtime.CompilerServices;
+using Core.Specs.SpecificationParams;
 
 namespace Inventory.Web.Controllers
 {
@@ -38,27 +38,34 @@ namespace Inventory.Web.Controllers
         /// <summary>
         /// Get paginated list of Devices with a count of assigned employess for every device
         /// </summary>
-        /// <param name="pagination">A pagination object from query</param>
+        /// <param name="deviceParams">A headerParams object from query</param>
         /// <returns></returns>
         // GET: api/Devices
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DeviceListToReturnDTO>>> GetDevices([FromQuery] PaginationDTO pagination)
+        public async Task<ActionResult<Pagination<DeviceListToReturnDTO>>> GetDevices([FromQuery] DeviceParams deviceParams)
         {
-            var deviceCount = await _unitOfWork.Repository<Device>().CountAsync(d => d.Id != 0);
+            // record count with filters applied
+            var countSpec = new DevicesWithFilterForCountSpec(deviceParams);
 
-            await HttpContext.InsertPaginationParametersInResponse(deviceCount, pagination.RecordsPerPage);
+            var totalDevices = await _unitOfWork.Repository<Device>().CountAsync(countSpec);
 
             var devices = _unitOfWork.Repository<Device>()
-                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices((pagination.Page -1) * pagination.RecordsPerPage , pagination.RecordsPerPage))
+                .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices(deviceParams))
                 .ToList();
 
-            return Ok(_mapper
-                .Map<IEnumerable<DeviceListToReturnDTO>>(devices));
+            var data = _mapper.Map<IEnumerable<DeviceListToReturnDTO>>(devices);
+
+            return Ok(new Pagination<DeviceListToReturnDTO>(
+                            deviceParams.Page, 
+                            deviceParams.RecordsPerPage,
+                            totalDevices,
+                            data)
+                );
         }
 
         // GET: api/Devices/5
         [HttpGet("{id}", Name = nameof(GetDevice))]
-        public async Task<ActionResult<DeviceToReturnDto>> GetDevice(int id)
+        public ActionResult<DeviceToReturnDto> GetDevice(int id)
         {
             var device = _unitOfWork.Repository<Device>()
                 .Find(new DevicesWithCategoryAndMakerAndEmployeeDevices(id))
@@ -68,18 +75,7 @@ namespace Inventory.Web.Controllers
             {
                 return NotFound();
             }
-
             var deviceToReturn = _mapper.Map<DeviceToReturnDto>(device);
-
-            // All this here thanks to the Specification pattern. Not able to pass a .ThenInclude to EF
-            foreach (var employeeDeviceToReturnDTO in deviceToReturn.EmployeeDevicesList)
-            {
-                var employee = await _unitOfWork.Repository<Employee>()
-                    .FindById(employeeDeviceToReturnDTO.EmployeeId);
-
-                employeeDeviceToReturnDTO.Employee = $"{employee.FirstName} {employee.LastName}";
-            }
-
             return Ok(deviceToReturn);
         }
 

@@ -1,0 +1,57 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+version: "3"
+
+services:
+  # db service
+  db:
+    image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
+    volumes:
+      - inventory-db-data:/var/opt/mssql/data
+    networks:
+      - sql
+    container_name: db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=!Passw0rd
+    ports: 
+      - "1433:1433"
+  
+  # web service
+  # inventory-api:
+  #   networks:
+  #     - sql
+  #   build:
+  #   # image: comsat61/inventory:latest
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: inventory-api
+  #   env_file:
+  #     - ./test.env
+  #   # volumes:
+  #   #   - ./certs:/https
+  #   restart: always
+  #   expose:
+  #     - 5000
+  #   depends_on:
+  #     - db
+
+  # # ningx proxy service
+  # proxy:
+  #   networks:
+  #     - sql
+  #   build:
+  #     context: ./nginx
+  #     dockerfile: nginx.Dockerfile
+  #   container_name: proxy
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   # volumes:
+  #   #   - /etc/letsencrypt/:/etc/letsencrypt/
+  #   links:
+  #     - inventory-api
+
+networks:
+  sql:
+volumes:
+  inventory-db-data:

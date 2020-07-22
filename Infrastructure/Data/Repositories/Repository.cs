@@ -51,6 +51,11 @@ namespace Infrastructure.Data.Repositories
             return await _context.Set<TEntity>().Where(predicate).CountAsync();
         }
 
+        public async Task<int> CountAsync(ISpecification<TEntity> specification = null)
+        {
+            return await ApplySpecification(specification).CountAsync();
+        }
+
         public IEnumerable<TEntity> Find(ISpecification<TEntity> specification = null)
         {
             return ApplySpecification(specification);
