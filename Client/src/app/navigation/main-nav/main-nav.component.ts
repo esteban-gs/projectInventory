@@ -18,7 +18,7 @@ export class MainNavComponent implements OnInit {
   appTitle: string;
   isHs: any;
   navItems: Nav[] = [
-    { link: `/`, page: `Home`, tooltipPos: `right`, icon: `home` },
+    { link: `/home`, page: `Home`, tooltipPos: `right`, icon: `home` },
     { link: `/device/devices`, page: `Devices`, tooltipPos: `right`, icon: `laptop_mac` },
     { link: `/category/categories`, page: `Categories`, tooltipPos: `right`, icon: `device_hub` },
     { link: `/maker/makers`, page: `Makers`, tooltipPos: `right`, icon: `home_work` },
