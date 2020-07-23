@@ -10,16 +10,17 @@
     </section>
   </div>
   <div fxLayout="row" fxLayoutAlign="space-between stretch">
-    <!-- <div>
+    <div>
       <mat-form-field>
         <input
           matInput
           type="text"
-          (keyup)="doFilter($event.target.value)"
-          placeholder="Filter List"
+          placeholder="Search"
+          [(ngModel)]="searchString"
+          (keyup)="search(searchString)"
         />
       </mat-form-field>
-    </div> -->
+    </div>
     <div>
       <button
         [routerLink]="['/device/create']"
@@ -100,7 +101,7 @@
           <button
             mat-icon-button
             color="warn"
-            
+            (click)="confirmDialog(element.id)"
           >
             <mat-icon class="mat-18">delete</mat-icon>
           </button>

@@ -43,6 +43,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   pageIndex = 1;
   recordsPerPage = 10;
   isLoadingResults = true;
+  searchString: string = null;
 
   public displayedColumns = [
     'id',
@@ -85,54 +86,18 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
       data: {}
     };
 
-    // this.dataSource.paginator = this.paginator;
-
-
-    ////
-    // this.devHttpServ.getDevices(1, 10);
-
     this.initDataSource();
   }
 
   ngAfterViewInit(): void {
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
-
-    // this.pageIndex = this.paginator.pageIndex;
-    // this.recordsPerPage = this.paginator.pageSize;
-
-    // merge(this.sort.sortChange, this.paginator.page)
-    //   .pipe(
-    //     startWith({}),
-    //     switchMap(() => {
-    //       return this.devHttpServ!.getDevices(
-    //         this.paginator.pageIndex + 1,
-    //         this.paginator.pageSize,
-    //         '',
-    //         '',
-    //         '',
-    //         '');
-    //     }),
-    //     map(data => {
-    //       this.resultsLength = data.count;
-    //       return data.data;
-    //     }),
-    //     catchError((error) => {
-    //       this.errorService.handleError(error);
-    //       return observableOf([]);
-    //     })
-    //   ).subscribe(data => this.dataSource = data);
-
-
-    // this.getDevices();
   }
 
   initDataSource() {
-    this.devHttpServ.getDevices(1, 10, '', '', '', '').pipe(
+    this.devHttpServ.getDevices(1, 10, null, null, null, null).pipe(
       tap(data => console.log(data)),
       map((data: ApiResponseModel) => {
         this.dataSource = data as ApiResponseModel;
-        console.log(this.dataSource);
+        console.log('initDataSource' + this.dataSource);
       })
     ).subscribe();
   }
@@ -140,9 +105,24 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   onPaginateChange(event: PageEvent) {
     const page = event.pageIndex + 1;
     const size = event.pageSize;
+    console.log(this.searchString);
 
-    this.devHttpServ.getDevices(page, size).pipe(
-      map((data: ApiResponseModel) => this.dataSource = data)
+    if (this.searchString == null) {
+      this.devHttpServ.getDevices(page, size).pipe(
+        map((data: ApiResponseModel) => this.dataSource = data)
+      ).subscribe();
+    } else {
+      this.search(this.searchString, page, size);
+    }
+
+  }
+
+  search(searchString: string, page: number, size: number) {
+    this.devHttpServ.getDevices(page || 1, size || 10, null, null, null, searchString || null).pipe(
+      map((data: ApiResponseModel) => {
+        this.dataSource = data as ApiResponseModel;
+        console.log('search results' + this.dataSource);
+      })
     ).subscribe();
   }
 
@@ -152,25 +132,25 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   // confirm deletion, delete
-  // confirmDialog(id: string): any {
-  //   const message = `Are you sure you want to permanently delete record: ${id}`;
-  //   this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
-  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, this.dialogConfig);
+  confirmDialog(id: string): any {
+    const message = `Are you sure you want to permanently delete record: ${id}`;
+    this.dialogConfig.data = new ConfirmDialogModel('Delete Record', message);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, this.dialogConfig);
 
-  //   dialogRef.afterClosed()
-  //     .subscribe(dialogResult => {
-  //       this.confirmDelete = dialogResult;
-  //       if (this.confirmDelete) {
-  //         this.delete(`${id}`);
-  //         // removes deletem item from table list
-  //         const deviceId = Number(id);
-  //         const deletableIndex = this.dataSource.data.findIndex(i => i.id === deviceId);
-  //         this.dataSource.data.splice(deletableIndex, 1);
-  //         // force new array values into itself ???
-  //         this.dataSource.data = this.dataSource.data.slice(0);
-  //       }
-  //     });
-  // }
+    dialogRef.afterClosed()
+      .subscribe(dialogResult => {
+        this.confirmDelete = dialogResult;
+        if (this.confirmDelete) {
+          this.delete(`${id}`);
+          // removes deletem item from table list
+          const deviceId = Number(id);
+          const deletableIndex = this.dataSource.data.findIndex(i => i.id === deviceId);
+          this.dataSource.data.splice(deletableIndex, 1);
+          // force new array values into itself ???
+          this.dataSource.data = this.dataSource.data.slice(0);
+        }
+      });
+  }
 
   public delete = (id: string) => {
     this.actionsServ
