@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  appUrl: window.location.hostname
+  appUrl: `${window.location.protocol }//${window.location.host}`
 };

@@ -17,8 +17,9 @@ class Nav {
 export class MainNavComponent implements OnInit {
   appTitle: string;
   isHs: any;
+  isExpanded = true;
   navItems: Nav[] = [
-    { link: `/`, page: `Home`, tooltipPos: `right`, icon: `home` },
+    { link: `/home`, page: `Home`, tooltipPos: `right`, icon: `home` },
     { link: `/device/devices`, page: `Devices`, tooltipPos: `right`, icon: `laptop_mac` },
     { link: `/category/categories`, page: `Categories`, tooltipPos: `right`, icon: `device_hub` },
     { link: `/maker/makers`, page: `Makers`, tooltipPos: `right`, icon: `home_work` },
@@ -37,5 +38,13 @@ export class MainNavComponent implements OnInit {
       },
       err => console.log(err)
     );
+  }
+
+  expand() {
+    this.isExpanded = true;
+  }
+
+  contract() {
+    this.isExpanded = false;
   }
 }

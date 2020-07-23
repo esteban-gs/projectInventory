@@ -19,14 +19,11 @@ services:
     networks:
       - sql
     build:
-    # image: comsat61/inventory:latest
       context: .
       dockerfile: Dockerfile
     container_name: inventory-api
     env_file:
       - ./test.env
-    # volumes:
-    #   - ./certs:/https
     restart: always
     expose:
       - 5000
