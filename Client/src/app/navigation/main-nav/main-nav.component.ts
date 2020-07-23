@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DeviceBreakpointObserverService } from '../../shared/device-breakpoint-observer.service';
+import { ViewEncapsulation } from '@angular/core';
+
 
 class Nav {
   link: string;
@@ -20,10 +22,10 @@ export class MainNavComponent implements OnInit {
   isExpanded = true;
   navItems: Nav[] = [
     { link: `/home`, page: `Home`, tooltipPos: `right`, icon: `home` },
-    { link: `/device/devices`, page: `Devices`, tooltipPos: `right`, icon: `laptop_mac` },
-    { link: `/category/categories`, page: `Categories`, tooltipPos: `right`, icon: `device_hub` },
-    { link: `/maker/makers`, page: `Makers`, tooltipPos: `right`, icon: `home_work` },
-    { link: `/employee/employees`, page: `Employees`, tooltipPos: `right`, icon: `person` },
+    { link: `/devices/list`, page: `Devices`, tooltipPos: `right`, icon: `laptop_mac` },
+    { link: `/categories/list`, page: `Categories`, tooltipPos: `right`, icon: `device_hub` },
+    { link: `/makers/list`, page: `Makers`, tooltipPos: `right`, icon: `home_work` },
+    { link: `/employees/list`, page: `Employees`, tooltipPos: `right`, icon: `person` },
   ];
 
   constructor(

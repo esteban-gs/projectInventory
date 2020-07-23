@@ -6,7 +6,7 @@ import { MakerCreateComponent } from '../maker-create/maker-create.component';
 import { MakerDetailsComponent } from '../maker-details/maker-details.component';
 
 const routes: Routes = [
-  { path: 'makers', component: MakerListComponent },
+  { path: 'list', component: MakerListComponent },
   { path: 'create', component: MakerCreateComponent },
   { path: 'details/:id', component: MakerDetailsComponent }
 ];
