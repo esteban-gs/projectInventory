@@ -30,9 +30,9 @@ import { DeviceService } from './device.service';
 export class DeviceListComponent implements OnInit, AfterViewInit {
   // endpoints
   apiEndpoint = `api/devices/`;
-  listEndpoint = `device/devices/`;
-  rootEndpoint = `device/`;
-  detailsEndpoint = `device/details/`;
+  listEndpoint = `devices/list/`;
+  rootEndpoint = `devices/`;
+  detailsEndpoint = `devices/details/`;
 
   // dialog cofigs
   private dialogConfig;

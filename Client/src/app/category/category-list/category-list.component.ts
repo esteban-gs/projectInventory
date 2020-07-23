@@ -15,8 +15,8 @@ import { DeleteService } from 'src/app/shared/delete.service';
 export class CategoryListComponent implements OnInit, AfterViewInit {
   // endpoints
   apiEndpoint = `api/categories/`;
-  listEndpoint = `category/categories/`;
-  detailsEndpoint = `category/details/`;
+  listEndpoint = `categories/list/`;
+  detailsEndpoint = `categories/details/`;
 
   // dialog cofigs
   private dialogConfig;

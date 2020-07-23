@@ -14,8 +14,8 @@ import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialo
 export class MakerListComponent implements OnInit, AfterViewInit {
   // endpoints
   apiEndpoint = `api/makers/`;
-  listEndpoint = `maker/makers/`;
-  detailsEndpoint = `maker/details/`;
+  listEndpoint = `makers/list/`;
+  detailsEndpoint = `makers/details/`;
 
   // dialog cofigs
   private dialogConfig;
