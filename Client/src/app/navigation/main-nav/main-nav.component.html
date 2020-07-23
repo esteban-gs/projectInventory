@@ -1,71 +1,71 @@
 <mat-toolbar color="primary" class="header">
-
-<!-- Not handheld -->
-  <!--toolbar chevron toggl-->
-  <ng-container *ngIf="!drawer.opened && !isHs">
-    <button
-      type="button"
-      aria-label="Toggle sidenav"
-      matTooltip="Expand Menu"
-      mat-mini-fab
-      color="primary"
-      (click)="drawer.toggle()"
-    >
-      <mat-icon aria-label="Side nav toggle icon">chevron_right</mat-icon>
-    </button>
-  </ng-container>
-
-  <!--sidenav toolbar chevron toggle-->
-  <ng-container *ngIf="drawer.opened && !isHs">
-    <button
-      type="button"
-      aria-label="Toggle sidenav"
-      mat-mini-fab
-      matTooltip="Collapse Menu"
-      color="primary"
-      (click)="drawer.toggle()"
-    >
-      <mat-icon aria-label="Side nav toggle icon" *ngIf="drawer.opened"
-        >chevron_left</mat-icon
+ <!-- TOOLBAR -->
+  <!-- Not handheld -->
+    <!--toolbar chevron toggl-->
+    <ng-container *ngIf="!isExpanded && !isHs">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        matTooltip="Expand Menu"
+        mat-mini-fab
+        color="primary"
+        (click)="expand()"
       >
-    </button>
-  </ng-container>
-<!-- EO Not handheld -->
+        <mat-icon aria-label="Side nav toggle icon">chevron_right</mat-icon>
+      </button>
+    </ng-container>
+  
+    <!--sidenav toolbar chevron toggle-->
+    <ng-container *ngIf="isExpanded && !isHs">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-mini-fab
+        matTooltip="Collapse Menu"
+        color="primary"
+        (click)="contract()"
+      >
+        <mat-icon aria-label="Side nav toggle icon" *ngIf="sidenav.opened"
+          >chevron_left</mat-icon
+        >
+      </button>
+    </ng-container>
+  <!-- EO Not handheld -->
+  
+  <!-- Handheld -->
+    <!--Sidenav toggle button-->
+    <ng-container *ngIf="isHs">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-mini-fab
+        color="primary"
+        mat-icon-button
+        (click)="sidenav.toggle()"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+    </ng-container>
+  
+  <!--EO Handheld -->
+  
+    <!-- Title -->
+    <span class="mat-spacer"></span>
+    <span
+      ><a mat-button routerLink="/">
+        Project Inventory
+      </a>
+    </span>
+  </mat-toolbar>
+  
+<mat-sidenav-container class="sidenav-container" autosize>
 
-<!-- Handheld -->
-  <!--Sidenav toggle button-->
-  <ng-container *ngIf="isHs">
-    <button
-      type="button"
-      aria-label="Toggle sidenav"
-      mat-mini-fab
-      color="primary"
-      mat-icon-button
-      (click)="drawer.toggle()"
-    >
-      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-    </button>
-  </ng-container>
-
-<!--EO Handheld -->
-
-  <!-- Title -->
-  <span class="mat-spacer"></span>
-  <span
-    ><a mat-button routerLink="/">
-      Project Inventory
-    </a>
-  </span>
-</mat-toolbar>
-
-
-<mat-sidenav-container class="sidenav-container">
   <mat-sidenav
-    #drawer
+    #sidenav
     fixedInViewport="false"
     fixedTopGap="0"
     [attr.role]="isHs ? 'dialog' : 'navigation'"
-    [mode]="isHs ? 'push' : 'side'"
+    mode="side"
     [opened]="isHs ? false : true"
   >
     <!-- sidenav navigation list -->
@@ -73,28 +73,30 @@
       <mat-toolbar *ngFor="let nav of navItems" color="white">
 
         <!-- Each nav item is a row -->
-        <mat-toolbar-row [routerLinkActive]="['active']">
+        <mat-toolbar-row 
+          [routerLink]="nav.link" 
+          [routerLinkActive]="['active-link']"
+        >
           <div fxLayout="row" fxLayoutAlign="space-between center">
 
             <!-- nav item icon button -->
             <div>
               <button
                 mat-icon-button
-                [routerLink]="nav.link"
-                [routerLinkActive]="['active-link']"
                 [matTooltip]="nav.page"
                 [matTooltipPosition]="nav.tooltipPos"
                 color="accent"
               >
-                <mat-icon>{{ nav.icon }}</mat-icon>
+                <mat-icon
+                  >{{ nav.icon }}
+                </mat-icon>
               </button>
             </div>
 
             <!--nav item button with nav text -->
-            <div>
+            <div *ngIf="isExpanded">
                 <a 
                   mat-button 
-                  [routerLink]="nav.link" 
                   class="mat-small"
                   >{{ nav.page }}
                 </a>
@@ -106,37 +108,10 @@
       </mat-toolbar>
     </div>
   </mat-sidenav>
+
   <!-- EO: Side nav-->
 
   <mat-sidenav-content>
-
-  <!-- THIN sidenav navigation list -->
-  <div class="white-spacing float" *ngIf="!drawer.opened && !isHs">
-    <mat-toolbar *ngFor="let nav of navItems" color="white">
-
-      <!-- Each nav item is a row -->
-      <mat-toolbar-row [routerLinkActive]="['active']">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-
-          <!-- nav item icon button -->
-          <div>
-            <button
-              mat-icon-button
-              [routerLink]="nav.link"
-              [routerLinkActive]="['active-link']"
-              [matTooltip]="nav.page"
-              [matTooltipPosition]="nav.tooltipPos"
-              color="accent"
-            >
-              <mat-icon>{{ nav.icon }}</mat-icon>
-            </button>
-          </div>
-        </div>
-      </mat-toolbar-row>
-
-    </mat-toolbar>
-  </div>
-
     <!--App content-->
     <ng-content></ng-content>
   </mat-sidenav-content>
