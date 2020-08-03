@@ -1,13 +1,9 @@
 .sidenav-container {
-  // height: 100%;
-  // width: 100%;
-  // top: 64px;
-  // position: absolute;
-  // bottom: 0px;
   position: absolute;
   top: 64px;
   left: 0;
   right: 0;
+  overflow: auto;
 }
 
 .mat-spacer {
@@ -45,4 +41,8 @@ mat-sidenav {
   top: 0;
   left: 0;
   right: 0;
+}
+
+::ng-deep .mat-sidenav-backdrop.mat-sidenav-shown {
+  background-color: transparent;
 }

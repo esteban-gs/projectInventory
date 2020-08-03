@@ -17,13 +17,13 @@
           type="text"
           placeholder="Search"
           [(ngModel)]="searchString"
-          (keyup)="search(searchString)"
+          (keyup)="search(searchString, null, null)"
         />
       </mat-form-field>
     </div>
     <div>
       <button
-        [routerLink]="['/device/create']"
+        [routerLink]="['/devices/create']"
         mat-mini-fab
         color="primary"
         matTooltip="Create Record"

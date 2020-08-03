@@ -6,7 +6,7 @@ import { DeviceDetailsComponent } from '../device-details/device-details.compone
 import { DeviceCreateComponent } from '../device-create/device-create.component';
 
 const routes: Routes = [
-  { path: 'devices', component: DeviceListComponent },
+  { path: 'list', component: DeviceListComponent },
   { path: 'details/:id', component: DeviceDetailsComponent },
   { path: 'create', component: DeviceCreateComponent }
 ];

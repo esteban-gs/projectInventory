@@ -58,14 +58,14 @@
     </span>
   </mat-toolbar>
   
-<mat-sidenav-container class="sidenav-container" autosize>
+<mat-sidenav-container class="sidenav-container"  autosize>
 
   <mat-sidenav
     #sidenav
     fixedInViewport="false"
     fixedTopGap="0"
     [attr.role]="isHs ? 'dialog' : 'navigation'"
-    mode="side"
+    [mode]="isHs ? 'over' : 'side'"
     [opened]="isHs ? false : true"
   >
     <!-- sidenav navigation list -->
@@ -76,6 +76,7 @@
         <mat-toolbar-row 
           [routerLink]="nav.link" 
           [routerLinkActive]="['active-link']"
+          [routerLinkActiveOptions]="{ exact: false }"
         >
           <div fxLayout="row" fxLayoutAlign="space-between center">
 
