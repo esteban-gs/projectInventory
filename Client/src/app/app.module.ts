@@ -16,6 +16,12 @@ import { MainNavComponent } from './navigation/main-nav/main-nav.component';
 import { DeviceBreakpointObserverService } from './shared/device-breakpoint-observer.service';
 import { MakerModule } from './maker/maker.module';
 import { EmployeeModule } from './employee/employee.module';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -24,7 +30,7 @@ import { EmployeeModule } from './employee/employee.module';
     HomeComponent,
     NotFoundComponent,
     ServerErrorComponent,
-    MainNavComponent
+    MainNavComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +41,13 @@ import { EmployeeModule } from './employee/employee.module';
     DeviceModule,
     CategoryModule,
     MakerModule,
-    EmployeeModule
+    EmployeeModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule
   ],
   providers: [DeviceBreakpointObserverService],
   bootstrap: [AppComponent]

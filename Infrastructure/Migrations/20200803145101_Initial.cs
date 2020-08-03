@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -61,8 +61,8 @@ namespace Infrastructure.Migrations
                     Purchased = table.Column<DateTime>(nullable: false),
                     Value = table.Column<decimal>(nullable: false),
                     ProductId = table.Column<string>(nullable: false),
-                    CategoryId = table.Column<int>(nullable: false),
-                    MakerId = table.Column<int>(nullable: false)
+                    CategoryId = table.Column<int>(nullable: true),
+                    MakerId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -72,13 +72,13 @@ namespace Infrastructure.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Devices_Makers_MakerId",
                         column: x => x.MakerId,
                         principalTable: "Makers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

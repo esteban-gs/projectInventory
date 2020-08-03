@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DeviceForList, ApiResponseModel } from '../../_interface/device-for-list';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort, SortDirection } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ErrorHandlerService } from '../../shared/error-handler.service';
@@ -14,6 +14,8 @@ import { HttpService } from 'src/app/shared/http.service';
 import { merge, Observable, of as observableOf } from 'rxjs';
 import { startWith, switchMap, map, catchError, tap } from 'rxjs/operators';
 import { DeviceService } from './device.service';
+import { JsonPipe } from '@angular/common';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-device-list',
@@ -42,8 +44,9 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   resultsLength = 0;
   pageIndex = 1;
   recordsPerPage = 10;
-  isLoadingResults = true;
   searchString: string = null;
+  sortDirection: SortDirection;
+  sortColumn: string = null;
 
   public displayedColumns = [
     'id',
@@ -94,10 +97,9 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
 
   initDataSource() {
     this.devHttpServ.getDevices(1, 10, null, null, null, null).pipe(
-      tap(data => console.log(data)),
       map((data: ApiResponseModel) => {
         this.dataSource = data as ApiResponseModel;
-        console.log('initDataSource' + this.dataSource);
+        console.log(this.dataSource);
       })
     ).subscribe();
   }
@@ -107,12 +109,23 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     const size = event.pageSize;
     console.log(this.searchString);
 
-    if (this.searchString == null) {
+    if (this.searchString == null && this.sortColumn == null) {
       this.devHttpServ.getDevices(page, size).pipe(
         map((data: ApiResponseModel) => this.dataSource = data)
       ).subscribe();
     } else {
-      this.search(this.searchString, page, size);
+
+      if (this.searchString != null && this.sortColumn == null) {
+        this.search(this.searchString, page, size);
+      }
+
+      if (this.searchString == null && this.sortColumn != null) {
+        this.sortData(this.sortDirection, this.sortColumn, page, size);
+      }
+
+      if (this.searchString != null && this.sortColumn != null) {
+        this.sortData(this.sortDirection, this.sortColumn, page, size, this.searchString);
+      }
     }
 
   }
@@ -121,7 +134,23 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     this.devHttpServ.getDevices(page || 1, size || 10, null, null, null, searchString || null).pipe(
       map((data: ApiResponseModel) => {
         this.dataSource = data as ApiResponseModel;
-        console.log('search results' + this.dataSource);
+        console.log(this.dataSource);
+      })
+    ).subscribe();
+  }
+
+  sortData(direction: SortDirection, activeColumn: string, page: number, size: number, searchString: string = null) {
+    this.sortDirection = direction;
+    this.sortColumn = activeColumn;
+
+    if (!this.sortColumn || this.sortDirection === '') {
+      return;
+    }
+    const sortParam = `${this.sortColumn}${this.sortDirection[0].toUpperCase()}${this.sortDirection.substr(1)}`;
+    console.log(sortParam);
+    this.devHttpServ.getDevices(page || 1, size || 10, sortParam || null, null, null, searchString || null).pipe(
+      map((data: ApiResponseModel) => {
+        this.dataSource = data as ApiResponseModel;
       })
     ).subscribe();
   }

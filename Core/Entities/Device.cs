@@ -21,10 +21,10 @@ namespace Core.Entities
         [Required]
         public string ProductId { get; set; }
         [ForeignKey("Category")]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public Category Category { get; set; }
         [ForeignKey("Maker")]
-        public int MakerId { get; set; }
+        public int? MakerId { get; set; }
         public Maker Maker { get; set; }
         public List<EmployeeDevice> EmployeeDevice { get; set; }
     }

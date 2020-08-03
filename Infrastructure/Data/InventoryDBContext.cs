@@ -54,11 +54,25 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // How to set it up: 
+            // https://www.learnentityframeworkcore.com/conventions/one-to-many-relationship
+
             modelBuilder.Entity<EmployeeDevice>()
                 .HasKey(x => new { x.EmployeeId, x.DeviceId });
+
             modelBuilder.Entity<EmployeeDevice>()
                 .Ignore(x => x.Id);
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Devices)
+                .WithOne(d => d.Category)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Maker>()
+                .HasMany(m => m.Devices)
+                .WithOne(d => d.Maker)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
