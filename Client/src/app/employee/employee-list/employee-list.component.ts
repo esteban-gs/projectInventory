@@ -16,8 +16,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
   // endpoints
   apiEndpoint = `api/employees/`;
   apiEntityListEndpoint = `api/employees/?recordsPerPage=50&page=1`;
-  listEndpoint = `employee/employees/`;
-  detailsEndpoint = `employee/details/`;
+  listEndpoint = `employees/list/`;
+  detailsEndpoint = `employees/details/`;
 
   // dialog cofigs
   private dialogConfig;

@@ -50,10 +50,10 @@ namespace Core.Specs
                         break;
 
                     // employees
-                    case "employeesAsc":
+                    case "employeesAssignedAsc":
                         ApplyOrderBy(d => d.EmployeeDevice.Count);
                         break;                    
-                    case "employeesDesc":
+                    case "employeesAssignedDesc":
                         ApplyOrderByDescending(d => d.EmployeeDevice.Count);
                         break;
                                            
@@ -61,7 +61,7 @@ namespace Core.Specs
                     case "purchasedAsc":
                         ApplyOrderBy(d => d.Purchased);
                         break;                    
-                    case "purcahsedDesc":
+                    case "purchasedDesc":
                         ApplyOrderByDescending(d => d.Purchased);
                         break;
 

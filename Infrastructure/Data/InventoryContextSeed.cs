@@ -13,8 +13,12 @@ using System.Reflection;
 namespace Infrastructure.Data
 {
     public class InventoryContextSeed
-    {
-        public static async Task SeedAsync(InventoryDBContext context, ILoggerFactory loggerFactory)
+    { 
+        public static async Task SeedAsync(
+            InventoryDBContext context,
+            ILoggerFactory loggerFactory,
+            string webContentRootPath
+            )
         {
             try
             {
@@ -22,12 +26,11 @@ namespace Infrastructure.Data
 
                 if (!context.Devices.Any())
                 {
-
-                    await MigrationRepository<Category>.JsonToList("deviceCategory", context);
-                    await MigrationRepository<Maker>.JsonToList("deviceMakers", context);
-                    await MigrationRepository<Device>.JsonToList("devices", context);
-                    await MigrationRepository<Employee>.JsonToList("employees", context);
-                    await MigrationRepository<EmployeeDevice>.JsonToList("employeesDevices", context);
+                    await MigrationRepository<Category>.JsonToList("deviceCategory", context, webContentRootPath);
+                    await MigrationRepository<Maker>.JsonToList("deviceMakers", context, webContentRootPath);
+                    await MigrationRepository<Device>.JsonToList("devices", context, webContentRootPath);
+                    await MigrationRepository<Employee>.JsonToList("employees", context, webContentRootPath);
+                    await MigrationRepository<EmployeeDevice>.JsonToList("employeesDevices", context, webContentRootPath);
                 }
             }
             catch (Exception ex)
@@ -42,9 +45,12 @@ namespace Infrastructure.Data
 
     internal static class MigrationRepository<T> where T : class
     {
-        static DbSet<T> objSet;
-        internal static async Task JsonToList(string fileName, InventoryDBContext context)
+        public static string WebContentRootPath { get; set; }
+        private static DbSet<T> objSet;
+        internal static async Task JsonToList(string fileName, InventoryDBContext context, string webRootPAth)
         {
+            WebContentRootPath = webRootPAth;
+
             var options = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -52,7 +58,8 @@ namespace Infrastructure.Data
             };
 
             // var rootPath = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-            var rootPath = Environment.CurrentDirectory;
+            //var rootPath = Environment.CurrentDirectory;
+            var rootPath = $"{WebContentRootPath}/../";
             Console.WriteLine("______________+++++++_");
             Console.WriteLine(rootPath);
 
