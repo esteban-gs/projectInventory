@@ -4,15 +4,19 @@ version: "3"
 services:
   # db service
   db:
-    image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
+    container_name: db
+    image: postgres:latest
+    expose:
+      - 5432
+    restart: always
     volumes:
-      - inventory-db-data:/var/opt/mssql/data
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=SA
+      - POSTGRES_PASSWORD=!Passw0rd
+      - POSTGRES_DB=Inventory
     networks:
       - sql
-    container_name: db
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=!Passw0rd
   
   # web service
   inventory-api:
@@ -49,4 +53,4 @@ services:
 networks:
   sql:
 volumes:
-  inventory-db-data:
+  db-data:
