@@ -25,7 +25,7 @@ namespace inventory
                     var hostEnv = services.GetService<IWebHostEnvironment>();
                     var webContentRootPath = hostEnv.ContentRootPath;
                     await context.Database.MigrateAsync();
-                    await InventoryContextSeed.SeedAsync(context, loggerFactory, webContentRootPath);
+                    await InventoryContextSeed.SeedAsync(context, loggerFactory);
                 }
                 catch(Exception ex)
                 {

@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+using Newtonsoft.Json;
 
 namespace Infrastructure.Data
 {
@@ -16,8 +14,7 @@ namespace Infrastructure.Data
     { 
         public static async Task SeedAsync(
             InventoryDBContext context,
-            ILoggerFactory loggerFactory,
-            string webContentRootPath
+            ILoggerFactory loggerFactory
             )
         {
             try
@@ -26,11 +23,11 @@ namespace Infrastructure.Data
 
                 if (!context.Devices.Any())
                 {
-                    await MigrationRepository<Category>.JsonToList("deviceCategory", context, webContentRootPath);
-                    await MigrationRepository<Maker>.JsonToList("deviceMakers", context, webContentRootPath);
-                    await MigrationRepository<Device>.JsonToList("devices", context, webContentRootPath);
-                    await MigrationRepository<Employee>.JsonToList("employees", context, webContentRootPath);
-                    await MigrationRepository<EmployeeDevice>.JsonToList("employeesDevices", context, webContentRootPath);
+                    await MigrationRepository<Category>.JsonToList(DeviceCategorySeed.Json, context);
+                    await MigrationRepository<Maker>.JsonToList(DeviceMakerSeed.Json, context);
+                    await MigrationRepository<Device>.JsonToList(DeviceSeed.Json, context);
+                    await MigrationRepository<Employee>.JsonToList(EmployeeSeed.Json, context);
+                    await MigrationRepository<EmployeeDevice>.JsonToList(EmployeeDeviceSeed.Json, context);
                 }
             }
             catch (Exception ex)
@@ -45,39 +42,11 @@ namespace Infrastructure.Data
 
     internal static class MigrationRepository<T> where T : class
     {
-        public static string WebContentRootPath { get; set; }
         private static DbSet<T> objSet;
-        internal static async Task JsonToList(string fileName, InventoryDBContext context, string webRootPAth)
+        internal static async Task JsonToList(string jsonData, InventoryDBContext context)
         {
-            WebContentRootPath = webRootPAth;
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
-
-            // var rootPath = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-            //var rootPath = Environment.CurrentDirectory;
-            var rootPath = $"{WebContentRootPath}/../";
-            Console.WriteLine("______________+++++++_");
-            Console.WriteLine(rootPath);
-
-            var deviceDataSource = File
-                       .ReadAllText($"{rootPath}/Infrastructure/{fileName}.json");
-
-            var objectList = JsonSerializer.Deserialize<List<T>>(deviceDataSource, options);
+            var objectList = JsonConvert.DeserializeObject<List<T>>(jsonData);
             Console.Write($"Creating {objectList.Count()} records{Environment.NewLine}");
-            
-            // foreach (var devic in objectList)
-            // {
-            //     PropertyInfo[] properties = devic.GetType().GetProperties();
-            //     foreach (var prop in properties)
-            //     {
-            //         Console.WriteLine($"{prop.Name}: , {prop.GetValue(devic, null)}");
-            //     }
-            //     Console.Write($"{devic.GetType().GetProperties()}{Environment.NewLine}");
-            // }
 
             objSet = context.Set<T>();
             foreach (var item in objectList)

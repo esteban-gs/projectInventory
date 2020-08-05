@@ -31,6 +31,5 @@ WORKDIR /app
 
 COPY --from=build-env /app/out .
 COPY --from=ui-builder /app/Client/dist ./Client/dist
-COPY --from=build-env /app/Infrastructure ./Infrastructure
 
 ENTRYPOINT ["dotnet", "Inventory.Web.dll"]
