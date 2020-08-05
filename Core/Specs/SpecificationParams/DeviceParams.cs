@@ -1,4 +1,5 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Core.Specs.SpecificationParams

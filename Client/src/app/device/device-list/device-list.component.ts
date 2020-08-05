@@ -16,6 +16,7 @@ import { startWith, switchMap, map, catchError, tap } from 'rxjs/operators';
 import { DeviceService } from './device.service';
 import { JsonPipe } from '@angular/common';
 import { stringify } from 'querystring';
+import { DeviceRequestParams } from 'src/app/_interface/device-request-params';
 
 @Component({
   selector: 'app-device-list',
@@ -42,11 +43,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
 
   // Pagination
   resultsLength = 0;
-  pageIndex = 1;
-  recordsPerPage = 10;
-  searchString: string = null;
-  sortDirection: SortDirection;
-  sortColumn: string = null;
+  requestParams = new DeviceRequestParams();
 
   public displayedColumns = [
     'id',
@@ -96,59 +93,54 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   initDataSource() {
-    this.devHttpServ.getDevices(1, 10, null, null, null, null).pipe(
+    this.devHttpServ.getDevices(this.requestParams).pipe(
       map((data: ApiResponseModel) => {
         this.dataSource = data as ApiResponseModel;
-        console.log(this.dataSource);
       })
     ).subscribe();
   }
 
   onPaginateChange(event: PageEvent) {
-    const page = event.pageIndex + 1;
-    const size = event.pageSize;
-    console.log(this.searchString);
+    this.requestParams.pageIndex = event.pageIndex + 1;
+    this.requestParams.recordsPerPage = event.pageSize;
 
-    if (this.searchString == null && this.sortColumn == null) {
-      this.devHttpServ.getDevices(page, size).pipe(
+    const noSearchAndNoSort = this.requestParams.searchString == null && this.requestParams.sortColumn == null;
+    const hasSearchAndNoSort = this.requestParams.searchString != null && this.requestParams.sortColumn == null;
+    const noSearchAndHasSort = this.requestParams.searchString == null && this.requestParams.sortColumn != null;
+    const hasSearchAndHasSort = this.requestParams.searchString != null && this.requestParams.sortColumn != null;
+
+    if (noSearchAndNoSort) {
+      this.devHttpServ.getDevices(this.requestParams).pipe(
         map((data: ApiResponseModel) => this.dataSource = data)
       ).subscribe();
     } else {
 
-      if (this.searchString != null && this.sortColumn == null) {
-        this.search(this.searchString, page, size);
+      if (hasSearchAndNoSort) {
+        this.search();
       }
 
-      if (this.searchString == null && this.sortColumn != null) {
-        this.sortData(this.sortDirection, this.sortColumn, page, size);
-      }
-
-      if (this.searchString != null && this.sortColumn != null) {
-        this.sortData(this.sortDirection, this.sortColumn, page, size, this.searchString);
+      if (noSearchAndHasSort || hasSearchAndHasSort) {
+        this.sortData(this.requestParams.sortDirection, this.requestParams.sortColumn);
       }
     }
-
   }
 
-  search(searchString: string, page: number, size: number) {
-    this.devHttpServ.getDevices(page || 1, size || 10, null, null, null, searchString || null).pipe(
+  search() {
+    if (this.requestParams.searchString === '') {
+      this.requestParams.searchString = null;
+    }
+    this.devHttpServ.getDevices(this.requestParams).pipe(
       map((data: ApiResponseModel) => {
         this.dataSource = data as ApiResponseModel;
-        console.log(this.dataSource);
       })
     ).subscribe();
   }
 
-  sortData(direction: SortDirection, activeColumn: string, page: number, size: number, searchString: string = null) {
-    this.sortDirection = direction;
-    this.sortColumn = activeColumn;
+  sortData(direction: SortDirection, activeColumn: string) {
+    this.requestParams.sortDirection = direction;
+    this.requestParams.sortColumn = activeColumn;
 
-    if (!this.sortColumn || this.sortDirection === '') {
-      return;
-    }
-    const sortParam = `${this.sortColumn}${this.sortDirection[0].toUpperCase()}${this.sortDirection.substr(1)}`;
-    console.log(sortParam);
-    this.devHttpServ.getDevices(page || 1, size || 10, sortParam || null, null, null, searchString || null).pipe(
+    this.devHttpServ.getDevices(this.requestParams).pipe(
       map((data: ApiResponseModel) => {
         this.dataSource = data as ApiResponseModel;
       })

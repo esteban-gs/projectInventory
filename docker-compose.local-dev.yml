@@ -1,23 +1,26 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
 # remove container: docker-compose -f docker-compose.local-dev.yml rm -f db
 # start containers: docker-compose -f docker-compose.local-dev.yml up -d
+# remove volume: docker volume rm projectinventory_db-data
 
 version: "3"
 
 services:
-  # db service
+  # db service 
   db:
-    image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
-    volumes:
-      - db-data:/var/opt/mssql/data
-    networks:
-      - sql
     container_name: db
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=!Passw0rd
+    image: postgres:latest
     ports:
-      - "1433:1433"
+      - 5432:5432
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment: 
+      - POSTGRES_USER=SA
+      - POSTGRES_PASSWORD=!Passw0rd
+      - POSTGRES_DB=Inventory
+    networks:
+      - sql    
 
   # web service
   # inventory-api:

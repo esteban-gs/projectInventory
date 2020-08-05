@@ -13,7 +13,7 @@ namespace Core.Entities
         public string FirstName { get; set; }
         [Required]
         [MaxLength(365)]
-        public string  LastName { get; set; }
+        public string LastName { get; set; }
         [Required(ErrorMessage = "SSN is Required")]
         [MaxLength(11)]
         [RegularExpression(@"^\d{9}|\d{3}-\d{2}-\d{4}$", ErrorMessage = "Invalid Social Security Number")]

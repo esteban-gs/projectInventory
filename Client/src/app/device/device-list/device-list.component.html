@@ -16,8 +16,8 @@
           matInput
           type="text"
           placeholder="Search"
-          [(ngModel)]="searchString"
-          (keyup)="search(searchString, null, null)"
+          [(ngModel)]="requestParams.searchString"
+          (keyup)="search()"
         />
       </mat-form-field>
     </div>
@@ -40,7 +40,7 @@
       multiTemplateDataRows
       class="mat-elevation-z8"
       matSort
-      (matSortChange)="sortData($event.direction, $event.active, null, null, searchString)"
+      (matSortChange)="sortData($event.direction, $event.active)"
     >
 
       <ng-container matColumnDef="id" sticky>

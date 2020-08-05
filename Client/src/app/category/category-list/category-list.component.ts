@@ -58,6 +58,7 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
     this.repoServ.getData(`${this.apiEndpoint}`)
       .subscribe(res => {
         this.dataSource.data = res as CategoryForList[];
+        console.table(this.dataSource.data);
       });
   }
 
