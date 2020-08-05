@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Specs.SpecificationParams;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Core.Specs
 {

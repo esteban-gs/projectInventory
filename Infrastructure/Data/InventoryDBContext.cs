@@ -47,7 +47,7 @@ namespace Infrastructure.Data
             var _config = configurationBuilder.Build();
 
             var connectionString = _config.GetConnectionString("DefaultConnection");
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
             optionsBuilder.UseLoggerFactory(MyLoggerFactory)  //tie-up DbContext with LoggerFactory object
                 .EnableSensitiveDataLogging();
         }
