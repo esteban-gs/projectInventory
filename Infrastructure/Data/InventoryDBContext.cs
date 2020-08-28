@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,7 @@ using System.Text.Json;
 
 namespace Infrastructure.Data
 {
-    public class InventoryDBContext : DbContext
+    public class InventoryDBContext : IdentityDbContext
     {
         public static readonly ILoggerFactory MyLoggerFactory
             = LoggerFactory.Create(builder =>
@@ -62,7 +63,6 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<EmployeeDevice>()
                 .Ignore(x => x.Id);
-            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Devices)
@@ -73,6 +73,8 @@ namespace Infrastructure.Data
                 .HasMany(m => m.Devices)
                 .WithOne(d => d.Maker)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
