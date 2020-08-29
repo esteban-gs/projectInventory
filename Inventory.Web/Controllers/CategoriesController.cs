@@ -11,6 +11,8 @@ using Infrastructure.Data.Repositories;
 using AutoMapper;
 using Inventory.Web.Dtos;
 using Core.Specs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Inventory.Web.Controllers
 {
@@ -35,6 +37,7 @@ namespace Inventory.Web.Controllers
         /// <returns></returns>
         // GET: api/Categories
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<IEnumerable<CategoryToReturnDTO>> GetCategories()
         {
             var categories = _unitOfWork.Repository<Category>()

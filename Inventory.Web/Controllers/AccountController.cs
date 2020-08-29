@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Inventory.Web.Dtos.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -46,8 +47,9 @@ namespace Inventory.Web.Controllers
             return "value";
         }
 
-        // POST api/<AccountController>
-        [HttpPost]
+        // POST api/<AccountController>/Register
+        [HttpPost("Register")]
+        [AllowAnonymous]
         public async Task<ActionResult<TokenDTO>> Post([FromBody] UserInfoDTO userInfoDTO)
         {
             var user = new IdentityUser { UserName = userInfoDTO.Email, Email = userInfoDTO.Email };
@@ -64,6 +66,24 @@ namespace Inventory.Web.Controllers
 
         }
 
+        // POST api/<AccountController>/Login
+        [HttpPost("Login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TokenDTO>> Login([FromBody] UserInfoDTO userInfoDTO)
+        {
+            var result = await _signInManager.PasswordSignInAsync(userInfoDTO.Email,
+                userInfoDTO.Password, isPersistent: false, lockoutOnFailure: false);
+
+            if(result.Succeeded)
+            {
+                return BuildToken(userInfoDTO);
+            }
+            else
+            {
+                return BadRequest("Invalid Login");
+            }
+        }
+
         [NonAction]
         private TokenDTO BuildToken(UserInfoDTO userInfo)
         {
@@ -75,12 +95,11 @@ namespace Inventory.Web.Controllers
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
             var expiration = DateTime.UtcNow.AddMinutes(120);
 
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: _configuration["issuer"],
-                audience: _configuration["audience"],
+                issuer: _configuration["jwt:issuer"],
+                audience: _configuration["jwt:audience"],
                 claims: claims,
                 expires: expiration,
                 signingCredentials: creds);
