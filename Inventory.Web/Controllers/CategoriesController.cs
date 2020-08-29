@@ -18,6 +18,7 @@ namespace Inventory.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class CategoriesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -38,6 +39,7 @@ namespace Inventory.Web.Controllers
         // GET: api/Categories
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryToReturnDTO))]
         public ActionResult<IEnumerable<CategoryToReturnDTO>> GetCategories()
         {
             var categories = _unitOfWork.Repository<Category>()
@@ -108,7 +110,8 @@ namespace Inventory.Web.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory([FromBody] CategoryForCreationDTO categoryForCreation)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryToReturnDTO))]
+        public async Task<ActionResult<CategoryToReturnDTO>> PostCategory([FromBody] CategoryForCreationDTO categoryForCreation)
         {
             var category = _mapper.Map<Category>(categoryForCreation);
             await _unitOfWork.Repository<Category>().Add(category);
@@ -117,7 +120,7 @@ namespace Inventory.Web.Controllers
             // mapp to a returnable obj
             var categoryToReturn = _mapper.Map<CategoryToReturnDTO>(category);
 
-            return new CreatedAtRouteResult(nameof(GetCategory), new { category.Id }, categoryToReturn);
+            return new CreatedAtRouteResult(nameof(GetCategory), new { categoryToReturn.Id }, categoryToReturn);
         }
 
         // DELETE: api/Categories/5

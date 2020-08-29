@@ -16,11 +16,14 @@ using System.Security.Policy;
 using Inventory.Web.Helpers;
 using System.Runtime.CompilerServices;
 using Core.Specs.SpecificationParams;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace Inventory.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class DevicesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -38,10 +41,43 @@ namespace Inventory.Web.Controllers
         /// <summary>
         /// Get paginated list of Devices with a count of assigned employess for every device
         /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample Response:
+        /// 
+        ///     "page": 1
+        ///     "recordsPerPage": 10,
+        ///     "count": 2,
+        ///     "data": [
+        ///         {
+        ///             "id": 1,
+        ///             "name": "Trusty_Kranken_Swag",
+        ///             "description": "In very good condition",
+        ///             "purchased": "2018-12-21T00:00:00.0000000",
+        ///             "value": 2300.00,
+        ///             "productId": "AFGKHhj566-H",
+        ///             "category": "Laptop",
+        ///             "maker": "Lenovo",
+        ///             "employeesAssigned": 1
+        ///         },
+        ///         {
+        ///             "id": 2,
+        ///             "name": "Mosquito_Sphere_Laser",
+        ///             "description": "In bad condition",
+        ///             "purchased": "2015-12-21T00:00:00.0000000",
+        ///             "value": 1100.00,
+        ///             "productId": "ASDF2345",
+        ///             "category": "Desktop",
+        ///             "maker": "Apple",
+        ///             "employeesAssigned": 0
+        ///         }
+        ///     ]
+        /// 
+        /// </remarks>
         /// <param name="deviceParams">A headerParams object from query</param>
-        /// <returns></returns>
         // GET: api/Devices
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Pagination<DeviceListToReturnDTO>))]
         public async Task<ActionResult<Pagination<DeviceListToReturnDTO>>> GetDevices([FromQuery] DeviceParams deviceParams)
         {
             // record count with filters applied
@@ -122,7 +158,7 @@ namespace Inventory.Web.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Device>> PostDevice([FromBody] DeviceForCreationDTO deviceForCreationDTO)
+        public async Task<ActionResult<DeviceToReturnDto>> PostDevice([FromBody] DeviceForCreationDTO deviceForCreationDTO)
         {
             var device = _mapper.Map<Device>(deviceForCreationDTO);
             await _unitOfWork.Repository<Device>().Add(device);

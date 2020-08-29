@@ -16,6 +16,7 @@ namespace Inventory.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class MakersController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

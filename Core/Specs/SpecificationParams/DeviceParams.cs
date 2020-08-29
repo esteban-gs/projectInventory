@@ -14,19 +14,22 @@ namespace Core.Specs.SpecificationParams
 
         private int _recordsPerPage = 10;
 
-        [SwaggerParameter("The Number of Records Per Page. Defaults to 10, Max 50")]
+        [SwaggerParameter("Records Per Page. Defaults = 10, Max 50")]
         public int RecordsPerPage
         {
             get => _recordsPerPage;
             set => _recordsPerPage = (value > MaxRecordsPerPage) ? MaxRecordsPerPage : value;
         }
 
-        [SwaggerParameter("Concat of the column name and direction. E.g idDesc (also the deault)")]
+        [SwaggerParameter("columnName + direction. e.g 'idDesc'. Default is 'idDesc'")]
         public string Sort { get; set; }
+        [SwaggerParameter("The Id of a Category")]
         public int? CategoryId { get; set; }
+        [SwaggerParameter("The Id of a Maker")]
         public int? MakerId { get; set; }
 
         private string _search;
+        [SwaggerParameter("Search string")]
         public string Search
         {
             get => _search;

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Inventory.Web.Dtos.Account;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -50,6 +51,8 @@ namespace Inventory.Web.Controllers
         // POST api/<AccountController>/Register
         [HttpPost("Register")]
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TokenDTO>> Post([FromBody] UserInfoDTO userInfoDTO)
         {
             var user = new IdentityUser { UserName = userInfoDTO.Email, Email = userInfoDTO.Email };

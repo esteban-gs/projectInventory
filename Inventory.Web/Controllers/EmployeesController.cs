@@ -18,6 +18,7 @@ namespace Inventory.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class EmployeesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

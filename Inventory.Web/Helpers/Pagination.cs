@@ -19,6 +19,9 @@ namespace Inventory.Web.Helpers
         public int Page { get; set; }
         public int RecordsPerPage { get; set; }
         public int Count { get; set; }
+        /// <summary>
+        /// A paginated list of records matching the request
+        /// </summary>
         public IEnumerable<T> Data { get; set; }
     }
 }
