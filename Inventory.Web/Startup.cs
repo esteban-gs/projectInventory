@@ -1,23 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
-using Inventory.Web;
 using Inventory.Web.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +20,7 @@ using Microsoft.OpenApi.Models;
 
 namespace inventory
 {
+    // left off at : https://www.udemy.com/course/building-restful-web-apis-with-aspnet-core/learn/lecture/18231890#content
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -74,7 +69,7 @@ namespace inventory
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-
+                
 
             // Services
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -149,7 +144,11 @@ namespace inventory
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
+            });
+
             //app.UseMvc(routes =>
             //{
             //    routes.MapRoute(

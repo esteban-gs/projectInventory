@@ -38,7 +38,8 @@ namespace Inventory.Web.Controllers
         /// <returns></returns>
         // GET: api/Categories
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, 
+            Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryToReturnDTO))]
         public ActionResult<IEnumerable<CategoryToReturnDTO>> GetCategories()
         {

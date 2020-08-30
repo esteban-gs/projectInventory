@@ -1,5 +1,6 @@
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,9 +24,12 @@ namespace inventory
                 {
                     var context = services.GetRequiredService<InventoryDBContext>();
                     var hostEnv = services.GetService<IWebHostEnvironment>();
+                    var userManager = services.GetService<UserManager<IdentityUser>>();
+                    var roleManager = services.GetService<RoleManager<IdentityRole>>();
                     var webContentRootPath = hostEnv.ContentRootPath;
                     await context.Database.MigrateAsync();
-                    await InventoryContextSeed.SeedAsync(context, loggerFactory);
+
+                    await InventoryContextSeed.SeedAsync(context, loggerFactory, userManager, roleManager);
                 }
                 catch(Exception ex)
                 {

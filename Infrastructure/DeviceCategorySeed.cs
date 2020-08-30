@@ -2,9 +2,7 @@ namespace Infrastructure
 {
     public static class DeviceCategorySeed
     {
-        public static string Json 
-        { 
-            get => @"[
+        public const string Json = @"[
     {
         'name': 'Laptop'
     },
@@ -18,6 +16,5 @@ namespace Infrastructure
         'name': 'Desktop'
     }
 ]";
-        }
     }
 }

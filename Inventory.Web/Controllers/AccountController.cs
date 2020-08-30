@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,19 +34,6 @@ namespace Inventory.Web.Controllers
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._configuration = configuration;
-        }
-        // GET: api/<AccountController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<AccountController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
         }
 
         // POST api/<AccountController>/Register
@@ -87,6 +75,19 @@ namespace Inventory.Web.Controllers
             }
         }
 
+        // POST api/<AccountController>/RenewToken
+        [HttpPost("RenewToken")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult<TokenDTO> RenewToken()
+        {
+            var userInfo = new UserInfoDTO()
+            {
+                Email = HttpContext.User.Identity.Name
+            };
+
+            return BuildToken(userInfo);
+        }
+
         [NonAction]
         private TokenDTO BuildToken(UserInfoDTO userInfo)
         {
@@ -98,7 +99,7 @@ namespace Inventory.Web.Controllers
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.UtcNow.AddMinutes(120);
+            var expiration = DateTime.UtcNow.AddMinutes(1);
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["jwt:issuer"],
@@ -112,18 +113,6 @@ namespace Inventory.Web.Controllers
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };
-        }
-
-        // PUT api/<AccountController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<AccountController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

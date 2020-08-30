@@ -2,9 +2,7 @@ namespace Infrastructure
 {
     public static class DeviceSeed
     {
-        public static string Json 
-        { 
-            get => @"[
+        public const string Json = @"[
   {
     'name': 'enim',
     'description': 'Tempor ea consequat proident reprehenderit ea quis dolor Lorem anim amet irure aliqua irure cillum.',
@@ -4506,7 +4504,5 @@ namespace Infrastructure
     'makerId': 4
   }
 ]";
-        }
-        
     }
 }

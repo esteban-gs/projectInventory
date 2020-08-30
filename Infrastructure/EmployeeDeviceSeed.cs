@@ -2,9 +2,7 @@ namespace Infrastructure
 {
     public static class EmployeeDeviceSeed
     {
-        public static string Json 
-        { 
-            get => @"[
+        public const string Json = @"[
   {
     'employeeId': 448,
     'deviceId': 212,
@@ -4800,6 +4798,5 @@ namespace Infrastructure
     'checkInDate': '2016-08-04'
   }
 ]";
-        }
     }
 }

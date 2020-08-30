@@ -2,9 +2,7 @@ namespace Infrastructure
 {
     public static class DeviceMakerSeed
     {
-        public static string Json 
-        { 
-            get => @"[
+        public const string Json = @"[
     {
       'name': 'Lenovo'
     },
@@ -18,7 +16,6 @@ namespace Infrastructure
       'name': 'Apple'
     }
   ]";
-        }
-        
+
     }
 }

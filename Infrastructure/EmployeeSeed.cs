@@ -2,9 +2,7 @@ namespace Infrastructure
 {
     public static class EmployeeSeed
     {
-        public static string Json 
-        { 
-            get => @"[
+        public const string Json = @"[
   {
     'firstName': 'Branch',
     'lastName': 'Mcdonald',
@@ -3506,7 +3504,5 @@ namespace Infrastructure
     'hireDate': '2006-09-26'
   }
 ]";
-        }
-        
     }
 }
