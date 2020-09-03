@@ -13,6 +13,7 @@ using Inventory.Web.Dtos;
 using Core.Specs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Core.Specs.Categories;
 
 namespace Inventory.Web.Controllers
 {

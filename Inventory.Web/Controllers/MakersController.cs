@@ -11,6 +11,7 @@ using Infrastructure.Data.Repositories;
 using AutoMapper;
 using Core.Specs;
 using Inventory.Web.Dtos;
+using Core.Specs.Makers;
 
 namespace Inventory.Web.Controllers
 {

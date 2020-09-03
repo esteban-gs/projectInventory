@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Data
 {
-    public class InventoryContextSeed
+    public static class InventoryInitializer
     {
         public static async Task SeedAsync(
             InventoryDBContext context,
@@ -25,14 +25,18 @@ namespace Infrastructure.Data
             {
                 context.Database.EnsureCreated();
 
-                if (!context.Devices.Any())
+                var dbIsEmpty = !context.Devices.Any() &&
+                                !context.Employees.Any() &&
+                                !context.EmployeesDevices.Any();
+
+                if (dbIsEmpty)
                 {
-                    await MigrationRepository<Category>.JsonToList(DeviceCategorySeed.Json, context);
-                    await MigrationRepository<Maker>.JsonToList(DeviceMakerSeed.Json, context);
-                    await MigrationRepository<Device>.JsonToList(DeviceSeed.Json, context);
-                    await MigrationRepository<Employee>.JsonToList(EmployeeSeed.Json, context);
-                    await MigrationRepository<EmployeeDevice>.JsonToList(EmployeeDeviceSeed.Json, context);
-                    await MigrationRepository<IdentityUser>.SeedUsers(userManager, roleManager);
+                    await SeedRepository<Category>.AddFromJson(DeviceCategorySeed.Json, context);
+                    await SeedRepository<Maker>.AddFromJson(DeviceMakerSeed.Json, context);
+                    await SeedRepository<Device>.AddFromJson(DeviceSeed.Json, context);
+                    await SeedRepository<Employee>.AddFromJson(EmployeeSeed.Json, context);
+                    await SeedRepository<EmployeeDevice>.AddFromJson(EmployeeDeviceSeed.Json, context);
+                    await SeedRepository<IdentityUser>.SeedUsers(userManager, roleManager);
                 }
             }
             catch (Exception ex)
@@ -45,10 +49,10 @@ namespace Infrastructure.Data
     }
 
 
-    internal static class MigrationRepository<T> where T : class
+    internal static class SeedRepository<T> where T : class
     {
         private static DbSet<T> objSet;
-        internal static async Task JsonToList(string jsonData, InventoryDBContext context)
+        internal static async Task AddFromJson(string jsonData, InventoryDBContext context)
         {
             var objectList = JsonConvert.DeserializeObject<List<T>>(jsonData);
             Console.Write($"Creating {objectList.Count()} records{Environment.NewLine}");

@@ -9,7 +9,7 @@ namespace Infrastructure.Data.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
+        IRepository<TEntity> Repository<TEntity>() where TEntity : class;
         Task<int> Complete();
     }
 
@@ -28,7 +28,7 @@ namespace Infrastructure.Data.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
+        public IRepository<TEntity> Repository<TEntity>() where TEntity : class
         {
             if (_repositories == null)
                 _repositories = new Hashtable();

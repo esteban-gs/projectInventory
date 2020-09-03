@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.Specs
+namespace Core.Specs.Employees
 {
     public class EmployeesSpec : BaseSpecification<Employee>
     {

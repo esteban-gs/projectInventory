@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.Specs
+namespace Core.Specs.Devices
 {
     /// <summary>
     /// Class specification for counting records in a table

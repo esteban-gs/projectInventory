@@ -18,6 +18,7 @@ using System.Runtime.CompilerServices;
 using Core.Specs.SpecificationParams;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Core.Specs.Devices;
 
 namespace Inventory.Web.Controllers
 {
@@ -77,8 +78,8 @@ namespace Inventory.Web.Controllers
         /// <param name="deviceParams">A headerParams object from query</param>
         // GET: api/Devices
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Pagination<DeviceListToReturnDTO>))]
-        public async Task<ActionResult<Pagination<DeviceListToReturnDTO>>> GetDevices([FromQuery] DeviceParams deviceParams)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginationViewModel<DeviceListToReturnDTO>))]
+        public async Task<ActionResult<PaginationViewModel<DeviceListToReturnDTO>>> GetDevices([FromQuery] DeviceParams deviceParams)
         {
             // record count with filters applied
             var countSpec = new DevicesWithFilterForCountSpec(deviceParams);
@@ -91,7 +92,7 @@ namespace Inventory.Web.Controllers
 
             var data = _mapper.Map<IEnumerable<DeviceListToReturnDTO>>(devices);
 
-            return Ok(new Pagination<DeviceListToReturnDTO>(
+            return Ok(new PaginationViewModel<DeviceListToReturnDTO>(
                             deviceParams.Page, 
                             deviceParams.RecordsPerPage,
                             totalDevices,

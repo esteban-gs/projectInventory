@@ -20,7 +20,7 @@ using Microsoft.OpenApi.Models;
 
 namespace inventory
 {
-    // left off at : https://www.udemy.com/course/building-restful-web-apis-with-aspnet-core/learn/lecture/18231890#content
+    // left off before : https://www.udemy.com/course/building-restful-web-apis-with-aspnet-core/learn/lecture/18231890#content
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -118,10 +118,14 @@ namespace inventory
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "swagger/{documentName}/swagger.json";
+            });
 
             app.UseSwaggerUI(config =>
             {
+                config.DefaultModelsExpandDepth(-1);  // Disable swagger schemas at bottom
                 config.SwaggerEndpoint("/swagger/v1/swagger.json", "Inventory");
             });
 

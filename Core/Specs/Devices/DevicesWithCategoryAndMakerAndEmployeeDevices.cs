@@ -3,7 +3,7 @@ using Core.Specs.SpecificationParams;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Core.Specs
+namespace Core.Specs.Devices
 {
     public class DevicesWithCategoryAndMakerAndEmployeeDevices : BaseSpecification<Device>
     {

@@ -13,6 +13,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Infrastructure.Data.Repositories;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Core.Specs.SpecificationParams;
+using Core.Specs;
+using Core.Specs.SpecificationParams.Shared;
+using AutoMapper;
+using Inventory.Web.Helpers;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Internal;
+using Core.Specs.Users;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,15 +36,21 @@ namespace Inventory.Web.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._configuration = configuration;
+            this._unitOfWork = unitOfWork;
+            this._mapper = mapper;
         }
 
         // POST api/<AccountController>/Register
@@ -65,7 +82,7 @@ namespace Inventory.Web.Controllers
             var result = await _signInManager.PasswordSignInAsync(userInfoDTO.Email,
                 userInfoDTO.Password, isPersistent: false, lockoutOnFailure: false);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return BuildToken(userInfoDTO);
             }
@@ -113,6 +130,34 @@ namespace Inventory.Web.Controllers
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };
+        }
+
+        [HttpGet("Users")]
+        public async Task<ActionResult<PaginationViewModel<UserDTO>>> Get([FromQuery] BaseParams baseParams)
+        {
+            Expression<Func<IdentityUser, bool>> 
+                searchExpression = (u) => string.IsNullOrEmpty(baseParams.Search)
+                                        || u.Email.Contains(baseParams.Search)
+                                        || u.UserName.Contains(baseParams.Search); // Search implementation 
+
+            var countSpec = new UsersWithFiltersForCountSpec(searchExpression); // A spec with filters
+            var filteredCount = await _unitOfWork.Repository<IdentityUser>().CountAsync(countSpec); // count filtered records
+            var userSpec = new UserSpecification<IdentityUser>(baseParams, searchExpression); // The spec with the core functionality
+            var users = _unitOfWork.Repository<IdentityUser>().Find(userSpec); // Find users given the specification
+            var usersDTO = _mapper.Map<List<UserDTO>>(users); // Map to ViewModel
+            return Ok(new PaginationViewModel<UserDTO>(
+                baseParams.Page,
+                baseParams.RecordsPerPage,
+                filteredCount,
+                usersDTO));
+        }
+
+        [HttpGet("Roles")]
+        public ActionResult<List<RolesDTO>> GetRoles()
+        {
+            var rolesSpecification = new RolesSpecs();
+            var roles = _unitOfWork.Repository<IdentityRole>().Find(rolesSpecification);
+            return Ok(_mapper.Map<List<RolesDTO>>(roles));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace inventory
                     var webContentRootPath = hostEnv.ContentRootPath;
                     await context.Database.MigrateAsync();
 
-                    await InventoryContextSeed.SeedAsync(context, loggerFactory, userManager, roleManager);
+                    await InventoryInitializer.SeedAsync(context, loggerFactory, userManager, roleManager);
                 }
                 catch(Exception ex)
                 {

@@ -1,4 +1,6 @@
-﻿using Core.Specs;
+﻿using Core.Entities;
+using Core.Specs;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Inventory.Web.Dtos;
+using Inventory.Web.Dtos.Account;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +41,12 @@ namespace Inventory.Web.Helpers
             // employees
             CreateMap<Employee, EmployeeForReturnDTO>();
             CreateMap<EmployeeForCreationDTO, Employee>();
+
+            // Users
+            CreateMap<IdentityUser, UserDTO>()
+                .ForMember(udto => udto.UserId, o => o.MapFrom(iu => iu.Id));
+            CreateMap<IdentityRole, RolesDTO>()
+                .ForMember(r => r.Name, o => o.MapFrom(ir => ir.Name));
         }
 
         private List<EmployeeDevice> MapEmployeesDevices(

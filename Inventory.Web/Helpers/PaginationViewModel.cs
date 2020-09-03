@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Inventory.Web.Helpers
 {
-    public class Pagination<T> where T : class
+    public class PaginationViewModel<T> where T : class
     {
-        public Pagination(int page, int recordsPerPage, int count, IEnumerable<T> data)
+        public PaginationViewModel(int page, int recordsPerPage, int count, IEnumerable<T> data)
         {
             Page = page;
             RecordsPerPage = recordsPerPage;
