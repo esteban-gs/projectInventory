@@ -31,6 +31,7 @@ namespace Inventory.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -65,7 +66,7 @@ namespace Inventory.Web.Controllers
 
             if (result.Succeeded)
             {
-                return  await BuildToken(userInfoDTO);
+                return  Ok(await BuildToken(userInfoDTO));
             }
             else
             {
@@ -77,6 +78,8 @@ namespace Inventory.Web.Controllers
         // POST api/<AccountController>/Login
         [HttpPost("Login")]
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TokenDTO>> Login([FromBody] UserInfoDTO userInfoDTO)
         {
             var result = await _signInManager.PasswordSignInAsync(userInfoDTO.Email,
@@ -84,7 +87,7 @@ namespace Inventory.Web.Controllers
 
             if (result.Succeeded)
             {
-                return await BuildToken(userInfoDTO);
+                return Ok(await BuildToken(userInfoDTO));
             }
             else
             {
@@ -95,6 +98,8 @@ namespace Inventory.Web.Controllers
         // POST api/<AccountController>/RenewToken
         [HttpPost("RenewToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenDTO))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<TokenDTO>> RenewToken()
         {
             var userInfo = new UserInfoDTO()
@@ -102,7 +107,7 @@ namespace Inventory.Web.Controllers
                 Email = HttpContext.User.Identity.Name
             };
 
-            return await BuildToken(userInfo);
+            return Ok(await BuildToken(userInfo));
         }
 
         [NonAction]
@@ -138,6 +143,10 @@ namespace Inventory.Web.Controllers
         }
 
         [HttpGet("Users")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginationViewModel<UserDTO>))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<PaginationViewModel<UserDTO>>> Get([FromQuery] BaseParams baseParams)
         {
             Expression<Func<IdentityUser, bool>> 
@@ -158,6 +167,10 @@ namespace Inventory.Web.Controllers
         }
 
         [HttpGet("Roles")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RolesDTO>))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public ActionResult<List<RolesDTO>> GetRoles()
         {
             var rolesSpecification = new RolesSpecs();
@@ -166,6 +179,11 @@ namespace Inventory.Web.Controllers
         }
 
         [HttpPost("AssignRole")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> AssignRole(EditRoleDTO editRoleDTO)
         {
             var user = await _userManager.FindByIdAsync(editRoleDTO.UserId);
@@ -178,6 +196,11 @@ namespace Inventory.Web.Controllers
         }
 
         [HttpPost("RemoveRole")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveRole(EditRoleDTO editRoleDTO)
         {
             var user = await _userManager.FindByIdAsync(editRoleDTO.UserId);
