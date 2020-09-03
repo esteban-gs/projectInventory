@@ -65,7 +65,7 @@ namespace Inventory.Web.Controllers
 
             if (result.Succeeded)
             {
-                return BuildToken(userInfoDTO);
+                return  await BuildToken(userInfoDTO);
             }
             else
             {
@@ -84,7 +84,7 @@ namespace Inventory.Web.Controllers
 
             if (result.Succeeded)
             {
-                return BuildToken(userInfoDTO);
+                return await BuildToken(userInfoDTO);
             }
             else
             {
@@ -95,24 +95,29 @@ namespace Inventory.Web.Controllers
         // POST api/<AccountController>/RenewToken
         [HttpPost("RenewToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<TokenDTO> RenewToken()
+        public async Task<ActionResult<TokenDTO>> RenewToken()
         {
             var userInfo = new UserInfoDTO()
             {
                 Email = HttpContext.User.Identity.Name
             };
 
-            return BuildToken(userInfo);
+            return await BuildToken(userInfo);
         }
 
         [NonAction]
-        private TokenDTO BuildToken(UserInfoDTO userInfo)
+        private async Task<TokenDTO> BuildToken(UserInfoDTO userInfo)
         {
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, userInfo.Email),
                 new Claim(ClaimTypes.Email, userInfo.Email),
             };
+
+            var identityUser = await _userManager.FindByEmailAsync(userInfo.Email);
+            var claimsDB = await _userManager.GetClaimsAsync(identityUser);
+
+            claims.AddRange(claimsDB);
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -158,6 +163,31 @@ namespace Inventory.Web.Controllers
             var rolesSpecification = new RolesSpecs();
             var roles = _unitOfWork.Repository<IdentityRole>().Find(rolesSpecification);
             return Ok(_mapper.Map<List<RolesDTO>>(roles));
+        }
+
+        [HttpPost("AssignRole")]
+        public async Task<ActionResult> AssignRole(EditRoleDTO editRoleDTO)
+        {
+            var user = await _userManager.FindByIdAsync(editRoleDTO.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, editRoleDTO.RoleName));
+            return NoContent();
+        }
+
+        [HttpPost("RemoveRole")]
+        public async Task<ActionResult> RemoveRole(EditRoleDTO editRoleDTO)
+        {
+            var user = await _userManager.FindByIdAsync(editRoleDTO.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await _userManager.RemoveClaimAsync(user, new Claim(ClaimTypes.Role, editRoleDTO.RoleName));
+            return NoContent();
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Infrastructure.Data
 {
@@ -89,7 +90,7 @@ namespace Infrastructure.Data
 
             // Add UserRole
             var userForAdminRole = await userManager.FindByEmailAsync("admin@test.com");
-            await userManager.AddToRoleAsync(userForAdminRole, UserSeed.RoleName);
+            await userManager.AddClaimAsync(userForAdminRole, new Claim(ClaimTypes.Role, UserSeed.RoleName));
         }
 
         struct TempUser
