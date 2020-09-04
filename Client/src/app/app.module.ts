@@ -5,23 +5,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutComponent } from './layout/layout.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { DeviceModule } from './device/device.module';
+import { DeviceModule } from './components/device/device.module';
 import { NotFoundComponent } from './error-pages/not-found/not-found.component';
 import { ServerErrorComponent } from './error-pages/server-error/server-error.component';
 import { SharedModule } from './shared/shared.module';
-import { CategoryModule } from './category/category.module';
-import { MainNavComponent } from './navigation/main-nav/main-nav.component';
+import { CategoryModule } from './components/category/category.module';
+import { MainNavComponent } from './components/navigation/main-nav/main-nav.component';
 import { DeviceBreakpointObserverService } from './shared/device-breakpoint-observer.service';
-import { MakerModule } from './maker/maker.module';
-import { EmployeeModule } from './employee/employee.module';
+import { MakerModule } from './components/maker/maker.module';
+import { EmployeeModule } from './components/employee/employee.module';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
+import { LogInComponent } from './components/log-in/log-in.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +28,8 @@ import { MatListModule } from '@angular/material/list';
     NotFoundComponent,
     ServerErrorComponent,
     MainNavComponent,
+    LogInComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,12 +41,7 @@ import { MatListModule } from '@angular/material/list';
     CategoryModule,
     MakerModule,
     EmployeeModule,
-    LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule
+    LayoutModule
   ],
   providers: [DeviceBreakpointObserverService],
   bootstrap: [AppComponent]

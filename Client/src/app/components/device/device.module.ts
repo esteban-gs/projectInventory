@@ -6,7 +6,7 @@ import { DeviceDetailsComponent } from './device-details/device-details.componen
 import { DeviceDataComponent } from './device-details/device-data/device-data.component';
 import { DeviceCreateComponent } from './device-create/device-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [

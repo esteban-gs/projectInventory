@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DeviceBreakpointObserverService } from '../../shared/device-breakpoint-observer.service';
-import { ViewEncapsulation } from '@angular/core';
+import { DeviceBreakpointObserverService } from '../../../shared/device-breakpoint-observer.service';
 
 
 class Nav {
