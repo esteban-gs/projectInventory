@@ -1,65 +1,67 @@
 <mat-toolbar color="primary" class="header">
- <!-- TOOLBAR -->
+  <!-- TOOLBAR -->
   <!-- Not handheld -->
-    <!--toolbar chevron toggl-->
-    <ng-container *ngIf="!isExpanded && !isHs">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        matTooltip="Expand Menu"
-        mat-mini-fab
-        color="primary"
-        (click)="expand()"
-      >
-        <mat-icon aria-label="Side nav toggle icon">chevron_right</mat-icon>
-      </button>
-    </ng-container>
-  
-    <!--sidenav toolbar chevron toggle-->
-    <ng-container *ngIf="isExpanded && !isHs">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-mini-fab
-        matTooltip="Collapse Menu"
-        color="primary"
-        (click)="contract()"
-      >
-        <mat-icon aria-label="Side nav toggle icon" *ngIf="sidenav.opened"
-          >chevron_left</mat-icon
-        >
-      </button>
-    </ng-container>
-  <!-- EO Not handheld -->
-  
-  <!-- Handheld -->
-    <!--Sidenav toggle button-->
-    <ng-container *ngIf="isHs">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-mini-fab
-        color="primary"
-        mat-icon-button
-        (click)="sidenav.toggle()"
-      >
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-    </ng-container>
-  
-  <!--EO Handheld -->
-  
-    <!-- Title -->
-    <span class="mat-spacer"></span>
-    <span
-      ><a mat-button routerLink="/">
-        Project Inventory
-      </a>
-    </span>
-  </mat-toolbar>
-  
-<mat-sidenav-container class="sidenav-container"  autosize>
+  <!--toolbar chevron toggl-->
+  <ng-container *ngIf="!isExpanded && !isHs">
+    <button
+      type="button"
+      aria-label="Toggle sidenav"
+      matTooltip="Expand Menu"
+      mat-mini-fab
+      color="primary"
+      (click)="expand()"
+    >
+      <mat-icon aria-label="Side nav toggle icon">chevron_right</mat-icon>
+    </button>
+  </ng-container>
 
+  <!--sidenav toolbar chevron toggle-->
+  <ng-container *ngIf="isExpanded && !isHs">
+    <button
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-mini-fab
+      matTooltip="Collapse Menu"
+      color="primary"
+      (click)="contract()"
+    >
+      <mat-icon aria-label="Side nav toggle icon" *ngIf="sidenav.opened"
+        >chevron_left</mat-icon
+      >
+    </button>
+  </ng-container>
+  <!-- EO Not handheld -->
+
+  <!-- Handheld -->
+  <!--Sidenav toggle button-->
+  <ng-container *ngIf="isHs">
+    <button
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-mini-fab
+      color="primary"
+      mat-icon-button
+      (click)="sidenav.toggle()"
+    >
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+  </ng-container>
+
+  <!--EO Handheld -->
+
+  <!-- Title -->
+  <span><a mat-button routerLink="/"> Project Inventory </a> </span>
+  
+  <span class="mat-spacer"></span>
+  
+  <!-- action links -->
+  <span class="nav-tool-items">
+    <a mat-button routerLink="login" routerLinkActive="active">Log in</a>
+    <a mat-button routerLink="register" routerLinkActive="active">Register</a>
+  </span>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container" autosize>
   <mat-sidenav
     #sidenav
     fixedInViewport="false"
@@ -71,15 +73,13 @@
     <!-- sidenav navigation list -->
     <div class="white-spacing">
       <mat-toolbar *ngFor="let nav of navItems" color="white">
-
         <!-- Each nav item is a row -->
-        <mat-toolbar-row 
-          [routerLink]="nav.link" 
+        <mat-toolbar-row
+          [routerLink]="nav.link"
           [routerLinkActive]="['active-link']"
           [routerLinkActiveOptions]="{ exact: false }"
         >
           <div fxLayout="row" fxLayoutAlign="space-between center">
-
             <!-- nav item icon button -->
             <div>
               <button
@@ -88,24 +88,16 @@
                 [matTooltipPosition]="nav.tooltipPos"
                 color="accent"
               >
-                <mat-icon
-                  >{{ nav.icon }}
-                </mat-icon>
+                <mat-icon>{{ nav.icon }} </mat-icon>
               </button>
             </div>
 
             <!--nav item button with nav text -->
             <div *ngIf="isExpanded">
-                <a 
-                  mat-button 
-                  class="mat-small"
-                  >{{ nav.page }}
-                </a>
+              <a mat-button class="mat-small">{{ nav.page }} </a>
             </div>
-
           </div>
         </mat-toolbar-row>
-
       </mat-toolbar>
     </div>
   </mat-sidenav>

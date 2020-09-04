@@ -7,6 +7,9 @@ import { LogInComponent } from './components/log-in/log-in.component';
 import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'login'},
+  { path: 'login', component: LogInComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
   { path: 'devices', loadChildren: () => import('./components/device/device.module').then(m => m.DeviceModule) },
   { path: 'categories', loadChildren: () => import('./components/category/category.module').then(m => m.CategoryModule) },

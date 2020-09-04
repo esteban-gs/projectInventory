@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { ApiResponseModel } from '../../_interface/device-for-list';
+import { ApiResponseModel } from 'src/app/_interface/device-for-list';
 import { map, catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DeviceRequestParams } from 'src/app/_interface/device-request-params';

@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DeviceForDetails } from '../../../_interface/device-for-details';
+import { DeviceForDetails } from '../../../../_interface/device-for-details';
 import { Router } from '@angular/router';
-import { DeleteService } from '../../../shared/delete.service';
+import { DeleteService } from '../../../../shared/delete.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Location } from '@angular/common';
-import { DeviceForCreate } from '../../../_interface/device-for-create';
+import { DeviceForCreate } from '../../../../_interface/device-for-create';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from 'src/app/shared/dialogs/success-dialog/success-dialog.component';
-import { ErrorHandlerService } from '../../../shared/error-handler.service';
+import { ErrorHandlerService } from '../../../../shared/error-handler.service';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EditingStatusComponent } from 'src/app/shared/snackbars/editing-status/editing-status.component';

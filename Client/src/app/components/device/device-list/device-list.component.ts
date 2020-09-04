@@ -1,21 +1,16 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { DeviceForList, ApiResponseModel } from '../../_interface/device-for-list';
-import { MatSort, Sort, SortDirection } from '@angular/material/sort';
+import { DeviceForList, ApiResponseModel } from 'src/app/_interface/device-for-list';
+import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ErrorHandlerService } from '../../shared/error-handler.service';
+import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 import { Router } from '@angular/router';
-import { DeleteService } from '../../shared/delete.service';
+import { DeleteService } from 'src/app/shared/delete.service';
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
-import { DeviceForDetails } from 'src/app/_interface/device-for-details';
 import { HttpService } from 'src/app/shared/http.service';
-import { merge, Observable, of as observableOf } from 'rxjs';
-import { startWith, switchMap, map, catchError, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { DeviceService } from './device.service';
-import { JsonPipe } from '@angular/common';
-import { stringify } from 'querystring';
 import { DeviceRequestParams } from 'src/app/_interface/device-request-params';
 
 @Component({
@@ -95,7 +90,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   initDataSource() {
     this.devHttpServ.getDevices(this.requestParams).pipe(
       map((data: ApiResponseModel) => {
-        this.dataSource = data as ApiResponseModel;
+        this.dataSource = data;
       })
     ).subscribe();
   }
@@ -131,7 +126,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     }
     this.devHttpServ.getDevices(this.requestParams).pipe(
       map((data: ApiResponseModel) => {
-        this.dataSource = data as ApiResponseModel;
+        this.dataSource = data;
       })
     ).subscribe();
   }
@@ -142,7 +137,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
 
     this.devHttpServ.getDevices(this.requestParams).pipe(
       map((data: ApiResponseModel) => {
-        this.dataSource = data as ApiResponseModel;
+        this.dataSource = data;
       })
     ).subscribe();
   }
